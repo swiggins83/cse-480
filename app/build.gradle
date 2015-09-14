@@ -21,7 +21,8 @@ def AAVersion = '3.3.2'
 dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
-    compile 'com.android.support:appcompat-v7:22.2.1'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+    compile 'com.flipboard:bottomsheet-core:1.4.2'
 }
 
 apt {
@@ -39,12 +40,12 @@ apt {
 }
 
 android {
-    compileSdkVersion 22
+    compileSdkVersion 23
     buildToolsVersion "22.0.1"
 
     defaultConfig {
         applicationId "edu.oakland.festinfo"
-        minSdkVersion 9
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"

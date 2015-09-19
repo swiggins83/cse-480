@@ -26,6 +26,10 @@
             </intent-filter>
         </activity>
         <activity android:name=".activities.RegistrationActivity_" />
+        <activity
+            android:name=".activities.FestivalAppIntro"
+            android:label="@string/title_activity_festival_app_intro" >
+        </activity>
     </application>
 
 </manifest>

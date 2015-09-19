@@ -1,4 +1,6 @@
 package edu.oakland.festinfo.fragments;
 
-public class SearchFragment extends AppCompatActivity {
+import android.support.v4.app.Fragment;
+
+public class SearchFragment extends Fragment {
 }

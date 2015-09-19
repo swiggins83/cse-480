@@ -6,6 +6,7 @@ import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
 
+import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -29,6 +30,23 @@ public class ParseUtil {
                     Snackbar
                             .make(rootView, R.string.error_occurred, Snackbar.LENGTH_LONG)
                             .show(); // Don’t forget to show!
+                }
+            }
+        });
+    }
+
+    public static void signIn(final Context context, String username, String password) {
+        ParseUser.logInInBackground(username, password, new LogInCallback() {
+            @Override
+            public void done(ParseUser user, ParseException e) {
+                if (e == null) {
+                    View rootView = ((Activity) context).getWindow().getDecorView().findViewById(android.R.id.content);
+                    Snackbar
+                            .make(rootView, R.string.error_occurred, Snackbar.LENGTH_LONG)
+                            .setText(user.getUsername() + " logged in!")
+                            .show(); // Don’t forget to show!
+                } else {
+
                 }
             }
         });

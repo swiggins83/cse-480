@@ -29,6 +29,10 @@
             android:name=".activities.RegistrationActivity_"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity
+            android:name=".activities.LoginActivity_"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
     </application>
 
 </manifest>

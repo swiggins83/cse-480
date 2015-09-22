@@ -25,10 +25,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.RegistrationActivity_" />
         <activity
-            android:name=".activities.FestivalAppIntro"
-            android:label="@string/title_activity_festival_app_intro" >
+            android:name=".activities.RegistrationActivity_"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity
+            android:name=".activities.LoginActivity_"
+            android:windowSoftInputMode="adjustResize">
         </activity>
     </application>
 

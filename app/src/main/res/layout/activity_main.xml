@@ -12,10 +12,17 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/sign_in"
+        android:text="Sign In"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/hello_world" />
+
+    <Button
         android:id="@+id/sign_up"
         android:text="Sign Up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/hello_world" />
+        android:layout_below="@id/sign_in" />
 
 </RelativeLayout>

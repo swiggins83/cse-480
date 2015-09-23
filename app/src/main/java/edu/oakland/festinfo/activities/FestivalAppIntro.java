@@ -18,7 +18,7 @@ public class FestivalAppIntro extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
 
-                addSlide(AppIntroFragment.newInstance("First Slide", "Description", R.mipmap.ic_launcher, Color.parseColor("#2196F3")));
+        addSlide(AppIntroFragment.newInstance("First Slide", "Description", R.mipmap.ic_launcher, Color.parseColor("#2196F3")));
         addSlide(AppIntroFragment.newInstance("Second Slide", "Second Description", R.mipmap.ic_launcher, Color.parseColor("#3F51B5")));
         addSlide(AppIntroFragment.newInstance("Third Slide", "Third Description", R.mipmap.ic_launcher, Color.parseColor("#3F51B5")));
         addSlide(AppIntroFragment.newInstance("Fourth Slide", "Fourth Description", R.mipmap.ic_launcher, Color.parseColor("#3F51B5")));
@@ -30,25 +30,24 @@ public class FestivalAppIntro extends AppIntro {
 
     }
 
-    private void loadMainActivity(){
+    private void loadMainActivity() {
         RegistrationActivity_
                 .intent(this)
                 .start();
     }
+
     @Override
-    public void onSkipPressed(){
+    public void onSkipPressed() {
 
         loadMainActivity();
 
     }
     @Override
-    public void onDonePressed(){
-
+    public void onDonePressed() {
         loadMainActivity();
     }
 
-    public void getStarted(View v)
-    {
+    public void getStarted(View v) {
         loadMainActivity();
     }
 }

@@ -12,7 +12,7 @@ import org.androidannotations.annotations.ViewById;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 
-/*@EActivity(R.layout.activity_login)*/
+@EActivity(R.layout.activity_login)
 public class LoginActivity extends AppCompatActivity {
 
     @ViewById(R.id.username_edittext)

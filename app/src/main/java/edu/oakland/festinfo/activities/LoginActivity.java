@@ -12,7 +12,10 @@ import org.androidannotations.annotations.ViewById;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 
-/*@EActivity(R.layout.activity_login)*/
+HEAD
+=======
+@EActivity(R.layout.activity_login)
+ a20c5029aefa65ccfdff5d77650377f9eacb8bd3
 public class LoginActivity extends AppCompatActivity {
 
     @ViewById(R.id.username_edittext)

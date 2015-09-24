@@ -11,9 +11,17 @@ import edu.oakland.festinfo.R;
 public class HomePageActivity extends AppCompatActivity {
 
     @Click(R.id.sign_up)
-    public void signUpFormLauncher() {
+    public void signUp() {
         RegistrationActivity_
                 .intent(this)
                 .start();
     }
+
+    @Click(R.id.sign_in)
+    public void signIn() {
+        LoginActivity_
+                .intent(this)
+                .start();
+    }
+
 }

@@ -7,6 +7,7 @@
 
     <string name="incomplete_data">Please fill in each box.</string>
     <string name="error_occurred">An error occurred. Please check your information and try again.</string>
+    <string name="login_occurred">Logged in!</string>
 
     <!-- Parse stuff -->
     <string name="parse_app_id">5NCv1Uqfleqxcn30mWAMFHYf8GaQGUeEl4Yma9Lk</string>

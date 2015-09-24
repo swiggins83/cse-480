@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -20,6 +21,9 @@ public class LoginActivity extends AppCompatActivity {
     @ViewById(R.id.password_edittext)
     EditText passwordEditText;
 
+    @Bean
+    ParseUtil parseUtil;
+
     @Click(R.id.submit_button)
     public void signIn() {
 
@@ -29,7 +33,7 @@ public class LoginActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            ParseUtil.signIn(this, username, password);
+            parseUtil.signIn(this, username, password);
         } else {
             View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
             Snackbar

@@ -26,6 +26,7 @@ public class ParseUtil {
         if (currentUser != null) {
             ParseUser.logOut();
         }
+
         ParseUser user = new ParseUser();
         user.setEmail(email);
         user.setUsername(username);

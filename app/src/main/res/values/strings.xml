@@ -7,8 +7,22 @@
 
     <string name="incomplete_data">Please fill in each box.</string>
     <string name="error_occurred">An error occurred. Please check your information and try again.</string>
+    <string name="login_occurred">Logged in!</string>
+
+    <string-array name="navigation_drawer_items_array">
+        <item>Create</item>
+        <item>Read</item>
+        <item>Help</item>
+    </string-array>
+
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+
+
 
     <!-- Parse stuff -->
     <string name="parse_app_id">5NCv1Uqfleqxcn30mWAMFHYf8GaQGUeEl4Yma9Lk</string>
     <string name="parse_client_key">0XIJP8UiTzNc64qHAHE2EK01T2Z0j1eDZk8nfJLd</string>
 </resources>
+
+

@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
 
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -12,33 +13,40 @@ import org.androidannotations.annotations.ViewById;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 
-HEAD
-=======
 @EActivity(R.layout.activity_login)
- a20c5029aefa65ccfdff5d77650377f9eacb8bd3
-public class LoginActivity extends AppCompatActivity {
+ public class LoginActivity extends AppCompatActivity {
+
 
     @ViewById(R.id.username_edittext)
     EditText usernameEditText;
     @ViewById(R.id.password_edittext)
     EditText passwordEditText;
 
+
+    @Bean
+    ParseUtil parseUtil;
+
+
     @Click(R.id.submit_button)
     public void signIn() {
 
+
         if (!usernameEditText.getText().toString().isEmpty() &&
-            !passwordEditText.getText().toString().isEmpty()) {
+                !passwordEditText.getText().toString().isEmpty()) {
+
 
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            ParseUtil.signIn(this, username, password);
+
+            parseUtil.signIn(this, username, password);
         } else {
             View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
             Snackbar
                     .make(rootView, R.string.incomplete_data, Snackbar.LENGTH_LONG)
                     .show();
         }
+
 
     }
 }

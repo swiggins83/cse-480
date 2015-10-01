@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">FestInfo</string>
+    <string name="app_name">Amplify!</string>
 
     <string name="hello_world">Hi world!</string>
     <string name="action_settings">Settings</string>
@@ -9,16 +9,23 @@
     <string name="error_occurred">An error occurred. Please check your information and try again.</string>
     <string name="login_occurred">Logged in!</string>
 
-    <string-array name="navigation_drawer_items_array">
-        <item>Create</item>
-        <item>Read</item>
-        <item>Help</item>
-    </string-array>
 
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
+    <string name="OpenDrawer">Open navigation drawer</string>
+    <string name="CloseDrawer">Close navigation drawer</string>
 
 
+    <string name="user_profile_string">User Profile</string>
+    <string name="search_string">Search</string>
+    <string name="directions_string">Directions</string>
+    <string name="weather_string">Weather</string>
+    <string name="tickets_string">Tickets</string>
+    <string name="notifications_string">Notifications</string>
+    <string name="logout_string">Logout</string>
+
+    <string name="openDrawer">Open</string>
+    <string name="closeDrawer">Close</string>
+
+    <color name="white">#FFFFFF</color>
 
     <!-- Parse stuff -->
     <string name="parse_app_id">5NCv1Uqfleqxcn30mWAMFHYf8GaQGUeEl4Yma9Lk</string>

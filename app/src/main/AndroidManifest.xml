@@ -33,6 +33,10 @@
             android:name=".activities.LoginActivity_"
             android:windowSoftInputMode="adjustResize">
         </activity>
+        <activity android:name=".activities.HomePageActivity"></activity>
+        <activity android:name=".activities.FestivalAppIntroActivity"></activity>
+        <activity android:name=".activities.MapPageActivity_"></activity>
+        <activity android:name=".activities.UserProfileActivity_"></activity>
     </application>
 
 </manifest>

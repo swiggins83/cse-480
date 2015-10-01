@@ -1,4 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <group android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/user_profile"
+            android:checked="false"
+            android:icon="@drawable/ic_account_box_black_24dp"
+            android:title="@string/user_profile_string" />
+
+        <item
+            android:id="@+id/search"
+            android:checked="false"
+            android:icon="@drawable/ic_search_black_24dp"
+            android:title="@string/search_string" />
+
+        <item
+            android:id="@+id/directions"
+            android:checked="false"
+            android:icon="@drawable/ic_directions_black_24dp"
+            android:title="@string/directions_string" />
+
+        <item
+            android:id="@+id/weather"
+            android:checked="false"
+            android:icon="@drawable/ic_wb_sunny_black_24dp"
+            android:title="@string/weather_string" />
+
+
+        <item
+            android:id="@+id/tickets"
+            android:checked="false"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            android:title="@string/tickets_string" />
+        <item
+            android:id="@+id/notifications"
+            android:checked="false"
+            android:icon="@drawable/ic_notifications_black_24dp"
+            android:title="@string/notifications_string" />
+        <item
+            android:id="@+id/logout"
+            android:checked="false"
+            android:icon="@drawable/ic_exit_to_app_black_24dp"
+            android:title="@string/logout_string" />
+
+    </group>
 </menu>

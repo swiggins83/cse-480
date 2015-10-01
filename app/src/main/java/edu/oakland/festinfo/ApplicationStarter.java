@@ -17,6 +17,7 @@ public class ApplicationStarter extends Application {
         Parse.enableLocalDatastore(this);
 
         Parse.initialize(this, "5NCv1Uqfleqxcn30mWAMFHYf8GaQGUeEl4Yma9Lk", "0XIJP8UiTzNc64qHAHE2EK01T2Z0j1eDZk8nfJLd");
+        ParseUser.enableRevocableSessionInBackground();
 
         ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
@@ -25,3 +26,4 @@ public class ApplicationStarter extends Application {
         ParseACL.setDefaultACL(defaultACL, true);
     }
 }
+

@@ -21,6 +21,8 @@
         <activity
             android:name=".activities.HomePageActivity_"
             android:label="@string/app_name" >
+        </activity>
+        <activity android:name=".activities.FestivalAppIntro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,10 +36,9 @@
             android:name=".activities.LoginActivity_"
             android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".activities.HomePageActivity"></activity>
-        <activity android:name=".activities.FestivalAppIntroActivity"></activity>
         <activity android:name=".activities.MapPageActivity_"></activity>
         <activity android:name=".activities.UserProfileActivity_"></activity>
+        <activity android:name=".activities.AdminActivity_" />
     </application>
 
 </manifest>

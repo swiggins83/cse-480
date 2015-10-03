@@ -34,7 +34,7 @@ import org.androidannotations.annotations.ViewById;
 import edu.oakland.festinfo.R;
 
 @EActivity(R.layout.activity_main)
-public class HomePageActivity extends AppCompatActivity {
+public class HomePageActivity extends BaseActivity {
 
     //Defining Variables
     private Toolbar toolbar;
@@ -51,9 +51,6 @@ public class HomePageActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //ParseUser parseUser = new ParseUser();
         //currentUserTextView.setText(parseUser.getCurrentUser().getUsername());
-
-        setContentView(R.layout.activity_main);
-
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -197,6 +194,3 @@ public class HomePageActivity extends AppCompatActivity {
 
 
 }
-
-
-

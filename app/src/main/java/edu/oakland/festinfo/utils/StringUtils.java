@@ -8,5 +8,3 @@ public class StringUtils {
         return Character.toUpperCase(s.charAt(0)) + s.substring(1);
     }
 }
-
-

@@ -7,6 +7,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import com.parse.ParseException;
+import com.parse.SignUpCallback;
+
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
@@ -16,7 +19,7 @@ import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 
 @EActivity(R.layout.activity_registration)
-public class RegistrationActivity extends AppCompatActivity {
+public class RegistrationActivity extends BaseActivity {
 
     @ViewById(R.id.email_edittext)
     EditText emailEditText;
@@ -39,12 +42,21 @@ public class RegistrationActivity extends AppCompatActivity {
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-            parseUtil.signUp(this, email, username, password);
+            final Activity parent = this;
+            parseUtil.signUp(email, username, password, new SignUpCallback() {
+                @Override
+                public void done(ParseException e) {
+                    if (e != null) {
+                        showSnackBar(parent, e.getLocalizedMessage());
+                    } else {
+                        HomePageActivity_
+                                .intent(parent)
+                                .start();
+                    }
+                }
+            });
         } else {
-            View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
-            Snackbar
-                    .make(rootView, R.string.incomplete_data, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBar(this, getString(R.string.incomplete_data));
         }
 
     }

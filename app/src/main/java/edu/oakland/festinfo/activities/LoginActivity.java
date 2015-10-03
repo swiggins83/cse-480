@@ -1,9 +1,12 @@
 package edu.oakland.festinfo.activities;
 
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
+import android.app.Activity;
+import android.util.Log;
 import android.widget.EditText;
+
+import com.parse.LogInCallback;
+import com.parse.ParseException;
+import com.parse.ParseUser;
 
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
@@ -14,18 +17,15 @@ import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 
 @EActivity(R.layout.activity_login)
- public class LoginActivity extends AppCompatActivity {
-
+public class LoginActivity extends BaseActivity {
 
     @ViewById(R.id.username_edittext)
     EditText usernameEditText;
     @ViewById(R.id.password_edittext)
     EditText passwordEditText;
 
-
     @Bean
     ParseUtil parseUtil;
-
 
     @Click(R.id.submit_button)
     public void signIn() {
@@ -38,15 +38,24 @@ import edu.oakland.festinfo.utils.ParseUtil;
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
 
-
-            parseUtil.signIn(this, username, password);
+            final Activity parent = this;
+            parseUtil.signIn(username, password, new LogInCallback() {
+                @Override
+                public void done(ParseUser user, ParseException e) {
+                    if (e != null) {
+                        showSnackBar(parent, e.getLocalizedMessage());
+                    } else {
+                        HomePageActivity_
+                                .intent(parent)
+                                .start();
+                    }
+                }
+            });
         } else {
-            View rootView = this.getWindow().getDecorView().findViewById(android.R.id.content);
-            Snackbar
-                    .make(rootView, R.string.incomplete_data, Snackbar.LENGTH_LONG)
-                    .show();
+            showSnackBar(this, getString(R.string.incomplete_data));
         }
 
 
     }
+
 }

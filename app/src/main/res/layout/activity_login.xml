@@ -40,7 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit"
-        android:layout_below="@id/password_layout" />
+        android:layout_below="@+id/password_layout"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>
 

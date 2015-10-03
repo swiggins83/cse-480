@@ -20,6 +20,7 @@ package edu.oakland.festinfo.utils;
 
          import edu.oakland.festinfo.R;
          import edu.oakland.festinfo.activities.HomePageActivity_;
+//import edu.oakland.festinfo.activities.HomePageActivity_;
 
 
          @EBean(scope = EBean.Scope.Singleton)

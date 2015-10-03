@@ -33,7 +33,7 @@ import org.androidannotations.annotations.ViewById;
 
 import edu.oakland.festinfo.R;
 
-//@EActivity(R.layout.activity_main)
+@EActivity(R.layout.activity_main)
 public class HomePageActivity extends AppCompatActivity {
 
     //Defining Variables
@@ -80,7 +80,7 @@ public class HomePageActivity extends AppCompatActivity {
                 switch (menuItem.getItemId()) {
 
 
-                    //Replacing the main content with ContentFragment Which is our Inbox View;
+                    //Replacing the main content with chosen Fragment;
                     case R.id.user_profile:
                         Toast.makeText(getApplicationContext(), "User Profile Selected", Toast.LENGTH_SHORT).show();
                         UserProfileActivity fragment = new UserProfileActivity();

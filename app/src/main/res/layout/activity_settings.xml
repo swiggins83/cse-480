@@ -1,0 +1,96 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent"
+    android:layout_width="match_parent">
+
+
+    <ImageView
+        android:layout_width="76dp"
+        android:layout_height="76dp"
+        android:id="@+id/settings_header_image"
+        android:src="@drawable/ic_settings_black_24dp"
+        android:padding="10dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Settings"
+        android:layout_toRightOf="@+id/settings_header_image"
+        android:textSize="56dp"
+        android:textColor="@android:color/black"
+        android:padding="10dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Image"
+        android:layout_below="@id/settings_header_image"
+        android:textSize="26dp"
+        android:layout_marginTop="30dp"
+        android:padding="22dp"
+        android:background="@color/settings_background"
+        android:textAllCaps="false"
+        android:id="@+id/settings_image_text"
+        android:drawableLeft="@drawable/ic_account_box_black_24dp"
+        android:drawablePadding="-178dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset Password"
+        android:layout_below="@id/settings_image_text"
+        android:textSize="26dp"
+        android:layout_marginTop="30dp"
+        android:padding="22dp"
+        android:background="@color/settings_background"
+        android:textAllCaps="false"
+        android:id="@+id/settings_reset_pass_text"
+        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawablePadding="-60dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset Username"
+        android:layout_below="@id/settings_reset_pass_text"
+        android:textSize="26dp"
+        android:layout_marginTop="30dp"
+        android:padding="22dp"
+        android:background="@color/settings_background"
+        android:textAllCaps="false"
+        android:id="@+id/settings_reset_user_text"
+        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawablePadding="-60dp"
+        />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reset Email"
+        android:layout_below="@id/settings_reset_user_text"
+        android:textSize="26dp"
+        android:layout_marginTop="30dp"
+        android:padding="22dp"
+        android:background="@color/settings_background"
+        android:textAllCaps="false"
+        android:id="@+id/settings_reset_email_text"
+        android:drawableLeft="@drawable/ic_lock_black_24dp"
+        android:drawablePadding="-110dp"
+        />
+
+
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

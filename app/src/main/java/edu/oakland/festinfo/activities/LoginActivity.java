@@ -30,8 +30,10 @@ public class LoginActivity extends BaseActivity {
     @Click(R.id.submit_button)
     public void signIn() {
 
+
         if (!usernameEditText.getText().toString().isEmpty() &&
-            !passwordEditText.getText().toString().isEmpty()) {
+                !passwordEditText.getText().toString().isEmpty()) {
+
 
             String username = usernameEditText.getText().toString();
             String password = passwordEditText.getText().toString();
@@ -52,6 +54,7 @@ public class LoginActivity extends BaseActivity {
         } else {
             showSnackBar(this, getString(R.string.incomplete_data));
         }
+
 
     }
 

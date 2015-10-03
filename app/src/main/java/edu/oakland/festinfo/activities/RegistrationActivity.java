@@ -35,8 +35,8 @@ public class RegistrationActivity extends BaseActivity {
     public void submitForm() {
 
         if (!emailEditText.getText().toString().isEmpty()    &&
-            !usernameEditText.getText().toString().isEmpty() &&
-            !passwordEditText.getText().toString().isEmpty()) {
+                !usernameEditText.getText().toString().isEmpty() &&
+                !passwordEditText.getText().toString().isEmpty()) {
 
             String email = emailEditText.getText().toString();
             String username = usernameEditText.getText().toString();
@@ -60,5 +60,4 @@ public class RegistrationActivity extends BaseActivity {
         }
 
     }
-
 }

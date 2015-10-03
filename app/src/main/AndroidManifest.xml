@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:name=".ApplicationStarter"
@@ -20,12 +21,12 @@
         <activity
             android:name=".activities.HomePageActivity_"
             android:label="@string/app_name" >
-        </activity>
-        <activity android:name=".activities.FestivalAppIntro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".activities.FestivalAppIntroActivity">
         </activity>
         <activity
             android:name=".activities.RegistrationActivity_"
@@ -35,8 +36,7 @@
             android:name=".activities.LoginActivity_"
             android:windowSoftInputMode="adjustResize">
         </activity>
-        <activity android:name=".activities.MapPageActivity_" />
-        <activity android:name=".activities.UserProfileActivity_" />
+        <activity android:name=".activities.MapPageActivity_"></activity>
         <activity android:name=".activities.AdminActivity_" />
         <activity android:name=".activities.ArtistDetailActivity_" />
 

@@ -38,6 +38,8 @@
         <activity android:name=".activities.MapPageActivity_" />
         <activity android:name=".activities.UserProfileActivity_" />
         <activity android:name=".activities.AdminActivity_" />
+        <activity android:name=".activities.ArtistDetailActivity_" />
+
     </application>
 
 </manifest>

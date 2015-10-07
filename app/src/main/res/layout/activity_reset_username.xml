@@ -1,6 +1,5 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -9,9 +8,7 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/background_gradient"
-
-    >
+    android:background="@drawable/background_gradient" >
 
     <ImageView
         android:layout_width="52dp"
@@ -19,8 +16,7 @@
         android:id="@+id/reset_username_header_image"
         android:src="@drawable/ic_lock_black_24dp"
         android:padding="10dp"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_marginTop="5dp" />
 
     <TextView
         android:layout_width="match_parent"
@@ -29,55 +25,44 @@
         android:layout_toRightOf="@+id/reset_username_header_image"
         android:textSize="32dp"
         android:textColor="@android:color/black"
-        android:padding="10dp"
-        />
+        android:padding="10dp" />
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/reset_username_firstname_layout"
+        android:id="@+id/reset_username_current_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/reset_username_header_image">
+
         <EditText
-            android:id="@+id/reset_username_firstname_edittext"
-            android:hint="First Name"
+            android:id="@+id/reset_username_current_eddittext"
+            android:hint="Current Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/reset_username_lastname_layout"
+        android:id="@+id/reset_username_new_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reset_username_firstname_layout">
-        <EditText
-            android:id="@+id/reset_username_lastname_edittext"
-            android:hint="Last Name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-    </android.support.design.widget.TextInputLayout>
+        android:layout_below="@id/reset_username_current_layout">
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/reset_username_username_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/reset_username_lastname_layout">
         <EditText
-            android:id="@+id/reset_username_username_edittext"
+            android:id="@+id/reset_username_new_edittext"
             android:hint="New Username"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
     </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/reset_username_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/reset_username_username_layout"
+        android:layout_below="@id/reset_username_new_layout"
         android:text="Reset Username"
         android:layout_marginTop="16dp"
-        android:background="@color/settings_background"
-
-        />
+        android:background="@color/settings_background" />
 
     <Button
         android:id="@+id/cancel_button"
@@ -86,10 +71,6 @@
         android:layout_below="@id/reset_username_button"
         android:text="Cancel"
         android:layout_marginTop="16dp"
-        android:background="@color/settings_background"
-
-        />
-
-
+        android:background="@color/settings_background" />
 
 </RelativeLayout>

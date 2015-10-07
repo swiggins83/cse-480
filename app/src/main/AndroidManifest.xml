@@ -30,15 +30,19 @@
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="@string/parse_client_key" />
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyAC4EfC127hRalfCAT2U3n1nMWybIvJMmw"/>
+
         <activity
             android:name=".activities.HomePageActivity_"
             android:label="@string/app_name" >
+        </activity>
+        <activity android:name=".activities.FestivalAppIntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".activities.FestivalAppIntroActivity">
         </activity>
         <activity
             android:name=".activities.RegistrationActivity_"
@@ -51,14 +55,16 @@
         <activity android:name=".activities.MapPageActivity_"></activity>
         <activity android:name=".activities.AdminActivity_" />
         <activity android:name=".activities.ArtistDetailActivity_" />
-        <activity android:name=".activities.HomePageActivity"></activity>
-
-        <activity android:name=".activities.MapPageActivity"></activity>
-
-
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAC4EfC127hRalfCAT2U3n1nMWybIvJMmw"/>
+        <activity android:name=".activities.ResetEmailActivity_"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".activities.ResetUsernameActivity_"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".activities.ResetPasswordActivity_"
+            android:windowSoftInputMode="adjustResize">
+        </activity>
+        <activity android:name=".activities.SettingsPageActivity_" />
 
     </application>
 

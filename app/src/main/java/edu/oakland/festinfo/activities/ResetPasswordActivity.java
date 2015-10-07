@@ -10,6 +10,4 @@ import edu.oakland.festinfo.R;
 
 @EActivity(R.layout.activity_reset_password)
 public class ResetPasswordActivity extends BaseActivity{
-
-
 }

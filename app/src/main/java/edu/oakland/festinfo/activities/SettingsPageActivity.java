@@ -1,8 +1,8 @@
 package edu.oakland.festinfo.activities;
 
-import android.content.Intent;
 import android.view.View;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
 import edu.oakland.festinfo.R;
@@ -14,22 +14,29 @@ import edu.oakland.festinfo.R;
 @EActivity(R.layout.activity_settings)
 public class SettingsPageActivity extends BaseActivity {
 
-    public void resetPasswordPressed (View view) {
-        Intent intent = new Intent(this, ResetPasswordActivity.class);
-        startActivity(intent);
-
+    @Click(R.id.settings_reset_image)
+    public void showImageReset() {
     }
 
-    public void resetUsernamePressed (View view) {
-        Intent intent = new Intent(this, ResetUsernameActivity.class);
-        startActivity(intent);
+    @Click(R.id.settings_reset_email)
+    public void showEmailReset() {
+        ResetEmailActivity_
+                .intent(this)
+                .start();
     }
 
-    public void resetEmailPressed (View view) {
-        Intent intent = new Intent(this, ResetEmailActivity.class);
-        startActivity(intent);
+    @Click(R.id.settings_reset_username)
+    public void showUsernameReset() {
+        ResetUsernameActivity_
+                .intent(this)
+                .start();
     }
 
-
+    @Click(R.id.settings_reset_password)
+    public void showPasswordReset() {
+        ResetPasswordActivity_
+                .intent(this)
+                .start();
+    }
 
 }

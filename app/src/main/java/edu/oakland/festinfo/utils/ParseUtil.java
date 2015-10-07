@@ -2,6 +2,7 @@ package edu.oakland.festinfo.utils;
 
 import com.parse.LogInCallback;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import org.androidannotations.annotations.EBean;
@@ -23,6 +24,21 @@ public class ParseUtil {
 
     public void signIn(String username, String password, LogInCallback callback) {
         ParseUser.logInInBackground(username, password, callback);
+    }
+
+    public void changeEmail(String email, SaveCallback callback) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.setEmail(email);
+        currentUser.saveInBackground(callback);
+    }
+
+    public void changeUsername(String username, SaveCallback callback) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        currentUser.setUsername(username);
+        currentUser.saveInBackground(callback);
+    }
+
+    public void changePassword() {
     }
 
 }

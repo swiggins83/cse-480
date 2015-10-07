@@ -1,7 +1,5 @@
 package edu.oakland.festinfo.activities;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +10,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
@@ -145,14 +144,18 @@ public class HomePageActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void settingsPressed(View view){
-        Intent intent = new Intent(this, SettingsPageActivity.class);
-        startActivity(intent);
+    @Click(R.id.settings_button)
+    public void showSettings(){
+        SettingsPageActivity_
+                .intent(this)
+                .start();
     }
 
-    public void mapPresed(View view) {
-        Intent intent = new Intent(this, MapPageActivity.class);
-        startActivity(intent);
+    @Click(R.id.map_button)
+    public void showMap() {
+        MapPageActivity_
+                .intent(this)
+                .start();
     }
 
 

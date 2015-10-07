@@ -156,6 +156,7 @@ public class HomePageActivity extends BaseActivity {
         MapPageActivity_
                 .intent(this)
                 .start();
+
     }
 
 

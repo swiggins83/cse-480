@@ -116,7 +116,7 @@
                     android:textSize="18dp"
                     android:drawablePadding="0dp"
                     android:paddingTop="20dp"
-                    android:onClick="mapPresed"
+                    android:onClick="mapPressed"
                     />
 
                 <Button

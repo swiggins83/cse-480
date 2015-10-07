@@ -23,16 +23,21 @@ public class MapPageActivity extends BaseActivity implements OnMapReadyCallback 
     }
 
     @Override
-    public void onMapReady(GoogleMap map) {
+    public void onMapReady(GoogleMap mMap) {
         LatLng sydney = new LatLng(-33.867, 151.206);
+        double lat = -33.867;
+        double lon = 151.206;
 
-        map.setMyLocationEnabled(true);
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
+        mMap.setMyLocationEnabled(true);
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(sydney, 13));
 
-        map.addMarker(new MarkerOptions()
+        mMap.addMarker(new MarkerOptions()
                 .title("Sydney")
                 .snippet("The most populous city in Australia")
                 .position(sydney));
+
     }
+
+
 
 }

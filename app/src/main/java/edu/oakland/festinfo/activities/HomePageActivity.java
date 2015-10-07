@@ -1,5 +1,6 @@
 package edu.oakland.festinfo.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.widget.DrawerLayout;
@@ -143,6 +144,18 @@ public class HomePageActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void settingsPressed(View view){
+        Intent intent = new Intent(this, SettingsPageActivity.class);
+        startActivity(intent);
+    }
+
+    public void mapPresed(View view) {
+        Intent intent = new Intent(this, MapPageActivity.class);
+        startActivity(intent);
+    }
+
+
 
 
 }

@@ -1,5 +1,9 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android" android:layout_height="match_parent"
-    android:layout_width="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:background="@drawable/background_gradient"
+    >
 
 
     <ImageView
@@ -49,6 +53,7 @@
         android:id="@+id/settings_reset_pass_text"
         android:drawableLeft="@drawable/ic_lock_black_24dp"
         android:drawablePadding="-60dp"
+        android:onClick="resetPasswordPressed"
         />
 
     <Button
@@ -64,6 +69,7 @@
         android:id="@+id/settings_reset_user_text"
         android:drawableLeft="@drawable/ic_lock_black_24dp"
         android:drawablePadding="-60dp"
+        android:onClick="resetUsernamePressed"
         />
 
     <Button
@@ -79,6 +85,7 @@
         android:id="@+id/settings_reset_email_text"
         android:drawableLeft="@drawable/ic_lock_black_24dp"
         android:drawablePadding="-110dp"
+        android:onClick="resetEmailPressed"
         />
 
 

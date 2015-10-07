@@ -38,209 +38,103 @@
                 android:columnCount="2"
                 android:rowCount="3">
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
+                <Button
+                    android:id="@+id/find_me_button"
                     android:background="#90CAF9"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/find_me_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_location_on" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/find_me_icon"
-                            android:text="Find Me" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Find Me"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawableTop="@drawable/ic_location_on"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/near_me_button"
                     android:background="#9FA8DA"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/venue_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_library_music" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/venue_icon"
-                            android:text="Near Me" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:text="Near Me"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawableTop="@drawable/ic_library_music"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/friends_button"
                     android:background="#2196F3"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/friends_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_group" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/friends_icon"
-                            android:text="Friends" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:drawableTop="@drawable/ic_group"
+                    android:text="Friends"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/favorites_button"
                     android:background="#3F51B5"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/favorites_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_favorite" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/favorites_icon"
-                            android:text="Favorites" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:drawableTop="@drawable/ic_favorite"
+                    android:text="Favorites"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    />
+
+                <Button
+                    android:id="@+id/map_button"
                     android:background="#1976D2"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/map_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_map" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/map_icon"
-                            android:text="Map" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
-
-                <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="#303F9F"
                     android:layout_gravity="fill"
                     android:layout_rowWeight="1"
-                    android:layout_columnWeight="1">
+                    android:layout_columnWeight="1"
+                    android:drawableTop="@drawable/ic_map"
+                    android:text="Map"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    android:onClick="mapPresed"
+                    />
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:id="@+id/settings_icon"
-                            android:layout_width="56dp"
-                            android:layout_height="56dp"
-                            android:padding="8dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_settings" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:layout_gravity="center_horizontal"
-                            android:layout_below="@id/settings_icon"
-                            android:text="Settings" />
-
-                    </LinearLayout>
-
-                </RelativeLayout>
+                <Button
+                    android:id="@+id/settings_button"
+                    android:background="#303F9F"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="fill"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:drawableTop="@drawable/ic_settings"
+                    android:text="Settings"
+                    android:textAllCaps="false"
+                    android:textSize="18dp"
+                    android:drawablePadding="0dp"
+                    android:paddingTop="20dp"
+                    android:onClick="settingsPressed"
+                    />
 
             </GridLayout>
 

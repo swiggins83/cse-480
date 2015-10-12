@@ -12,6 +12,8 @@
     <string name="OpenDrawer">Open navigation drawer</string>
     <string name="CloseDrawer">Close navigation drawer</string>
 
+    <string name="menu_legalnotices">Legal Notices</string>
+
 
     <string name="user_profile_string">User Profile</string>
     <string name="search_string">Search</string>

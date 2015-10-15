@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.HomePageActivity">
 
+
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -21,14 +22,55 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
+            <ViewFlipper
                 android:id="@+id/header_image"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:scaleType="fitCenter"
-                android:paddingTop="16dp"
-                android:paddingBottom="16dp"
-                android:src="@drawable/ef" />
+                android:layout_height="wrap_content"
+                android:autoStart="true"
+                android:flipInterval="2000">
+
+                <ImageView
+                    android:id="@+id/header_image1"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:src="@drawable/ef" />
+
+                <ImageView
+                    android:id="@+id/header_image2"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:src="@drawable/ef_image"
+                    />
+
+                <ImageView
+                    android:id="@+id/header_image3"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:src="@drawable/ef_map"
+                    />
+
+                <ImageView
+                    android:id="@+id/header_image4"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:scaleType="fitCenter"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:src="@drawable/ef_logo"
+                    />
+
+            </ViewFlipper>
+
+
 
             <GridLayout
                 android:id="@+id/frame"
@@ -46,7 +88,7 @@
                     android:layout_gravity="fill"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:text="Find Me"
+                    android:text="Scheule"
                     android:textAllCaps="false"
                     android:textSize="18dp"
                     android:drawableTop="@drawable/ic_location_on"
@@ -62,10 +104,10 @@
                     android:layout_gravity="fill"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
-                    android:text="Near Me"
+                    android:text="Information"
                     android:textAllCaps="false"
                     android:textSize="18dp"
-                    android:drawableTop="@drawable/ic_library_music"
+                    android:drawableTop="@drawable/ic_error_black_18dp"
                     android:drawablePadding="0dp"
                     android:paddingTop="20dp"
                     />

@@ -53,5 +53,12 @@ public class ResetUsernameActivity extends BaseActivity {
         }
 
     }
+    @Click(R.id.cancel_button)
+    public void cancelButton(){
+        SettingsPageActivity_
+                .intent(this)
+                .start();
+
+    }
 
 }

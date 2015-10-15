@@ -15,6 +15,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
 import edu.oakland.festinfo.R;
@@ -72,4 +73,10 @@ public class ChangeImageActivity extends Activity {
         return true;
     }
 
+    @Click(R.id.cancel_button)
+    public void cancelButton(){
+        SettingsPageActivity_
+                .intent(this)
+                .start();
+    }
 }

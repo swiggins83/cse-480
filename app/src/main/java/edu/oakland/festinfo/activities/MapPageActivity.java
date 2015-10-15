@@ -2,8 +2,10 @@ package edu.oakland.festinfo.activities;
 
 import android.app.AlertDialog;
 import android.app.FragmentManager;
+import android.content.DialogInterface;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,6 +39,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @ViewById(R.id.locinfo)
     TextView tvLocInfo;
+
+
 
     @AfterViews
     void init() {
@@ -101,18 +105,41 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         super.onResume();
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCESS", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
         } else {
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
     }
 
     @Override
-    public void onMapLongClick(LatLng point) {
+    public void onMapLongClick(final LatLng point) {
+
         tvLocInfo.setText("New marker added@" + point.toString());
-        map.addMarker(new MarkerOptions()
-                .position(point)
-                .draggable(true));
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Add Custom Text:");
+
+        final EditText input = new EditText(this);
+        builder.setView(input);
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String text = input.getText().toString();
+                map.addMarker(new MarkerOptions()
+                        .position(point)
+                        .title(text)
+                        .draggable(true));
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.show();
+
     }
 
     @Override

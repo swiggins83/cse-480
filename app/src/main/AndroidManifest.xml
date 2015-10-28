@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.oakland.festinfo" >
 
+
     <permission
 
         android:name="edu.oakland.festinfo.permission.MAPS_RECEIVE"
@@ -32,7 +33,7 @@
             android:value="@string/parse_client_key" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCPrzFyqDrf9miALMwYSF2_EbYfKsZx1Dc" />
+            android:value="AIzaSyDLxuRPIPs2FunVbE-9SSGCsuAjKblIcjU" />
 
         <activity
             android:name=".activities.HomePageActivity_"
@@ -67,6 +68,11 @@
         <activity android:name=".activities.SettingsPageActivity_" />
 
         <activity android:name=".activities.ChangeImageActivity_"/>
+
+        <activity android:name=".activities.NearbyLocationsActivity_"/>
+        <activity android:name=".activities.NearbyLocationsActivity"/>
+
+        <activity android:name=".activities.GeofenceTester"/>
 
     </application>
 

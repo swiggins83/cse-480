@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_gradient">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Weather"
+        android:text="Click the link below to view the current weather"
         android:padding="8dp"
         android:textColor="#fff"
         android:background="@color/PrimaryColor"
         android:textSize="28sp"
-        android:id="@+id/textView"
-        android:layout_centerVertical="true"
+        android:id="@+id/weather_title"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/weather_link_button"
+        android:autoLink="web"
+        android:text="Click Here!"
+        android:layout_below="@id/weather_title"
+        android:layout_marginTop="140dp"
+        android:textSize="26dp"
+        android:layout_centerHorizontal="true"
+        android:background="@android:color/white"
+        android:textColor="@color/PrimaryDarkColor"
+        android:padding="16dp"
+        />
+
 </RelativeLayout>

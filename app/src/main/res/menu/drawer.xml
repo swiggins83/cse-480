@@ -27,7 +27,6 @@
             android:icon="@drawable/ic_wb_sunny_black_24dp"
             android:title="@string/weather_string" />
 
-
         <item
             android:id="@+id/tickets"
             android:checked="false"

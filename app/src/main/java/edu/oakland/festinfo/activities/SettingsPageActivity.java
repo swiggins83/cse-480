@@ -16,6 +16,9 @@ public class SettingsPageActivity extends BaseActivity {
 
     @Click(R.id.settings_reset_image)
     public void showImageReset() {
+        ChangeImageActivity_
+                .intent(this)
+                .start();
     }
 
     @Click(R.id.settings_reset_email)

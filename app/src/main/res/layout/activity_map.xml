@@ -1,20 +1,73 @@
-<LinearLayout
+<RelativeLayout
     tools:context=".MapPageActivity"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
+
+
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/locinfo"/>
+
+    <TextView
+        android:id="@+id/marker_button_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locinfo"
+        android:drawableTop="@drawable/place_marker_24dp"
+        android:padding="14dp"
+        android:background="#25e3ec"
+        android:text="Food"
+        />
+
+    <TextView
+        android:id="@+id/marker_button_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/locinfo"
+        android:layout_toRightOf="@id/marker_button_1"
+        android:drawableTop="@drawable/place_marker_24dp"
+        android:padding="14dp"
+        android:text="ATM"
+        android:background="#ecae1f"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/marker_button_3"
+        android:layout_below="@id/locinfo"
+        android:drawableTop="@drawable/place_marker_24dp"
+        android:layout_toRightOf="@id/marker_button_2"
+        android:padding="14dp"
+        android:background="#6cec22"
+        android:text="Stage"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/marker_button_4"
+        android:layout_below="@id/locinfo"
+        android:drawableTop="@drawable/place_marker_24dp"
+        android:layout_toRightOf="@id/marker_button_3"
+        android:padding="14dp"
+        android:background="#ec05db"
+        android:text="Housing"
+        />
+
+
+
     <fragment
         android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_below="@id/marker_button_1"
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment"
         />
-</LinearLayout>
+</RelativeLayout>
 

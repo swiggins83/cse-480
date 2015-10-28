@@ -13,7 +13,6 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.models.Artist;
-import edu.oakland.festinfo.models.ArtistShowTime;
 
 public class ArtistsArtistAdapter extends ArrayAdapter<Artist> {
 

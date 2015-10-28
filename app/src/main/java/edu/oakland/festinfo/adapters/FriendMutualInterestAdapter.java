@@ -42,7 +42,7 @@ public class FriendMutualInterestAdapter extends ArrayAdapter<Artist> {
         }
 
         holder.nameTextView = (TextView) row.findViewById(R.id.friend_mutual_interest_name);
-        holder.image = (TextView) row.findViewById(R.id.friend_mutual_interest_name);
+        holder.image = (CircleImageView) row.findViewById(R.id.friend_mutual_interest_image);
 
         Artist artist = mutualInterests.get(position);
         holder.nameTextView.setText(artist.getName());

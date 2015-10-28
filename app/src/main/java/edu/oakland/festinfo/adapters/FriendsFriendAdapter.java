@@ -44,7 +44,7 @@ public class FriendsFriendAdapter extends ArrayAdapter<ParseUser> {
         }
 
         holder.nameTextView = (TextView) row.findViewById(R.id.friends_friend_name);
-        holder.image = (TextView) row.findViewById(R.id.friends_friend_image);
+        holder.image = (CircleImageView) row.findViewById(R.id.friends_friend_image);
 
         ParseUser friend = friends.get(position);
         holder.nameTextView.setText(friend.getUsername());

@@ -43,7 +43,7 @@ public class FavoritesArtistAdapter extends ArrayAdapter<FavoriteArtist> {
 
         holder.nameTextView = (TextView) row.findViewById(R.id.favorites_artist_name);
         holder.nextPerformanceTextView = (TextView) row.findViewById(R.id.favorites_artist_next_performance);
-        holder.image = (TextView) row.findViewById(R.id.favorites_artist_image);
+        holder.image = (CircleImageView) row.findViewById(R.id.favorites_artist_image);
 
         FavoriteArtist favoriteArtist = favoriteArtists.get(position);
         holder.nameTextView.setText(favoriteArtist.getName());

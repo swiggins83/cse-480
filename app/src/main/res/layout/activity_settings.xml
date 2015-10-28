@@ -31,7 +31,7 @@
         android:layout_marginTop="30dp"
         android:gravity="left"
         android:padding="14dp"
-        android:background="@color/settings_background"
+        android:background="@drawable/settings_page_button"
         android:textAllCaps="false"
         android:drawablePadding="32dp"
         android:drawableLeft="@drawable/ic_account_box_black_24dp" />
@@ -46,7 +46,7 @@
         android:layout_marginTop="30dp"
         android:padding="14dp"
         android:gravity="left"
-        android:background="@color/settings_background"
+        android:background="@drawable/settings_page_button"
         android:textAllCaps="false"
         android:drawablePadding="32dp"
         android:drawableLeft="@drawable/ic_lock_black_24dp" />
@@ -61,7 +61,7 @@
         android:layout_marginTop="30dp"
         android:gravity="left"
         android:padding="14dp"
-        android:background="@color/settings_background"
+        android:background="@drawable/settings_page_button"
         android:textAllCaps="false"
         android:drawableLeft="@drawable/ic_lock_black_24dp"
         android:drawablePadding="32dp" />
@@ -76,7 +76,7 @@
         android:layout_marginTop="30dp"
         android:padding="14dp"
         android:gravity="left"
-        android:background="@color/settings_background"
+        android:background="@drawable/settings_page_button"
         android:textAllCaps="false"
         android:drawablePadding="32dp"
         android:drawableLeft="@drawable/ic_lock_black_24dp" />

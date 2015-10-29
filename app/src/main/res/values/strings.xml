@@ -91,6 +91,22 @@
 
     <string name="tickets_link"><a href="http://www.electricforestfestival.com/ticket-information/how-to-visit-the-forest/">Click Here to Purchase Tickets!</a></string>
 
+    <string name="color_prompt">Choose a Color:</string>
+
+    <!--Strings for color spinner-->
+    <string-array name="color_array">
+        <item>Red</item>
+        <item>Azure</item>
+        <item>Orange</item>
+        <item>Green</item>
+        <item>Violet</item>
+        <item>Blue</item>
+        <item>Magenta</item>
+        <item>Rose</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+    </string-array>
+
 </resources>
 
 

@@ -5,9 +5,11 @@ import android.app.FragmentManager;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,6 +39,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.parse.FindCallback;
+import com.parse.GetCallback;
 import com.parse.ParseACL;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
@@ -56,11 +59,14 @@ import java.util.concurrent.TimeUnit;
 import edu.oakland.festinfo.R;
 
 @EActivity(R.layout.activity_map)
-public class MapPageActivity extends BaseActivity implements OnMapClickListener, OnMapLongClickListener, OnMarkerDragListener {
+public class MapPageActivity extends BaseActivity implements OnMapClickListener,
+        OnMapLongClickListener, OnMarkerDragListener {
 
     final int RQS_GooglePlayServices = 1;
     private GoogleMap map;
     MapFragment mapFragment;
+
+    private Spinner colorSpinner;
 
     String markerColor = "";
 
@@ -72,6 +78,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     Double geo1Lat;
     Double geo1Long;
     Float markerHue;
+    String currentMovingMarker = "null";
+    String currentObjectID = "Null";
+    String currentMarkerTitle = "Null";
 
 
     @AfterViews
@@ -90,6 +99,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         focusCamera();
         drawBoundaries();
+        addListenerOnSpinnerItemSelection();
 
 
     }
@@ -133,6 +143,13 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public void addListenerOnSpinnerItemSelection() {
+        colorSpinner = (Spinner) findViewById(R.id.color_spinner);
+        colorSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+    }
+
+
 
     @Override
     protected void onResume(){
@@ -182,6 +199,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         final ParseObject MapMarkers = new ParseObject("MapMarkers");
         MapMarkers.setACL(acl);
 
+        markerColor = String.valueOf(colorSpinner.getSelectedItem());
+
         tvLocInfo.setText("New marker added@" + point.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -195,7 +214,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             public void onClick(DialogInterface dialog, int which) {
                 String text = input.getText().toString();
 
-                if (markerColor.equals("")) {
+                if (markerColor.equals("Red")) {
                     map.addMarker(new MarkerOptions()
                             .position(point)
                             .title(text)
@@ -209,7 +228,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_RED);
                     MapMarkers.saveInBackground();
 
-                } else if (markerColor.equals("HUE_AZURE")) {
+                } else if (markerColor.equals("Azure")) {
                     map.addMarker(new MarkerOptions()
                             .position(point)
                             .title(text)
@@ -223,7 +242,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_AZURE);
                     MapMarkers.saveInBackground();
 
-                } else if (markerColor.equals("HUE_ORANGE")) {
+                } else if (markerColor.equals("Orange")) {
 
                     map.addMarker(new MarkerOptions()
                             .position(point)
@@ -238,7 +257,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_ORANGE);
                     MapMarkers.saveInBackground();
 
-                } else if (markerColor.equals("HUE_GREEN")) {
+                } else if (markerColor.equals("Green")) {
 
                     map.addMarker(new MarkerOptions()
                             .position(point)
@@ -253,7 +272,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_GREEN);
                     MapMarkers.saveInBackground();
 
-                } else if (markerColor.equals("HUE_VIOLET")) {
+                } else if (markerColor.equals("Violet")) {
 
                     map.addMarker(new MarkerOptions()
                             .position(point)
@@ -266,6 +285,81 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Title", text);
                     MapMarkers.put("Location", geoPoint);
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_VIOLET);
+                    MapMarkers.saveInBackground();
+
+                } else if (markerColor.equals("Blue")) {
+
+                    map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(text)
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+
+                    ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
+
+                    MapMarkers.put("Title", text);
+                    MapMarkers.put("Location", geoPoint);
+                    MapMarkers.put("Color", BitmapDescriptorFactory.HUE_BLUE);
+                    MapMarkers.saveInBackground();
+
+                } else if (markerColor.equals("Magenta")) {
+
+                    map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(text)
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+
+                    ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
+
+                    MapMarkers.put("Title", text);
+                    MapMarkers.put("Location", geoPoint);
+                    MapMarkers.put("Color", BitmapDescriptorFactory.HUE_MAGENTA);
+                    MapMarkers.saveInBackground();
+
+                } else if (markerColor.equals("Rose")) {
+
+                    map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(text)
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
+
+                    ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
+
+                    MapMarkers.put("Title", text);
+                    MapMarkers.put("Location", geoPoint);
+                    MapMarkers.put("Color", BitmapDescriptorFactory.HUE_ROSE);
+                    MapMarkers.saveInBackground();
+
+                } else if (markerColor.equals("Yellow")) {
+
+                    map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(text)
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+
+                    ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
+
+                    MapMarkers.put("Title", text);
+                    MapMarkers.put("Location", geoPoint);
+                    MapMarkers.put("Color", BitmapDescriptorFactory.HUE_YELLOW);
+                    MapMarkers.saveInBackground();
+
+                } else if (markerColor.equals("Cyan")) {
+
+                    map.addMarker(new MarkerOptions()
+                            .position(point)
+                            .title(text)
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
+
+                    ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
+
+                    MapMarkers.put("Title", text);
+                    MapMarkers.put("Location", geoPoint);
+                    MapMarkers.put("Color", BitmapDescriptorFactory.HUE_CYAN);
                     MapMarkers.saveInBackground();
 
                 } else {
@@ -306,48 +400,56 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     public void onMarkerDragEnd(Marker marker) {
         tvLocInfo.setText("Marker " + marker.getId() + " DragEnd");
-    }
 
-    public void onMarkerDragStart(Marker marker) {
-        tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
-    }
+        geo1Lat = marker.getPosition().latitude;
+        geo1Long = marker.getPosition().longitude;
 
-    @Click(R.id.marker_button_1)
-    public void addNewBlueMarker() {
+        final ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
 
-        tvLocInfo.setText("Marker color changed!");
+        final ParseQuery query = new ParseQuery("MapMarkers");
+        query.whereEqualTo("Title", currentMovingMarker);
+        query.getInBackground(currentObjectID, new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject object, ParseException e) {
 
-        markerColor = "HUE_AZURE";
+                if (e == null) {
+                    object.put("Location", geoPoint);
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
 
-
-    }
-
-    @Click(R.id.marker_button_2)
-    public void addNewOrangeMarker() {
-
-        tvLocInfo.setText("Marker color changed!");
-
-        markerColor = "HUE_ORANGE";
-
+            }
+        });
 
     }
 
-    @Click(R.id.marker_button_3)
-     public void addNewGreenMarker() {
+            public void onMarkerDragStart(Marker marker) {
+                tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
+                ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
+                currentMarkerTitle = marker.getTitle();
 
-        tvLocInfo.setText("Marker color changed!");
+                ParseQuery query = new ParseQuery("MapMarkers");
+                query.whereEqualTo("Title", currentMarkerTitle);
+                query.findInBackground(new FindCallback<ParseObject>() {
+                    @Override
+                    public void done(List<ParseObject> objects, ParseException e) {
 
-        markerColor = "HUE_GREEN";
+                        if (e == null) {
+                            for (int i = 0; i < objects.size(); i++) {
+                                currentMovingMarker = objects.get(i).getString("Title");
+                                currentObjectID = objects.get(i).getObjectId();
+                            }
+                        } else {
+                            Log.d("score", "Error: " + e.getMessage());
+                        }
 
-    }
+                    }
 
-    @Click(R.id.marker_button_4)
-    public void addNewVioletMarker() {
 
-        tvLocInfo.setText("Marker color changed!");
+                });
 
-        markerColor = "HUE_VIOLET";
+            }
 
-    }
 
-}
+        }
+

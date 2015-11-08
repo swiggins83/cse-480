@@ -4,11 +4,15 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseUser;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -26,6 +30,10 @@ public class HomePageActivity extends BaseActivity {
     NavigationView navigationView;
     @ViewById(R.id.drawer)
     DrawerLayout drawerLayout;
+    @ViewById(R.id.profile_header)
+    CardView profileHeader;
+    @ViewById(R.id.username)
+    TextView usernameTextView;
 
     @AfterViews
     void init() {
@@ -43,9 +51,6 @@ public class HomePageActivity extends BaseActivity {
                 switch (menuItem.getItemId()) {
 
                     //Replacing the main content with chosen Fragment;
-                    case R.id.user_profile:
-                        switchFragment(new UserProfileActivity(), "User Profile");
-                        return true;
                     case R.id.search:
                         switchFragment(new SearchPageActivity(), "Search");
                         return true;
@@ -84,6 +89,8 @@ public class HomePageActivity extends BaseActivity {
         };
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
+
+        usernameTextView.setText(ParseUser.getCurrentUser().getUsername());
 
         actionBarDrawerToggle.syncState();
 
@@ -133,6 +140,12 @@ public class HomePageActivity extends BaseActivity {
 
     }
 
+    @Click(R.id.profile_header)
+    public void showUserProfile() {
+        UserProfileActivity_
+                .intent(this)
+                .start();
+    }
 
 
 

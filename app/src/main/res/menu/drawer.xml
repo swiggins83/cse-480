@@ -4,12 +4,6 @@
     <group android:checkableBehavior="single">
 
         <item
-            android:id="@+id/user_profile"
-            android:checked="false"
-            android:icon="@drawable/ic_account_box_black_24dp"
-            android:title="@string/user_profile_string" />
-
-        <item
             android:id="@+id/search"
             android:checked="false"
             android:icon="@drawable/ic_search_black_24dp"

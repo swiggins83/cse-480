@@ -8,7 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.HomePageActivity">
 
-
     <LinearLayout
         android:layout_height="match_parent"
         android:layout_width="match_parent"
@@ -16,169 +15,306 @@
 
         <include layout="@layout/toolbar" />
 
-        <RelativeLayout
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
-            <ViewFlipper
-                android:id="@+id/header_image"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:autoStart="true"
-                android:flipInterval="2000">
-
-                <ImageView
-                    android:id="@+id/header_image1"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:src="@drawable/ef" />
-
-                <ImageView
-                    android:id="@+id/header_image2"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:src="@drawable/ef_image"
-                    />
-
-                <ImageView
-                    android:id="@+id/header_image3"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:src="@drawable/ef_map"
-                    />
-
-                <ImageView
-                    android:id="@+id/header_image4"
-                    android:layout_width="match_parent"
-                    android:layout_height="150dp"
-                    android:scaleType="fitCenter"
-                    android:paddingTop="16dp"
-                    android:paddingBottom="16dp"
-                    android:src="@drawable/ef_logo"
-                    />
-
-            </ViewFlipper>
-
-
-
-            <GridLayout
-                android:id="@+id/frame"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/header_image"
-                android:columnCount="2"
-                android:rowCount="3">
+                android:orientation="vertical">
 
-                <Button
-                    android:id="@+id/find_me_button"
-                    android:background="#90CAF9"
-                    android:layout_width="wrap_content"
+                <ViewFlipper
+                    android:id="@+id/header_image"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:text="Scheule"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawableTop="@drawable/ic_location_on"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    />
+                    android:autoStart="true"
+                    android:flipInterval="2000">
 
-                <Button
-                    android:id="@+id/near_me_button"
-                    android:background="#9FA8DA"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:text="Information"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawableTop="@drawable/ic_error_black_18dp"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    />
+                    <ImageView
+                        android:id="@+id/header_image1"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="fitCenter"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:src="@drawable/ef" />
 
-                <Button
-                    android:id="@+id/friends_button"
-                    android:background="#2196F3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:drawableTop="@drawable/ic_group"
-                    android:text="Friends"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    />
+                    <ImageView
+                        android:id="@+id/header_image2"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="fitCenter"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:src="@drawable/ef_image" />
 
-                <Button
-                    android:id="@+id/favorites_button"
-                    android:background="#3F51B5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:drawableTop="@drawable/ic_favorite"
-                    android:text="Favorites"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    />
+                    <ImageView
+                        android:id="@+id/header_image3"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="fitCenter"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:src="@drawable/ef_map" />
 
-                <Button
-                    android:id="@+id/map_button"
-                    android:background="#1976D2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:drawableTop="@drawable/ic_map"
-                    android:text="Map"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    android:onClick="mapPressed"
-                    />
+                    <ImageView
+                        android:id="@+id/header_image4"
+                        android:layout_width="match_parent"
+                        android:layout_height="150dp"
+                        android:scaleType="fitCenter"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp"
+                        android:src="@drawable/ef_logo" />
 
-                <Button
-                    android:id="@+id/settings_button"
-                    android:background="#303F9F"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="fill"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:drawableTop="@drawable/ic_settings"
-                    android:text="Settings"
-                    android:textAllCaps="false"
-                    android:textSize="18dp"
-                    android:drawablePadding="0dp"
-                    android:paddingTop="20dp"
-                    android:onClick="settingsPressed"
-                    />
+                </ViewFlipper>
 
-            </GridLayout>
+                <GridLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="2"
+                    android:rowCount="3">
 
-        </RelativeLayout>
+                    <RelativeLayout
+                        android:id="@+id/schedule_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#90CAF9"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/find_me_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_location_on" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_below="@id/find_me_icon"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="Find Me" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/map_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#1976D2"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/map_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_map" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_below="@id/map_icon"
+                                android:text="Map"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:layout_gravity="center_horizontal" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/friends_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#2196F3"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/friends_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_group" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_below="@id/friends_icon"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="Friends" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/favorites_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#3F51B5"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/favorites_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_favorite" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_below="@id/favorites_icon"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="Favs" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/information_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#9FA8DA"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/venue_icon"
+                                android:layout_width="48dp"
+                                android:layout_height="48dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_error_black_18dp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_below="@id/venue_icon"
+                                android:textStyle="bold"
+                                android:textSize="20sp"
+                                android:text="Info" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+
+                    <RelativeLayout
+                        android:id="@+id/settings_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:background="#303F9F"
+                        android:clickable="true"
+                        android:elevation="2dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/settings_icon"
+                                android:layout_width="56dp"
+                                android:layout_height="56dp"
+                                android:padding="8dp"
+                                android:layout_gravity="center_horizontal"
+                                android:src="@drawable/ic_settings" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_below="@id/settings_icon"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
+                                android:text="Settings" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
+
+                </GridLayout>
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 

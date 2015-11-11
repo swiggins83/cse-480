@@ -34,33 +34,6 @@
 
 
     <string name="str_btn_find">Find</string>
-    <string-array name="place_type">
-        <item>airport</item>
-        <item>atm</item>
-        <item>bank</item>
-        <item>bus_station</item>
-        <item>church</item>
-        <item>doctor</item>
-        <item>hospital</item>
-        <item>mosque</item>
-        <item>movie_theater</item>
-        <item>hindu_temple</item>
-        <item>restaurant</item>
-    </string-array>
-
-    <string-array name="place_type_name">
-        <item>Airport</item>
-        <item>ATM</item>
-        <item>Bank</item>
-        <item>Bus Station</item>
-        <item>Church</item>
-        <item>Doctor</item>
-        <item>Hospital</item>
-        <item>Mosque</item>
-        <item>Movie Theater</item>
-        <item>Hindu Temple</item>
-        <item>Restaurant</item>
-    </string-array>
 
     <string name="add_geofences">Add geofences</string>
     <string name="remove_geofences">Remove geofences</string>
@@ -85,12 +58,14 @@
     <!-- Transition type strings -->
     <string name="geofence_transition_entered">Entered</string>
     <string name="geofence_transition_exited">Exited</string>
+    <string name="geofence_transition_dwelling">Dwelling</string>
     <string name="unknown_geofence_transition">Unknown Transition</string>
 
     <string name="geofence_transition_notification_text">Click notification to return to app</string>
 
     <string name="tickets_link"><a href="http://www.electricforestfestival.com/ticket-information/how-to-visit-the-forest/">Click Here to Purchase Tickets!</a></string>
 
+    <!--color spinner title-->
     <string name="color_prompt">Choose a Color:</string>
 
     <!--Strings for color spinner-->
@@ -106,6 +81,17 @@
         <item>Yellow</item>
         <item>Cyan</item>
     </string-array>
+
+    <!--Info window for map marker alert dialog title-->
+    <string name="infowindow_click_options">Select An Option:</string>
+    <!--Array of options for info window-->
+    <string-array name="infowindow_choices_array">
+        <item>Delete Marker</item>
+        <item>Add Geofence</item>
+        <item>Remove Geofence</item>
+        <item>Change Geofence Size</item>
+    </string-array>
+
 
 </resources>
 

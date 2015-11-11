@@ -1,6 +1,9 @@
 package edu.oakland.festinfo.utils;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
@@ -39,6 +42,13 @@ public class ParseUtil {
     }
 
     public void changePassword() {
+    }
+
+    public void getArtistSchedule(FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
+        query.whereExists("time");
+        query.orderByAscending("time");
+        query.findInBackground(callback);
     }
 
 }

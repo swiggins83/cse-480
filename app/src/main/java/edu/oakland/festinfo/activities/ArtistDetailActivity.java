@@ -27,11 +27,7 @@ public class ArtistDetailActivity extends BaseActivity {
     void init() {
 
         List<ArtistShowTime> showTimes = new ArrayList<>();
-        showTimes.add(new ArtistShowTime("NOW", "alskjdlaks", "KJSADLKJALS"));
-        showTimes.add(new ArtistShowTime("NOW", "kjwlkjlkjl", ".,qwjkelj3"));
-        showTimes.add(new ArtistShowTime("NOW", "alskjdlaks", "KJSADLKJALS"));
-        showTimes.add(new ArtistShowTime("NOW", "alskjdlaks", "KJSADLKJALS"));
-        showTimes.add(new ArtistShowTime("NOW", "alskjdlaks", "KJSADLKJALS"));
+        //showTimes.add(new ArtistShowTime("NOW", "alskjdlaks", "KJSADLKJALS"));
 
         ArtistShowTimeAdapter adapter = new ArtistShowTimeAdapter(this, R.layout.artist_show_time, showTimes);
         showTimeList.setAdapter(adapter);

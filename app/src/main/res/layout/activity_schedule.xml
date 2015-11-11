@@ -32,7 +32,7 @@
     </FrameLayout>
 
     <ListView
-        android:id="@+id/favorites_artist_list"
+        android:id="@+id/schedule_artists_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/header_image" />

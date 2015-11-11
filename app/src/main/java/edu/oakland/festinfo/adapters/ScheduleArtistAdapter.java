@@ -41,14 +41,14 @@ public class ScheduleArtistAdapter extends ArrayAdapter<ArtistShowTime> {
             holder = (ArtistShowTimeHolder) row.getTag();
         }
 
-        holder.dateTextView = (TextView) row.findViewById(R.id.show_date_text);
+        holder.nameTextView = (TextView) row.findViewById(R.id.show_name_text);
         holder.timeTextView = (TextView) row.findViewById(R.id.show_time_text);
         holder.locationTextView = (TextView) row.findViewById(R.id.show_location_text);
         holder.venueImageView = (CircleImageView) row.findViewById(R.id.artist_location_image);
 
         ArtistShowTime artistShowTime = showTimes.get(position);
-        holder.dateTextView.setText(artistShowTime.getDate());
-        holder.timeTextView.setText(artistShowTime.getTime());
+        holder.nameTextView.setText(artistShowTime.getArtistName());
+        holder.timeTextView.setText(artistShowTime.getTime().toString());
         holder.locationTextView.setText(artistShowTime.getLocation());
         //holder.venueImageView.setImageDrawable(artistShowTime.getImage());
 
@@ -56,7 +56,7 @@ public class ScheduleArtistAdapter extends ArrayAdapter<ArtistShowTime> {
     }
 
     static class ArtistShowTimeHolder {
-        TextView dateTextView;
+        TextView nameTextView;
         TextView timeTextView;
         TextView locationTextView;
         CircleImageView venueImageView;

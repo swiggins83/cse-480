@@ -1,22 +1,17 @@
 package edu.oakland.festinfo.activities;
 
-        import android.content.Intent;
         import android.graphics.Color;
-        import android.support.v7.app.AppCompatActivity;
-        import android.os.Bundle;
-        import android.view.Menu;
-        import android.view.MenuItem;
-        import android.view.View;
+import android.os.Bundle;
 
-        import com.github.paolorotolo.appintro.AppIntro;
-        import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.github.paolorotolo.appintro.AppIntro;
+import com.github.paolorotolo.appintro.AppIntroFragment;
 
-        import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.R;
 
 /**
  * Created by Devin on 9/22/2015.
  */
-public class FestivalAppIntroActivity extends AppIntro{
+public class FestivalAppIntroActivity extends AppIntro {
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -55,11 +50,6 @@ public class FestivalAppIntroActivity extends AppIntro{
     @Override
     public void onDonePressed(){
 
-        loadMainActivity();
-    }
-
-    public void getStarted(View v)
-    {
         loadMainActivity();
     }
 

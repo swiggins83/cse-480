@@ -1,27 +1,37 @@
 package edu.oakland.festinfo.models;
 
+import android.net.Uri;
+
+import java.util.Date;
+
 public class ArtistShowTime {
 
-    public String date;
-    public String time;
-    public String location;
+    private String artistName;
+    private Date time;
+    private String location;
+    private Uri artistImage;
 
-    public ArtistShowTime(String date, String time, String location) {
-        this.date = date;
+    public ArtistShowTime(String artistName, Date time, String location, Uri artistImage) {
+        this.artistName = artistName;
         this.time = time;
         this.location = location;
+        this.artistImage = artistImage;
     }
 
-    public String getDate() {
-        return date;
+    public String getArtistName() {
+        return artistName;
     }
 
-    public String getTime() {
+    public Date getTime() {
         return time;
     }
 
     public String getLocation() {
         return location;
+    }
+
+    public Uri getArtistImage() {
+        return artistImage;
     }
 
 }

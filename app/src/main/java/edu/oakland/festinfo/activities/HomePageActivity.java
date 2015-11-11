@@ -1,13 +1,18 @@
 package edu.oakland.festinfo.activities;
 
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseUser;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -25,6 +30,10 @@ public class HomePageActivity extends BaseActivity {
     NavigationView navigationView;
     @ViewById(R.id.drawer)
     DrawerLayout drawerLayout;
+    @ViewById(R.id.profile_header)
+    CardView profileHeader;
+    @ViewById(R.id.username)
+    TextView usernameTextView;
 
     @AfterViews
     void init() {
@@ -42,60 +51,23 @@ public class HomePageActivity extends BaseActivity {
                 switch (menuItem.getItemId()) {
 
                     //Replacing the main content with chosen Fragment;
-                    case R.id.user_profile:
-                        Toast.makeText(getApplicationContext(), "User Profile Selected", Toast.LENGTH_SHORT).show();
-                        UserProfileActivity fragment = new UserProfileActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction.replace(R.id.frame, fragment);
-                        fragmentTransaction.commit();
-                        return true;
-
                     case R.id.search:
-                        Toast.makeText(getApplicationContext(), "Search Selected", Toast.LENGTH_SHORT).show();
-                        SearchPageActivity fragment2 = new SearchPageActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction2 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction2.replace(R.id.frame, fragment2);
-                        fragmentTransaction2.commit();
+                        switchFragment(new SearchPageActivity(), "Search");
                         return true;
-
                     case R.id.directions:
-                        Toast.makeText(getApplicationContext(), "Directions Selected", Toast.LENGTH_SHORT).show();
-                        DirectionsPageActivity fragment3 = new DirectionsPageActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction3 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction3.replace(R.id.frame, fragment3);
-                        fragmentTransaction3.commit();
+                        switchFragment(new DirectionsPageActivity(), "Directions");
                         return true;
-
                     case R.id.weather:
-                        Toast.makeText(getApplicationContext(), "Weather Selected", Toast.LENGTH_SHORT).show();
-                        WeatherPageActivity fragment4 = new WeatherPageActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction4 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction4.replace(R.id.frame, fragment4);
-                        fragmentTransaction4.commit();
+                        switchFragment(new WeatherPageActivity(), "Weather");
                         return true;
-
                     case R.id.tickets:
-                        Toast.makeText(getApplicationContext(), "Tickets Selected", Toast.LENGTH_SHORT).show();
-                        TicketsPageActivity fragment5 = new TicketsPageActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction5 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction5.replace(R.id.frame, fragment5);
-                        fragmentTransaction5.commit();
+                        switchFragment(new TicketsPageActivity(), "Tickets");
                         return true;
-
                     case R.id.notifications:
-                        Toast.makeText(getApplicationContext(), "Notifications Selected", Toast.LENGTH_SHORT).show();
-                        NotificationsPageActivity fragment6 = new NotificationsPageActivity();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction6 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction6.replace(R.id.frame, fragment6);
-                        fragmentTransaction6.commit();
+                        switchFragment(new NotificationsPageActivity(), "Notifications");
                         return true;
-
                     case R.id.logout:
-                        Toast.makeText(getApplicationContext(), "Logout Selected", Toast.LENGTH_SHORT).show();
-                        LogoutPage fragment7 = new LogoutPage();
-                        android.support.v4.app.FragmentTransaction fragmentTransaction7 = getSupportFragmentManager().beginTransaction();
-                        fragmentTransaction7.replace(R.id.frame, fragment7);
-                        fragmentTransaction7.commit();
+                        switchFragment(new LogoutPage(), "Logout");
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -118,8 +90,17 @@ public class HomePageActivity extends BaseActivity {
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
 
+        usernameTextView.setText(ParseUser.getCurrentUser().getUsername());
+
         actionBarDrawerToggle.syncState();
 
+    }
+
+    public void switchFragment(Fragment f, String label) {
+        Toast.makeText(getApplicationContext(), label + " Selected", Toast.LENGTH_SHORT).show();
+        android.support.v4.app.FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.frame, f);
+        fragmentTransaction.commit();
     }
 
     @Override
@@ -159,6 +140,12 @@ public class HomePageActivity extends BaseActivity {
 
     }
 
+    @Click(R.id.profile_header)
+    public void showUserProfile() {
+        UserProfileActivity_
+                .intent(this)
+                .start();
+    }
 
 
 

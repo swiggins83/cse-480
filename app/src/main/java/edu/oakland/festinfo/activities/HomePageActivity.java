@@ -1,25 +1,33 @@
 package edu.oakland.festinfo.activities;
 
+import android.content.Intent;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.parse.ParseUser;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONException;
 
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.utils.FacebookUtil;
 
 @EActivity(R.layout.activity_main)
 public class HomePageActivity extends BaseActivity {
@@ -34,6 +42,40 @@ public class HomePageActivity extends BaseActivity {
     CardView profileHeader;
     @ViewById(R.id.username)
     TextView usernameTextView;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (ParseUser.getCurrentUser().getUsername() == null) {
+            LoginActivity_
+                    .intent(this)
+                    .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .start();
+        } else {
+            fetchFacebookData();
+        }
+    }
+
+    private void fetchFacebookData() {
+        FacebookUtil.getUserName(new GraphRequest.Callback() {
+            @Override
+            public void onCompleted(GraphResponse response) {
+                try {
+                    String userName = (String) response.getJSONObject().get("name");
+                    ParseUser.getCurrentUser().setUsername(userName);
+                    usernameTextView.setText(userName);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
 
     @AfterViews
     void init() {
@@ -67,7 +109,12 @@ public class HomePageActivity extends BaseActivity {
                         switchFragment(new NotificationsPageActivity(), "Notifications");
                         return true;
                     case R.id.logout:
-                        switchFragment(new LogoutPage(), "Logout");
+                        ParseUser.logOut();
+                        LoginManager.getInstance().logOut();
+                        LoginActivity_
+                                .intent(HomePageActivity.this)
+                                .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                .start();
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -89,8 +136,6 @@ public class HomePageActivity extends BaseActivity {
         };
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
-
-        usernameTextView.setText(ParseUser.getCurrentUser().getUsername());
 
         actionBarDrawerToggle.syncState();
 
@@ -126,14 +171,14 @@ public class HomePageActivity extends BaseActivity {
     }
 
     @Click(R.id.settings_button)
-    public void showSettings(){
+    public void launchSettingActivity(){
         SettingsPageActivity_
                 .intent(this)
                 .start();
     }
 
     @Click(R.id.map_button)
-    public void showMap() {
+    public void launchMapActivity() {
         MapPageActivity_
                 .intent(this)
                 .start();
@@ -141,7 +186,7 @@ public class HomePageActivity extends BaseActivity {
     }
 
     @Click(R.id.profile_header)
-    public void showUserProfile() {
+    public void launchUserProfileActivity() {
         UserProfileActivity_
                 .intent(this)
                 .start();

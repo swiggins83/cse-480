@@ -1,25 +1,42 @@
 package edu.oakland.festinfo.activities;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.parse.ParseUser;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+import org.json.JSONException;
+import org.json.JSONObject;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.utils.FacebookUtil;
 
 @EActivity(R.layout.activity_main)
 public class HomePageActivity extends BaseActivity {
@@ -34,6 +51,92 @@ public class HomePageActivity extends BaseActivity {
     CardView profileHeader;
     @ViewById(R.id.username)
     TextView usernameTextView;
+    @ViewById(R.id.profile_image)
+    CircleImageView profileImage;
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // check if user exists
+        if (ParseUser.getCurrentUser().getUsername() == null) {
+            LoginActivity_
+                    .intent(this)
+                    .flags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK)
+                    .start();
+        } else {
+            // check if user linked to facebook
+            if (AccessToken.getCurrentAccessToken() != null) {
+                fetchFacebookData();
+            } else {
+                // personalize app with parse info instead
+                setUsernameText(ParseUser.getCurrentUser().getUsername());
+            }
+        }
+    }
+
+    private void fetchFacebookData() {
+
+        FacebookUtil.getUserInfo(new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                // set header name
+                try {
+                    String userName = (String) response.getJSONObject().get("name");
+                    ParseUser.getCurrentUser().setUsername(userName);
+                    setUsernameText(userName);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                // set profile image
+                try {
+                    Uri uri = Uri.parse(response.getJSONObject()
+                            .getJSONObject("picture")
+                            .getJSONObject("data")
+                            .getString("url"));
+                    Picasso.with(HomePageActivity.this).load(uri).placeholder(R.drawable.ic_account_circle).into(profileImage);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                // set profile header
+                try {
+                    Uri uri = Uri.parse(response.getJSONObject()
+                            .getJSONObject("cover")
+                            .getString("source"));
+                    Picasso.with(HomePageActivity.this).load(uri).into(new Target() {
+                        @Override
+                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                            profileHeader.setBackground(new BitmapDrawable(getResources(), bitmap));
+                        }
+
+                        @Override
+                        public void onBitmapFailed(Drawable errorDrawable) {
+                        }
+
+                        @Override
+                        public void onPrepareLoad(Drawable placeHolderDrawable) {
+                        }
+                    });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+
+    }
+
+    private void setUsernameText(String userName) {
+        usernameTextView.setText(userName);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppEventsLogger.deactivateApp(this);
+    }
 
     @AfterViews
     void init() {
@@ -67,7 +170,12 @@ public class HomePageActivity extends BaseActivity {
                         switchFragment(new NotificationsPageActivity(), "Notifications");
                         return true;
                     case R.id.logout:
-                        switchFragment(new LogoutPage(), "Logout");
+                        ParseUser.logOut();
+                        LoginManager.getInstance().logOut();
+                        LoginActivity_
+                                .intent(HomePageActivity.this)
+                                .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                                .start();
                         return true;
                     default:
                         Toast.makeText(getApplicationContext(), "Somethings Wrong", Toast.LENGTH_SHORT).show();
@@ -89,8 +197,6 @@ public class HomePageActivity extends BaseActivity {
         };
 
         drawerLayout.setDrawerListener(actionBarDrawerToggle);
-
-        usernameTextView.setText(ParseUser.getCurrentUser().getUsername());
 
         actionBarDrawerToggle.syncState();
 
@@ -125,24 +231,37 @@ public class HomePageActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Click(R.id.settings_button)
-    public void showSettings(){
-        SettingsPageActivity_
+    @Click(R.id.profile_header)
+    public void launchUserProfileActivity() {
+        UserProfileActivity_
                 .intent(this)
                 .start();
     }
 
     @Click(R.id.map_button)
-    public void showMap() {
+    public void launchMapActivity() {
         MapPageActivity_
                 .intent(this)
                 .start();
-
     }
 
-    @Click(R.id.profile_header)
-    public void showUserProfile() {
-        UserProfileActivity_
+    @Click(R.id.friends_button)
+    public void launchFriendsActivity() {
+        FacebookUtil.getUserFriends(this, new GraphRequest.GraphJSONObjectCallback() {
+            @Override
+            public void onCompleted(JSONObject object, GraphResponse response) {
+                try {
+                    Log.d("FRANDS", "" + response.getJSONObject().get("data"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    @Click(R.id.settings_button)
+    public void launchSettingActivity(){
+        SettingsPageActivity_
                 .intent(this)
                 .start();
     }

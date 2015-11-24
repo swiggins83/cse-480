@@ -1,10 +1,14 @@
 package edu.oakland.festinfo.activities;
 
-        import android.graphics.Color;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
+import com.facebook.appevents.AppEventsLogger;
 import com.github.paolorotolo.appintro.AppIntro;
 import com.github.paolorotolo.appintro.AppIntroFragment;
+import com.parse.ParseUser;
 
 import edu.oakland.festinfo.R;
 
@@ -12,6 +16,13 @@ import edu.oakland.festinfo.R;
  * Created by Devin on 9/22/2015.
  */
 public class FestivalAppIntroActivity extends AppIntro {
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        AppEventsLogger.activateApp(this);
+        checkIfLoggedIn();
+    }
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -28,29 +39,39 @@ public class FestivalAppIntroActivity extends AppIntro {
 
     }
 
-    private void loadMainActivity(){
-        RegistrationActivity_
+    private void checkIfLoggedIn() {
+        if (ParseUser.getCurrentUser() != null) {
+            if (ParseUser.getCurrentUser().getUsername() != null) {
+                HomePageActivity_
+                        .intent(this)
+                        .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .start();
+            }
+        }
+    }
+
+    private void launchLoginActivity(){
+        LoginActivity_
                 .intent(this)
+                .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .start();
     }
 
-    private void loadMain2Activity(){
-        LoginActivity_
+    private void launchRegistrationActivity(){
+        RegistrationActivity_
                 .intent(this)
+                .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 .start();
-
     }
 
     @Override
     public void onSkipPressed(){
-
-        loadMain2Activity();
-
+        launchLoginActivity();
     }
+
     @Override
     public void onDonePressed(){
-
-        loadMainActivity();
+        launchRegistrationActivity();
     }
 
 }

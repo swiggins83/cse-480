@@ -63,6 +63,14 @@
                 android:background="@drawable/login_button"
                 android:layout_below="@id/password_layout" />
 
+            <com.facebook.login.widget.LoginButton
+                android:id="@+id/facebook_login_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="20dp"
+                android:layout_below="@id/submit_button"
+                android:layout_marginTop="16dp" />
+
         </RelativeLayout>
 
     </ScrollView>

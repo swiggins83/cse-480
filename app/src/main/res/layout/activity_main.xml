@@ -75,7 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:columnCount="2"
-                    android:rowCount="3">
+                    android:rowCount="3"
+                    android:layout_gravity="bottom">
 
                     <RelativeLayout
                         android:id="@+id/schedule_button"

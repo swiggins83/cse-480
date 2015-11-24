@@ -147,6 +147,13 @@ public class HomePageActivity extends BaseActivity {
                 .start();
     }
 
+    @Click(R.id.favorites_button)
+    public void showFavorites() {
+        ArtistDetailActivity_
+                .intent(this)
+                .start();
+    }
+
 
 
 }

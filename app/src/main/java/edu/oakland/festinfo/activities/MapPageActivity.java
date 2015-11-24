@@ -3,21 +3,23 @@ package edu.oakland.festinfo.activities;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.service.carrier.CarrierMessagingService;
-import android.support.v4.app.FragmentActivity;
 import android.text.InputType;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,9 +27,7 @@ import android.widget.Spinner;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
-import com.google.android.gms.common.api.Api;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
@@ -35,7 +35,6 @@ import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
@@ -53,34 +52,38 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 
+import com.github.clans.fab.FloatingActionButton;
+
 import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseACL;
+import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseSession;
+import com.parse.ParseUser;
+import com.parse.http.ParseHttpRequest;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 
-import java.io.FileDescriptor;
-import java.io.PrintWriter;
+import java.text.ParsePosition;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.models.CombinedMarker;
 
 @EActivity(R.layout.activity_map)
 public class MapPageActivity extends BaseActivity implements OnMapClickListener,
-        OnMapLongClickListener, OnMarkerDragListener, GoogleMap.OnMarkerClickListener,
+        OnMapLongClickListener, OnMarkerDragListener,
         ConnectionCallbacks, OnConnectionFailedListener, ResultCallback<Status> {
-
 
     protected static final String TAG = "MapPageActivity";
 
@@ -89,6 +92,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     MapFragment mapFragment;
 
     private Spinner colorSpinner;
+    private Spinner mapKeySpinner;
 
     private GeofenceStore mGeofenceStore;
 
@@ -97,8 +101,14 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     @ViewById(R.id.locinfo)
     TextView tvLocInfo;
 
-    @ViewById(R.id.debugTextview)
-    TextView debugText;
+    //Arrays for map key spinner
+    String[] strings = {"Map Key", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
+            "Hot Air Balloon Rides", "Access Shuttle", "Restrooms", "Tents", "Stages"};
+    String[] subs = {"click to expand", "", "", "", "", "", "", "", "", "", ""};
+    int arr_images[] = {R.drawable.place_marker_24dp, R.drawable.orange_marker_24dp, R.drawable.red_marker_24dp,
+            R.drawable.blue_marker_24dp, R.drawable.violet_marker_24dp,
+            R.drawable.azure_marker_24dp, R.drawable.rose_marker_24dp, R.drawable.green_marker_24dp,
+            R.drawable.yellow_marker_24dp, R.drawable.cyan_marker_24dp, R.drawable.magenta_marker_24dp};
 
     Circle mapCircle;
     ArrayList<Circle> circleArray = new ArrayList<Circle>();
@@ -111,7 +121,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     GoogleApiClient mGoogleApiClient;
     private PendingIntent mGeofencePendingIntent = null;
 
-
     String titleGet;
     Double geo1Lat;
     Double geo1Long;
@@ -122,13 +131,14 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     String currentMovingMarker = "null";
     String currentObjectID = "Null";
-    String currentCircleID;
     String currentMarkerTitle = "Null";
 
     boolean geofencesCreated = false;
 
     @AfterViews
     void init() {
+        mapKeySpinner = (Spinner) findViewById(R.id.mapkey_spinner);
+        mapKeySpinner.setAdapter(new MyAdapter(MapPageActivity.this, R.layout.row, strings));
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -140,173 +150,146 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         map.setOnMapClickListener(this);
         map.setOnMapLongClickListener(this);
         map.setOnMarkerDragListener(this);
-        map.setOnMarkerClickListener(this);
         map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
                 tvLocInfo.setText("Info Window Selected");
-                AlertDialog.Builder infowindowBuilder = new AlertDialog.Builder(MapPageActivity.this);
-                infowindowBuilder.setTitle(R.string.infowindow_click_options)
-                        .setItems(R.array.infowindow_choices_array, new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                switch (which) {
-                                    case 0:
-                                        tvLocInfo.setText("Delete Marker Selected");
-                                        AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(MapPageActivity.this);
-                                        deleteConfirmation.setTitle("Warning");
-                                        deleteConfirmation.setMessage("Are you sure you want to delete this marker?");
-                                        deleteConfirmation.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-                                                currentMarkerTitle = marker.getTitle();
+                if (marker.getTitle().equals("Ranch Area") || marker.getTitle().equals("Sherwood Court")
+                        || marker.getTitle().equals("Tripolee") || marker.getTitle().equals("The Observatory")
+                        || marker.getTitle().equals("The Hangar") || marker.getTitle().equals("Jubilee")
+                        || marker.getTitle().equals("Forest Stage")) {
+                    AlertDialog.Builder infowindowBuilderGeofence = new AlertDialog.Builder(MapPageActivity.this);
+                    infowindowBuilderGeofence.setTitle(R.string.infowindow_geofence_click_options)
+                            .setItems(R.array.infowindow_geofence_choices_array, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
 
-                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
-                                                query.whereEqualTo("Title", currentMarkerTitle);
-                                                query.getFirstInBackground(new GetCallback<ParseObject>() {
-                                                    @Override
-                                                    public void done(ParseObject object, ParseException e) {
-                                                        String debug = "string: ";
-
-                                                        try {
-                                                            for (int i = 0; i < combinedArray.size(); i++) {
-                                                                debug = combinedArray.get(i).getIdentification() + ":" + object.getString("GeofenceID") + ":" + combinedArray.get(i).getCircle().getId();
-                                                                debugText.setText(debug);
-                                                                if (combinedArray.get(i).getIdentification().equals(object.getString("GeofenceID"))) {
-                                                                    combinedArray.get(i).getCircle().setRadius(0);
-                                                                    combinedArray.get(i).getCircle().remove();
-                                                                    combinedArray.get(i).getMarker().remove();
-                                                                    combinedArray.remove(i);
-                                                                    object.delete();
-                                                                }
-
-                                                            }
-                                                        } catch (ParseException e1) {
-                                                            e1.printStackTrace();
-                                                        }
-                                                        object.saveInBackground();
-
+                                                case 0:
+                                                    tvLocInfo.setText("Favorite Stage Selected");
+                                                    ParseInstallation installationFavorite = ParseInstallation.getCurrentInstallation();
+                                                    if (marker.getTitle().equals("Ranch Area")) {
+                                                        installationFavorite.put("RanchAreaFavorited", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Sherwood Court")) {
+                                                        installationFavorite.put("SherwoodCourtFavorited", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Tripolee")) {
+                                                        installationFavorite.put("TripoleeFavorited", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("The Hangar")) {
+                                                        installationFavorite.put("TheHangar", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Jubilee")) {
+                                                        installationFavorite.put("JubileeFavorited", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Forest Stage")) {
+                                                        installationFavorite.put("ForestStageFavorited", true);
+                                                        installationFavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("The Observatory")) {
+                                                        installationFavorite.put("TheObservatoryFavorited", true);
+                                                        installationFavorite.saveInBackground();
                                                     }
-                                                });
-                                            }
-                                        });
-                                        deleteConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                dialog.cancel();
-                                            }
-                                        });
-                                        deleteConfirmation.show();
-                                        break;
-
-                                    case 1:
-                                        tvLocInfo.setText("Add Geofence Selected");
-                                        for (int i = 0; i < combinedArray.size(); i++) {
-                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
-                                                if (combinedArray.get(i).getCircle().getRadius() != 0) {
-                                                    Toast.makeText(getApplicationContext(), "You already have created a geofence", Toast.LENGTH_SHORT).show();
                                                     break;
-                                                } else {
-                                                    final AlertDialog.Builder newRadiusInput = new AlertDialog.Builder(MapPageActivity.this);
-                                                    newRadiusInput.setTitle("Enter new radius in Meters: ");
-                                                    final EditText newInput = new EditText(MapPageActivity.this);
-                                                    newInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                                                    newRadiusInput.setView(newInput);
-                                                    newRadiusInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+
+                                                case 1:
+                                                    tvLocInfo.setText("Unfavorite Stage Selected");
+                                                    ParseInstallation installationUnfavorite = ParseInstallation.getCurrentInstallation();
+                                                    if (marker.getTitle().equals("Ranch Area")) {
+                                                        installationUnfavorite.put("RanchAreaFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Sherwood Court")) {
+                                                        installationUnfavorite.put("SherwoodCourtFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Tripolee")) {
+                                                        installationUnfavorite.put("TripoleeFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("The Hangar")) {
+                                                        installationUnfavorite.put("TheHangar", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Jubilee")) {
+                                                        installationUnfavorite.put("JubileeFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("Forest Stagee")) {
+                                                        installationUnfavorite.put("ForestStageFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    } else if (marker.getTitle().equals("The Observatory")) {
+                                                        installationUnfavorite.put("TheObservatoryFavorited", false);
+                                                        installationUnfavorite.saveInBackground();
+                                                    }
+                                                    break;
+
+                                            }
+                                        }
+
+                                    }
+
+                            );
+                    infowindowBuilderGeofence.show();
+                } else {
+                    AlertDialog.Builder infowindowBuilderNoGeofence = new AlertDialog.Builder(MapPageActivity.this);
+                    infowindowBuilderNoGeofence.setTitle(R.string.infowindow_nogeofence_click_options)
+                            .setItems(R.array.infowindow_nogeofence_choices_array, new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            switch (which) {
+                                                case 0:
+                                                    tvLocInfo.setText("Delete Marker Selected");
+                                                    AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(MapPageActivity.this);
+                                                    deleteConfirmation.setTitle("Warning");
+                                                    deleteConfirmation.setMessage("Are you sure you want to delete this marker?");
+                                                    deleteConfirmation.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
-                                                            if (newInput.getText().toString().matches("")) {
-                                                                Toast.makeText(getApplicationContext(), "No Input Entered!", Toast.LENGTH_SHORT).show();
-                                                            } else {
-                                                                final double radius = Double.parseDouble(newInput.getText().toString());
-                                                                for (int i = 0; i < combinedArray.size(); i++) {
-                                                                    if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
-                                                                        combinedArray.get(i).getCircle().setRadius(radius);
-                                                                    }
-                                                                }
-                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
-                                                                query.findInBackground(new FindCallback<ParseObject>() {
-                                                                    @Override
-                                                                    public void done(List<ParseObject> objects, ParseException e) {
-                                                                        if (e == null) {
-                                                                            for (int i = 0; i < objects.size(); i++) {
-                                                                                if (objects.get(i).getString("Title").equals(marker.getTitle())) {
-                                                                                    objects.get(i).put("GeofenceRadius", radius);
-                                                                                    objects.get(i).saveInBackground();
-                                                                                }
-                                                                            }
-                                                                        } else {
-                                                                            Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
-                                                                        }
-                                                                    }
-                                                                });
+                                                            ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
+                                                            currentMarkerTitle = marker.getTitle();
 
-                                                            }
+                                                            ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
+                                                            query.whereEqualTo("Title", currentMarkerTitle);
+                                                            query.getFirstInBackground(new GetCallback<ParseObject>() {
+                                                                @Override
+                                                                public void done(ParseObject object, ParseException e) {
+
+                                                                    try {
+                                                                        for (int i = 0; i < combinedArray.size(); i++) {
+                                                                            if (combinedArray.get(i).getIdentification().equals(object.getString("GeofenceID"))) {
+                                                                                combinedArray.get(i).getCircle().setRadius(0);
+                                                                                combinedArray.get(i).getCircle().remove();
+                                                                                combinedArray.get(i).getMarker().remove();
+                                                                                combinedArray.remove(i);
+                                                                                object.delete();
+                                                                            }
+
+                                                                        }
+                                                                    } catch (ParseException e1) {
+                                                                        e1.printStackTrace();
+                                                                    }
+                                                                    object.saveInBackground();
+
+                                                                }
+                                                            });
                                                         }
                                                     });
-                                                    newRadiusInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                    deleteConfirmation.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             dialog.cancel();
                                                         }
                                                     });
-                                                    newRadiusInput.show();
-                                                }
-                                            }
-                                        }
-                                        break;
-
-
-                                    case 2:
-                                        tvLocInfo.setText("Remove Geofence Selected");
-                                        for (int i = 0; i < combinedArray.size(); i++) {
-                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
-                                                combinedArray.get(i).getCircle().setRadius(0);
-                                            }
-                                        }
-                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
-                                        query.findInBackground(new FindCallback<ParseObject>() {
-                                            @Override
-                                            public void done(List<ParseObject> objects, ParseException e) {
-                                                if (e == null) {
-                                                    for (int i = 0; i < objects.size(); i++) {
-                                                        if (objects.get(i).getString("Title").equals(marker.getTitle())) {
-                                                            objects.get(i).put("GeofenceRadius", 0);
-                                                            objects.get(i).saveInBackground();
-                                                        }
-                                                    }
-                                                } else {
-                                                    Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }
-                                        });
-                                        break;
-
-                                    case 3:
-                                        tvLocInfo.setText("Change Geofence Size Selected");
-                                        for (int i = 0; i < combinedArray.size(); i++) {
-                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
-                                                if (combinedArray.get(i).getCircle().getRadius() == 0) {
-                                                    Toast.makeText(getApplicationContext(), "Geofence has not been created.", Toast.LENGTH_SHORT).show();
+                                                    deleteConfirmation.show();
                                                     break;
-                                                } else {
-                                                    AlertDialog.Builder changeRadiusInput = new AlertDialog.Builder(MapPageActivity.this);
-                                                    changeRadiusInput.setTitle("Enter new radius in Meters: ");
+
+                                                case 1:
+                                                    tvLocInfo.setText("Change title selected");
+                                                    AlertDialog.Builder changeTitleInput = new AlertDialog.Builder(MapPageActivity.this);
+                                                    changeTitleInput.setTitle("Enter new Title: ");
                                                     final EditText changeInput = new EditText(MapPageActivity.this);
-                                                    changeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
-                                                    changeRadiusInput.setView(changeInput);
-                                                    changeRadiusInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                    changeInput.setInputType(InputType.TYPE_CLASS_TEXT);
+                                                    changeTitleInput.setView(changeInput);
+                                                    changeTitleInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             if (changeInput.getText().toString().matches("")) {
                                                                 Toast.makeText(getApplicationContext(), "No Input Entered!", Toast.LENGTH_SHORT).show();
                                                             } else {
-                                                                final double radius = Double.parseDouble(changeInput.getText().toString());
-                                                                for (int i = 0; i < combinedArray.size(); i++) {
-                                                                    if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
-                                                                        combinedArray.get(i).getCircle().setRadius(radius);
-                                                                    }
-                                                                }
                                                                 ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
                                                                 query.findInBackground(new FindCallback<ParseObject>() {
                                                                     @Override
@@ -314,7 +297,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                                         if (e == null) {
                                                                             for (int i = 0; i < objects.size(); i++) {
                                                                                 if (objects.get(i).getString("Title").equals(marker.getTitle())) {
-                                                                                    objects.get(i).put("GeofenceRadius", radius);
+                                                                                    objects.get(i).put("Title", changeInput.getText().toString());
                                                                                     objects.get(i).saveInBackground();
                                                                                 }
                                                                             }
@@ -323,40 +306,70 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                                         }
                                                                     }
                                                                 });
+                                                                for (int i = 0; i < combinedArray.size(); i++) {
+                                                                    if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                                        combinedArray.get(i).getMarker().setTitle(changeInput.getText().toString());
+                                                                    }
+                                                                }
+
                                                             }
                                                         }
                                                     });
-                                                    changeRadiusInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                    changeTitleInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                                                         @Override
                                                         public void onClick(DialogInterface dialog, int which) {
                                                             dialog.cancel();
                                                         }
                                                     });
-                                                    changeRadiusInput.show();
-                                                }
+                                                    changeTitleInput.show();
+                                                    break;
+
                                             }
                                         }
 
-                                                    break;
+                                    }
 
-                                                    default:
-                                                        tvLocInfo.setText("No Option Selected");
-                                                        break;
-
-                                                }
-                        }
-
+                            );
+                    infowindowBuilderNoGeofence.show();
+                }
             }
-
-            );
-            infowindowBuilder.show();
-        }
     });
 
         focusCamera();
-        drawBoundaries();
         addListenerOnSpinnerItemSelection();
         buildGoogleApiClient();
+
+    }
+
+    public class MyAdapter extends ArrayAdapter<String> {
+        public MyAdapter(Context context, int textViewResourceId, String[] objects){
+            super(context, textViewResourceId, objects);
+        }
+
+        @Override
+        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            return getCustomView(position, convertView, parent);
+        }
+
+        public View getCustomView(int position, View convertView, ViewGroup parent) {
+            LayoutInflater inflator = getLayoutInflater();
+            View row = inflator.inflate(R.layout.row, parent, false);
+            TextView mainLabel = (TextView)row.findViewById(R.id.company);
+            TextView label = (TextView)row.findViewById(R.id.sub);
+            mainLabel.setText(strings[position]);
+            label.setText(subs[position]);
+
+            ImageView icon = (ImageView)row.findViewById(R.id.image);
+            icon.setImageResource(arr_images[position]);
+
+            return row;
+        }
+
 
     }
 
@@ -366,18 +379,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 new LatLng(42.67076892499418, -83.21840766817331),
                 new LatLng(42.67571776885421, -83.21245819330215));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(OAKLAND.getCenter(), 15));
-    }
-
-    public void drawBoundaries() {
-        // draws rough lines around EC parking lot
-        PolylineOptions rectOptions = new PolylineOptions()
-                .add(new LatLng(42.6713583, -83.215614482)) // north west
-                .add(new LatLng(42.670903, -83.215614482)) // south west
-                .add(new LatLng(42.670903, -83.21417212)) // south east
-                .add(new LatLng(42.671420707, -83.214113451))  // north east
-                .add(new LatLng(42.6713583, -83.215614482)); // closing at north west
-
-        Polyline polyline = map.addPolyline(rectOptions);
     }
 
     @Override
@@ -405,12 +406,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         colorSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
     }
 
-
-
     @Override
     protected void onResume(){
         super.onResume();
-
 
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
@@ -420,57 +418,89 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         }
         //Pregenerated Markers for Geofences
         map.addMarker(new MarkerOptions()
-        .title("EC")
+        .title("Ranch Area")
         .position(new LatLng(42.671896, -83.215000))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         map.addMarker(new MarkerOptions()
-        .title("MSC")
+        .title("Sherwood Court")
         .position(new LatLng(42.670989, -83.217028))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         map.addMarker(new MarkerOptions()
-                .title("Rec")
+                .title("Tripolee")
                 .position(new LatLng(42.673979, -83.212962))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         map.addMarker(new MarkerOptions()
-                .title("OC")
+                .title("The Hangar")
                 .position(new LatLng(42.674286, -83.216577))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
+        map.addMarker(new MarkerOptions()
+            .title("Jubilee")
+            .position(new LatLng(42.672307, -83.210057))
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+
+        map.addMarker(new MarkerOptions()
+            .title("Forest Stage")
+            .position(new LatLng(42.677103, -83.213855))
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+
+        map.addMarker(new MarkerOptions()
+            .title("The Observatory")
+            .position(new LatLng(42.677953, -83.219222))
+            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+
         //Build predefined Circles
-        //Engineering Center
+        //Ranch Area
         map.addCircle(new CircleOptions()
                 .center(new LatLng(42.671896, -83.215000))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
-        //Math and Science Center
+        //Sherwood Court
         map.addCircle(new CircleOptions()
                 .center(new LatLng(42.670989, -83.217028))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
-        //Recreation Center
+        //Tripolee
         map.addCircle(new CircleOptions()
                 .center(new LatLng(42.673979, -83.212962))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
-        //Oakland Center
+        //The Hangar
         map.addCircle(new CircleOptions()
                 .center(new LatLng(42.674286, -83.216577))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
-
+        //Jubilee
+        map.addCircle(new CircleOptions()
+            .center(new LatLng(42.672307, -83.210057))
+            .radius(100)
+            .strokeColor(Color.MAGENTA)
+            .strokeWidth(3));
+        //Forest Stage
+        map.addCircle(new CircleOptions()
+                .center(new LatLng(42.677103, -83.213855))
+                .radius(100)
+                .strokeColor(Color.MAGENTA)
+                .strokeWidth(3));
+        //The Observatory
+        map.addCircle(new CircleOptions()
+                .center(new LatLng(42.677953, -83.219222))
+                .radius(100)
+                .strokeColor(Color.MAGENTA)
+                .strokeWidth(3));
 
         //Build static geofences here
         if (geofencesCreated == false) {
-            //Engineering Center
+            //Ranch Area
             geofenceArray.add(new Geofence.Builder()
-                    .setRequestId("EC")
+                    .setRequestId("RanchArea")
                     .setLoiteringDelay(30000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.671896, -83.215000, 100)
@@ -478,9 +508,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             | Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
-            //Math and Science Center
+            //Sherwood Court
             geofenceArray.add(new Geofence.Builder()
-                    .setRequestId("MSC")
+                    .setRequestId("SherwoodCourt")
                     .setLoiteringDelay(30000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.670989, -83.217028, 100)
@@ -488,9 +518,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             | Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
-            //Recreation Center
+            //Tripolee
             geofenceArray.add(new Geofence.Builder()
-                    .setRequestId("Rec")
+                    .setRequestId("Tripolee")
                     .setLoiteringDelay(30000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.673979, -83.212962, 100)
@@ -498,12 +528,42 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             | Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
-            //Oakland Center
+            //The Hangar
             geofenceArray.add(new Geofence.Builder()
-                    .setRequestId("OC")
+                    .setRequestId("TheHangar")
                     .setLoiteringDelay(30000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.674286, -83.216577, 100)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                            | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+            //Jubilee
+            geofenceArray.add(new Geofence.Builder()
+                    .setRequestId("Jubilee")
+                    .setLoiteringDelay(30000)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setCircularRegion(42.672307, -83.210057, 100)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                            | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+            //Forest Stage
+            geofenceArray.add(new Geofence.Builder()
+                    .setRequestId("ForestStage")
+                    .setLoiteringDelay(30000)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setCircularRegion(42.677103, -83.213855, 100)
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                            | Geofence.GEOFENCE_TRANSITION_EXIT)
+                    .build());
+            //The Observatory
+            geofenceArray.add(new Geofence.Builder()
+                    .setRequestId("TheObservatory")
+                    .setLoiteringDelay(30000)
+                    .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                    .setCircularRegion(42.677953, -83.219222, 100)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
                             | Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
@@ -567,16 +627,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
 
                 }
-
             }
 
         });
-
-
     }
-
-
-
 
     @Override
     public void onMapLongClick(final LatLng point) {
@@ -608,12 +662,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -625,19 +678,17 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Azure")) {
                     Marker newMarker = map.addMarker(new MarkerOptions()
                             .position(point)
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -649,7 +700,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Orange")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -657,12 +707,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -674,7 +723,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Green")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -682,12 +730,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -695,10 +742,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("Location", geoPoint);
                     MapMarkers.put("Color", BitmapDescriptorFactory.HUE_GREEN);
                     MapMarkers.put("HasGeofence", false);
-                    MapMarkers.put("HasGeofence", newMarker.getId());
+                    MapMarkers.put("GeofenceID", newMarker.getId());
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
-
+                    tvLocInfo.setText("Green Stored");
 
                 } else if (markerColor.equals("Violet")) {
 
@@ -707,12 +754,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -724,7 +770,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Blue")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -732,12 +777,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -749,7 +793,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Magenta")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -757,12 +800,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -774,7 +816,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Rose")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -782,12 +823,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -799,7 +839,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Yellow")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -807,12 +846,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -824,7 +862,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else if (markerColor.equals("Cyan")) {
 
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -832,12 +869,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -849,19 +885,17 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
 
-
                 } else {
                     Marker newMarker = map.addMarker(new MarkerOptions()
                             .position(point)
                             .title(text)
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(10));
+                    Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
                     CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
                     combinedArray.add(cm);
-                    debugText.setText(newMarker.getId() + newCircle.getId() + cm.getIdentification() + combinedArray.size());
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
 
@@ -882,21 +916,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             }
         });
         builder.show();
-
     }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-
-        tvLocInfo.setText("Marker Clicked");
-        map.animateCamera(CameraUpdateFactory.newLatLng(marker.getPosition()));
-        marker.showInfoWindow();
-
-
-        return true;
-    }
-
-
 
     @Override
     public void onMapClick(LatLng point) {
@@ -906,7 +926,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     }
 
     public void onMarkerDrag(Marker marker) {
-        tvLocInfo.setText("Marker " + marker.getId() + "Drag@" + marker.getPosition());
+        tvLocInfo.setText("Marker " + marker.getId() + "Drag");
     }
 
     public void onMarkerDragEnd(final Marker marker) {
@@ -936,36 +956,63 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
             }
         });
-
     }
 
-            public void onMarkerDragStart(Marker marker) {
-                tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
-                ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
-                currentMarkerTitle = marker.getTitle();
+    public void onMarkerDragStart(Marker marker) {
+        tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
+        ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
+        currentMarkerTitle = marker.getTitle();
 
-                ParseQuery query = new ParseQuery("MapMarkers");
-                query.whereEqualTo("Title", currentMarkerTitle);
-                query.findInBackground(new FindCallback<ParseObject>() {
-                    @Override
-                    public void done(List<ParseObject> objects, ParseException e) {
+        ParseQuery query = new ParseQuery("MapMarkers");
+        query.whereEqualTo("Title", currentMarkerTitle);
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> objects, ParseException e) {
 
-                        if (e == null) {
-                            for (int i = 0; i < objects.size(); i++) {
-                                currentMovingMarker = objects.get(i).getString("Title");
-                                currentObjectID = objects.get(i).getObjectId();
-                            }
-                        } else {
-                            Log.d("score", "Error: " + e.getMessage());
-                        }
-
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        currentMovingMarker = objects.get(i).getString("Title");
+                        currentObjectID = objects.get(i).getObjectId();
                     }
-
-
-                });
-
+                } else {
+                    Log.d("score", "Error: " + e.getMessage());
+                }
             }
 
+        });
+    }
+
+    @Click(R.id.share_button_on)
+    public void shareLocation() {
+        if (map.getMyLocation() == null) {
+            Toast.makeText(getApplicationContext(), "Cannot share location. Is your GPS on?", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), "Sharing location", Toast.LENGTH_SHORT).show();
+            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+            ParseGeoPoint geoPoint = new ParseGeoPoint(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
+            installation.put("currentLocation", geoPoint);
+            installation.saveInBackground();
+            tvLocInfo.setText("Stored Location to Parse");
+            FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
+            fabOn.setVisibility(View.INVISIBLE);
+            FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
+            fabOff.setVisibility(View.VISIBLE);
+        }
+    }
+
+    @Click(R.id.share_button_off)
+    public void shareLocationOff() {
+        Toast.makeText(getApplicationContext(), "No longer sharing location", Toast.LENGTH_SHORT).show();
+        ParseGeoPoint point = new ParseGeoPoint(0,0);
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("currentLocation", point);
+        installation.saveInBackground();
+        tvLocInfo.setText("Removed Location from Parse");
+        FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
+        fabOff.setVisibility(View.INVISIBLE);
+        FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
+        fabOn.setVisibility(View.VISIBLE);
+    }
 
     private synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -973,7 +1020,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-
     }
 
     @Override
@@ -1003,23 +1049,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         Log.i(TAG, "Connection Suspended");
     }
 
-    private GeofencingRequest getGeofencingRequest(Geofence geofence) {
-        GeofencingRequest.Builder builder = new GeofencingRequest.Builder();
-        builder.setInitialTrigger(GeofencingRequest.INITIAL_TRIGGER_ENTER);
-        builder.addGeofence(geofence);
-        return builder.build();
-    }
-
-    private PendingIntent getGeofencePendingIntent() {
-        //Reuses the intent if application has it already
-        if (mGeofencePendingIntent != null) {
-            return mGeofencePendingIntent;
-        }
-        Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
-
-        return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-    }
-
     public void onResult(Status status) {
         if (status.isSuccess()) {
             Toast.makeText(this, "Created Successfully", Toast.LENGTH_SHORT).show();
@@ -1029,4 +1058,156 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     }
 
 }
+
+//old add geofence code
+                                        /*
+                                        for (int i = 0; i < combinedArray.size(); i++) {
+                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                if (combinedArray.get(i).getCircle().getRadius() != 0) {
+                                                    Toast.makeText(getApplicationContext(), "You already have created a geofence", Toast.LENGTH_SHORT).show();
+                                                    break;
+                                                } else {
+                                                    final AlertDialog.Builder newRadiusInput = new AlertDialog.Builder(MapPageActivity.this);
+                                                    newRadiusInput.setTitle("Enter new radius in Meters: ");
+                                                    final EditText newInput = new EditText(MapPageActivity.this);
+                                                    newInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                                    newRadiusInput.setView(newInput);
+                                                    newRadiusInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            if (newInput.getText().toString().matches("")) {
+                                                                Toast.makeText(getApplicationContext(), "No Input Entered!", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                final double radius = Double.parseDouble(newInput.getText().toString());
+                                                                for (int i = 0; i < combinedArray.size(); i++) {
+                                                                    if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                                        combinedArray.get(i).getCircle().setRadius(radius);
+                                                                        geofenceArray.add(new Geofence.Builder()
+                                                                                .setRequestId(combinedArray.get(i).getMarker().getTitle())
+                                                                                .setLoiteringDelay(30000)
+                                                                                .setExpirationDuration(Geofence.NEVER_EXPIRE)
+                                                                                .setCircularRegion(combinedArray.get(i).getMarker().getPosition().latitude,
+                                                                                        combinedArray.get(i).getMarker().getPosition().longitude,
+                                                                                        (float) radius)
+                                                                                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
+                                                                                        | Geofence.GEOFENCE_TRANSITION_DWELL
+                                                                                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                                                                                .build());
+
+                                                                        mGeofenceStore = new GeofenceStore(MapPageActivity.this, geofenceArray);
+                                                                    }
+                                                                }
+                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
+                                                                query.findInBackground(new FindCallback<ParseObject>() {
+                                                                    @Override
+                                                                    public void done(List<ParseObject> objects, ParseException e) {
+                                                                        if (e == null) {
+                                                                            for (int i = 0; i < objects.size(); i++) {
+                                                                                if (objects.get(i).getString("Title").equals(marker.getTitle())) {
+                                                                                    objects.get(i).put("GeofenceRadius", radius);
+                                                                                    objects.get(i).saveInBackground();
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+
+                                                            }
+                                                        }
+                                                    });
+                                                    newRadiusInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+                                                    newRadiusInput.show();
+                                                }
+                                            }
+                                        }
+                                        */
+//old remove geofence code
+                                        /*for (int i = 0; i < combinedArray.size(); i++) {
+                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                for (int j = 0; j < geofenceArray.size(); j++) {
+                                                    if (geofenceArray.get(j).getRequestId().equals(marker.getTitle())) {
+                                                        Log.d(TAG, "Geofence removed");
+                                                        geofenceArray.remove(j);
+                                                    }
+                                                }
+                                                combinedArray.get(i).getCircle().setRadius(0);
+                                            }
+                                        }
+                                        mGeofenceStore = new GeofenceStore(MapPageActivity.this, geofenceArray);
+                                        ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
+                                        query.findInBackground(new FindCallback<ParseObject>() {
+                                            @Override
+                                            public void done(List<ParseObject> objects, ParseException e) {
+                                                if (e == null) {
+                                                    for (int i = 0; i < objects.size(); i++) {
+                                                        if (objects.get(i).getString("Title").equals(marker.getTitle())) {
+                                                            objects.get(i).put("GeofenceRadius", 0);
+                                                            objects.get(i).saveInBackground();
+                                                        }
+                                                    }
+                                                } else {
+                                                    Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+                                        }); */
+//old change geofence code
+                                        /*for (int i = 0; i < combinedArray.size(); i++) {
+                                            if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                if (combinedArray.get(i).getCircle().getRadius() == 0) {
+                                                    Toast.makeText(getApplicationContext(), "Geofence has not been created.", Toast.LENGTH_SHORT).show();
+                                                    break;
+                                                } else {
+                                                    AlertDialog.Builder changeRadiusInput = new AlertDialog.Builder(MapPageActivity.this);
+                                                    changeRadiusInput.setTitle("Enter new radius in Meters: ");
+                                                    final EditText changeInput = new EditText(MapPageActivity.this);
+                                                    changeInput.setInputType(InputType.TYPE_CLASS_NUMBER);
+                                                    changeRadiusInput.setView(changeInput);
+                                                    changeRadiusInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            if (changeInput.getText().toString().matches("")) {
+                                                                Toast.makeText(getApplicationContext(), "No Input Entered!", Toast.LENGTH_SHORT).show();
+                                                            } else {
+                                                                final double radius = Double.parseDouble(changeInput.getText().toString());
+                                                                for (int i = 0; i < combinedArray.size(); i++) {
+                                                                    if (combinedArray.get(i).getIdentification().equals(marker.getId())) {
+                                                                        combinedArray.get(i).getCircle().setRadius(radius);
+                                                                    }
+                                                                }
+                                                                ParseQuery<ParseObject> query = ParseQuery.getQuery("MapMarkers");
+                                                                query.findInBackground(new FindCallback<ParseObject>() {
+                                                                    @Override
+                                                                    public void done(List<ParseObject> objects, ParseException e) {
+                                                                        if (e == null) {
+                                                                            for (int i = 0; i < objects.size(); i++) {
+                                                                                if (objects.get(i).getString("Title").equals(marker.getTitle())) {
+                                                                                    objects.get(i).put("GeofenceRadius", radius);
+                                                                                    objects.get(i).saveInBackground();
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            Toast.makeText(getApplicationContext(), "Error!", Toast.LENGTH_SHORT).show();
+                                                                        }
+                                                                    }
+                                                                });
+                                                            }
+                                                        }
+                                                    });
+                                                    changeRadiusInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialog, int which) {
+                                                            dialog.cancel();
+                                                        }
+                                                    });
+                                                    changeRadiusInput.show();
+                                                }
+                                            }
+                                        }*/
 

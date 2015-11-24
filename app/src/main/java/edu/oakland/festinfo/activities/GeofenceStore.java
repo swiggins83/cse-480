@@ -26,6 +26,8 @@ import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.parse.ParseGeoPoint;
+import com.parse.ParseInstallation;
 
 /**
  * Created by Devin on 11/9/2015.
@@ -119,7 +121,15 @@ public class GeofenceStore implements ConnectionCallbacks, OnConnectionFailedLis
 
     @Override
     public void onLocationChanged(Location location) {
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        ParseGeoPoint geopoint = installation.getParseGeoPoint("currentLocation");
+        if (geopoint.getLatitude() != 0 && geopoint.getLongitude() != 0) {
+            ParseGeoPoint newLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+            installation.put("currentLocation", newLocation);
+            installation.saveInBackground();
+        } else if (geopoint == null) {
 
+        }
     }
 
 }

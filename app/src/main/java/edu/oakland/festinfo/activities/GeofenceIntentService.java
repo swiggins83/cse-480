@@ -7,6 +7,7 @@ import com.google.android.gms.location.GeofencingEvent;
 import com.parse.Parse;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
+import com.parse.ParseQuery;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -21,6 +22,7 @@ import android.util.Log;
 import bolts.Continuation;
 import bolts.Task;
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.activities.MapPageActivity;
 
 /**
  * Created by Devin on 11/9/2015.
@@ -51,8 +53,10 @@ public class GeofenceIntentService extends IntentService{
         if (!geofencingEvent.hasError()) {
             int transition = geofencingEvent.getGeofenceTransition();
             String notificationTitle;
+            String currentStage = "";
             ParseInstallation.getCurrentInstallation().saveInBackground();
             ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+            ParsePush push = new ParsePush();
             Log.d(TAG, installation.getInstallationId());
 
             switch (transition) {
@@ -60,22 +64,48 @@ public class GeofenceIntentService extends IntentService{
                     notificationTitle = "Geofence Entered";
                     Log.v(TAG, "Geofence Entered");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
-                        if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("EC")) {
-                            installation.put("EC", true);
-                            Log.d(TAG, "EC Geofence found");
+                        if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
+                            push.subscribeInBackground("RanchArea");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("MSC")) {
-                            installation.put("MSC", true);
-                            Log.d(TAG, "MSC Geofence found");
+                            Log.d(TAG, "Ranch Area Geofence found");
+                            currentStage = "Ranch Area";
+                            //MapPageActivity.addLocationToPage("Ranch Area");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
+                            push.subscribeInBackground("SherwoodCourt");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Rec")) {
-                            installation.put("Rec", true);
-                            Log.d(TAG, "Rec Geofence found");
+                            Log.d(TAG, "Sherwood Court Geofence found");
+                            currentStage = "Sherwood Court";
+                            //MapPageActivity.addLocationToPage("Sherwood Court");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
+                            push.subscribeInBackground("Tripolee");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("OC")) {
-                            installation.put("OC", true);
-                            Log.d(TAG, "OC Geofence found");
+                            Log.d(TAG, "Tripolee Geofence found");
+                            currentStage = "Tripolee";
+                            //MapPageActivity.addLocationToPage("Tripolee");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
+                            push.subscribeInBackground("TheHangar");
                             installation.saveInBackground();
+                            Log.d(TAG, "The Hangar Geofence found");
+                            currentStage = "The Hangar";
+                            //MapPageActivity.addLocationToPage("The Hangar");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
+                            push.subscribeInBackground("Jubilee");
+                            installation.saveInBackground();
+                            Log.d(TAG, "Jubilee Geofence found");
+                            currentStage = "Jubilee";
+                            //MapPageActivity.addLocationToPage("Jubilee");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
+                            push.subscribeInBackground("ForestStage");
+                            installation.saveInBackground();
+                            Log.d(TAG, "Forest Stage Geofence found");
+                            currentStage = "Forest Stage";
+                            //MapPageActivity.addLocationToPage("Forest Stage");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
+                            push.subscribeInBackground("TheObservatory");
+                            installation.saveInBackground();
+                            Log.d(TAG, "The Observatory Geofence found");
+                            currentStage = "The Observatory";
+                            //MapPageActivity.addLocationToPage("The Observatory");
                         } else {
                             Log.d(TAG, "No Geofence Found");
                         }
@@ -89,22 +119,48 @@ public class GeofenceIntentService extends IntentService{
                     notificationTitle = "Geofence Exit";
                     Log.v(TAG, "Geofence Exited");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
-                        if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("EC")) {
-                            installation.put("EC", false);
-                            Log.d(TAG, "EC Geofence removed");
+                        if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
+                            push.unsubscribeInBackground("RanchArea");
+                            Log.d(TAG, "Ranch Area Geofence removed");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("MSC")) {
-                            installation.put("MSC", false);
-                            Log.d(TAG, "MSC Geofence removed");
+                            currentStage = "Ranch Area";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
+                            push.unsubscribeInBackground("SherwoodCourt");
+                            Log.d(TAG, "Sherwood Court Geofence removed");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Rec")) {
-                            installation.put("Rec", false);
-                            Log.d(TAG, "Rec Geofence removed");
+                            currentStage = "Sherwood Court";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
+                            push.unsubscribeInBackground("Tripolee");
+                            Log.d(TAG, "Tripolee Geofence removed");
                             installation.saveInBackground();
-                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("OC")) {
-                            installation.put("OC", false);
-                            Log.d(TAG, "OC Geofence removed");
+                            currentStage = "Tripolee";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
+                            push.unsubscribeInBackground("TheHangar");
+                            Log.d(TAG, "The Hangar Geofence removed");
                             installation.saveInBackground();
+                            currentStage = "The Hangar";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
+                            push.unsubscribeInBackground("Jubilee");
+                            Log.d(TAG, "Jubilee Geofence removed");
+                            installation.saveInBackground();
+                            currentStage = "Jubilee";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
+                            push.unsubscribeInBackground("ForestStage");
+                            Log.d(TAG, "Forest Stage Geofence removed");
+                            installation.saveInBackground();
+                            currentStage = "Forest Stage";
+                            //MapPageActivity.removeLocationFromPage(" ");
+                        } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
+                            push.unsubscribeInBackground("TheObservatory");
+                            Log.d(TAG, "The Observatory Geofence removed");
+                            installation.saveInBackground();
+                            currentStage = "The Observatory";
+                            //MapPageActivity.removeLocationFromPage(" ");
                         } else {
                             Log.d(TAG, "No Geofence removed");
                         }
@@ -114,7 +170,7 @@ public class GeofenceIntentService extends IntentService{
                     notificationTitle = "Geofence Unknown";
             }
 
-            sendNotifiation(this, getTriggeringGeofences(intent), notificationTitle);
+            sendNotifiation(this, currentStage, notificationTitle);
         }
     }
 

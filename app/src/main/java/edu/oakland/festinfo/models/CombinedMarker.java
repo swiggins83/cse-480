@@ -1,4 +1,4 @@
-package edu.oakland.festinfo.activities;
+package edu.oakland.festinfo.models;
 
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.Marker;

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -177,7 +178,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationFavorite.put("TripoleeFavorited", true);
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
-                                                        installationFavorite.put("TheHangar", true);
+                                                        installationFavorite.put("TheHangarFavorited", true);
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationFavorite.put("JubileeFavorited", true);
@@ -1012,6 +1013,24 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         fabOff.setVisibility(View.INVISIBLE);
         FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
         fabOn.setVisibility(View.VISIBLE);
+    }
+
+    @Click(R.id.navigate_to_friend_button)
+    public void launchNavigation() {
+        ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
+        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        ParseGeoPoint friendLocation = null;
+        try {
+            friendLocation = query.get("EaR2Lnm019").getParseGeoPoint("currentLocation");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        ParseGeoPoint yourLocation = currentInstallation.getParseGeoPoint("currentLocation");
+        String url = "http://maps.google.com/maps?saddr="+yourLocation.getLatitude()+","
+                +yourLocation.getLongitude()+"&daddr="+friendLocation.getLatitude()+","
+                +friendLocation.getLongitude();
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+        startActivity(intent);
     }
 
     private synchronized void buildGoogleApiClient() {

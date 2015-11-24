@@ -68,5 +68,21 @@
         fab:fab_colorPressed="@color/PrimaryDarkColor"
         fab:fab_colorRipple="@color/PrimaryColor"
         />
+
+    <com.github.clans.fab.FloatingActionButton
+        android:id="@+id/navigate_to_friend_button"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/share_button_on"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:visibility="visible"
+        android:src="@drawable/ic_group"
+        fab:fab_colorNormal="@color/PrimaryColor"
+        fab:fab_colorPressed="@color/PrimaryDarkColor"
+        fab:fab_colorRipple="@color/PrimaryColor"
+        />
+
 </RelativeLayout>
 

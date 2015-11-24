@@ -28,6 +28,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.ParseUtil;
 import edu.oakland.festinfo.utils.StringUtils;
@@ -54,7 +57,11 @@ public class LoginActivity extends BaseActivity {
     @Click(R.id.facebook_login_button)
     public void login() {
 
-        ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, null, new LogInCallback() {
+        List<String> permissions = new ArrayList<>();
+        permissions.add("user_friends");
+        permissions.add("user_photos");
+        permissions.add("user_likes");
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(LoginActivity.this, permissions, new LogInCallback() {
             @Override
             public void done(ParseUser user, ParseException err) {
                 if (user == null) {

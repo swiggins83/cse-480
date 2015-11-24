@@ -1,7 +1,6 @@
 package edu.oakland.festinfo;
 
 import android.app.Application;
-import android.util.Log;
 
 import com.parse.Parse;
 import com.parse.ParseACL;
@@ -22,7 +21,6 @@ public class ApplicationStarter extends Application {
 
         ParseUser.enableRevocableSessionInBackground();
 
-        ParseUser.enableAutomaticUser();
         ParseACL defaultACL = new ParseACL();
         // Optionally enable public read access.
         // defaultACL.setPublicReadAccess(true);

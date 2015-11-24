@@ -3,7 +3,7 @@ package edu.oakland.festinfo.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.util.Log;
 
 import com.facebook.appevents.AppEventsLogger;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -21,13 +21,7 @@ public class FestivalAppIntroActivity extends AppIntro {
     public void onResume() {
         super.onResume();
         AppEventsLogger.activateApp(this);
-
-        if (ParseUser.getCurrentUser().getUsername() != null) {
-            HomePageActivity_
-                    .intent(this)
-                    .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                    .start();
-        }
+        checkIfLoggedIn();
     }
 
     @Override
@@ -43,6 +37,17 @@ public class FestivalAppIntroActivity extends AppIntro {
         showSkipButton(true);
         showDoneButton(true);
 
+    }
+
+    private void checkIfLoggedIn() {
+        if (ParseUser.getCurrentUser() != null) {
+            if (ParseUser.getCurrentUser().getUsername() != null) {
+                HomePageActivity_
+                        .intent(this)
+                        .flags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                        .start();
+            }
+        }
     }
 
     private void launchLoginActivity(){

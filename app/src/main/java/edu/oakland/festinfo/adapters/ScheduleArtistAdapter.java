@@ -48,7 +48,7 @@ public class ScheduleArtistAdapter extends ArrayAdapter<ArtistShowTime> {
 
         ArtistShowTime artistShowTime = showTimes.get(position);
         holder.nameTextView.setText(artistShowTime.getArtistName());
-        holder.timeTextView.setText(artistShowTime.getTime().toString());
+        holder.timeTextView.setText(artistShowTime.getStartTime().toString() + " - " + artistShowTime.getEndTime().toString());
         holder.locationTextView.setText(artistShowTime.getLocation());
         //holder.venueImageView.setImageDrawable(artistShowTime.getImage());
 

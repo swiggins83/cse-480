@@ -23,7 +23,13 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseFacebookUtils;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
@@ -33,6 +39,11 @@ import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
@@ -76,56 +87,82 @@ public class HomePageActivity extends BaseActivity {
 
     private void fetchFacebookData() {
 
-        FacebookUtil.getUserInfo(new GraphRequest.GraphJSONObjectCallback() {
+        FacebookUtil.getCurrentUserInfo(new GraphRequest.GraphJSONObjectCallback() {
             @Override
             public void onCompleted(JSONObject object, GraphResponse response) {
-
-                // set header name
-                try {
-                    String userName = (String) response.getJSONObject().get("name");
-                    ParseUser.getCurrentUser().setUsername(userName);
-                    setUsernameText(userName);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                // set profile image
-                try {
-                    Uri uri = Uri.parse(response.getJSONObject()
-                            .getJSONObject("picture")
-                            .getJSONObject("data")
-                            .getString("url"));
-                    Picasso.with(HomePageActivity.this).load(uri).placeholder(R.drawable.ic_account_circle).into(profileImage);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                // set profile header
-                try {
-                    Uri uri = Uri.parse(response.getJSONObject()
-                            .getJSONObject("cover")
-                            .getString("source"));
-                    Picasso.with(HomePageActivity.this).load(uri).into(new Target() {
-                        @Override
-                        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-                            profileHeader.setBackground(new BitmapDrawable(getResources(), bitmap));
-                        }
-
-                        @Override
-                        public void onBitmapFailed(Drawable errorDrawable) {
-                        }
-
-                        @Override
-                        public void onPrepareLoad(Drawable placeHolderDrawable) {
-                        }
-                    });
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
+                setHeaderName(response);
+                setProfileImage(response);
+                setProfileHeader(response);
             }
         });
 
+    }
+
+    private void setProfileHeader(GraphResponse response) {
+        try {
+            Uri uri = Uri.parse(response.getJSONObject()
+                    .getJSONObject("cover")
+                    .getString("source"));
+            Picasso.with(HomePageActivity.this).load(uri).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    profileHeader.setBackground(new BitmapDrawable(getResources(), bitmap));
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) {
+                }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) {
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setProfileImage(GraphResponse response) {
+        try {
+            Uri uri = Uri.parse(response.getJSONObject()
+                    .getJSONObject("picture")
+                    .getJSONObject("data")
+                    .getString("url"));
+            Picasso.with(HomePageActivity.this).load(uri).placeholder(R.drawable.ic_account_circle).into(new Target() {
+                @Override
+                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+                    profileImage.setImageBitmap(bitmap);
+
+                    // convert bitmap to byte array
+                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 0, bos);
+                    byte[] bitmapData = bos.toByteArray();
+
+                    ParseFile pf = new ParseFile(bitmapData);
+                    ParseUser.getCurrentUser().put("portrait", pf);
+                    ParseUser.getCurrentUser().saveInBackground();
+
+                }
+
+                @Override
+                public void onBitmapFailed(Drawable errorDrawable) { }
+
+                @Override
+                public void onPrepareLoad(Drawable placeHolderDrawable) { }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setHeaderName(GraphResponse response) {
+        try {
+            String userName = (String) response.getJSONObject().get("name");
+            ParseUser.getCurrentUser().setUsername(userName);
+            setUsernameText(userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     private void setUsernameText(String userName) {
@@ -247,16 +284,16 @@ public class HomePageActivity extends BaseActivity {
 
     @Click(R.id.friends_button)
     public void launchFriendsActivity() {
-        FacebookUtil.getUserFriends(this, new GraphRequest.GraphJSONObjectCallback() {
-            @Override
-            public void onCompleted(JSONObject object, GraphResponse response) {
-                try {
-                    Log.d("FRANDS", "" + response.getJSONObject().get("data"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+        FriendsActivity_
+                .intent(this)
+                .start();
+    }
+
+    @Click(R.id.favorites_button)
+    public void launchScheduleActivity() {
+        ScheduleActivity_
+                .intent(this)
+                .start();
     }
 
     @Click(R.id.settings_button)

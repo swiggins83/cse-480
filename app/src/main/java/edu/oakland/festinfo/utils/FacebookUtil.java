@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -17,49 +16,50 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 
 import org.androidannotations.annotations.EBean;
-import org.json.JSONException;
 
-import edu.oakland.festinfo.activities.HomePageActivity;
 import edu.oakland.festinfo.activities.HomePageActivity_;
 
 @EBean(scope = EBean.Scope.Singleton)
 public class FacebookUtil {
 
-    public static void getUserInfo(GraphRequest.GraphJSONObjectCallback callback) {
+    public static void getAnyUserInfo(String userId, GraphRequest.GraphJSONObjectCallback callback) {
+
+        Log.d("HEYID", "" + userId);
+
+        GraphRequest.newGraphPathRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/{" + userId + "}",
+                new GraphRequest.Callback() {
+                    public void onCompleted(GraphResponse response) {
+                        Log.d("HEY", "" + response.getRawResponse());
+                    }
+                }
+        ).executeAsync();
+
+    }
+
+    public static void getCurrentUserInfo(GraphRequest.GraphJSONObjectCallback callback) {
 
         GraphRequest request = GraphRequest.newMeRequest(
                 AccessToken.getCurrentAccessToken(),
                 callback);
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "name,cover,picture");
+        parameters.putString("fields", "name,cover,picture,id");
         request.setParameters(parameters);
         request.executeAsync();
 
     }
 
-    public static void getUserFriends(final Context context, GraphRequest.GraphJSONObjectCallback callback) {
+    public static void getUserFriends(final Context context, GraphRequest.Callback callback) {
 
         if (AccessToken.getCurrentAccessToken() != null) {
-
-            // GraphRequest request = GraphRequest.newMeRequest(
-            //         AccessToken.getCurrentAccessToken(),
-            //         callback);
-            // Bundle parameters = new Bundle();
-            // parameters.putString("fields", "friends");
-            // request.setParameters(parameters);
-            // request.executeAsync();
 
             new GraphRequest(
                     AccessToken.getCurrentAccessToken(),
                     "/me/friends",
                     null,
                     HttpMethod.GET,
-                    new GraphRequest.Callback() {
-                        public void onCompleted(GraphResponse response) {
-                            Log.d("FRANDS", response.getRawResponse());
-                            Toast.makeText(context, response.getJSONObject().toString(), Toast.LENGTH_LONG).show();
-                        }
-                    }
+                    callback
             ).executeAsync();
 
         } else {

@@ -123,12 +123,12 @@ public class GeofenceStore implements ConnectionCallbacks, OnConnectionFailedLis
     public void onLocationChanged(Location location) {
         ParseInstallation installation = ParseInstallation.getCurrentInstallation();
         ParseGeoPoint geopoint = installation.getParseGeoPoint("currentLocation");
-        if (geopoint.getLatitude() != 0 && geopoint.getLongitude() != 0) {
-            ParseGeoPoint newLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
-            installation.put("currentLocation", newLocation);
-            installation.saveInBackground();
-        } else if (geopoint == null) {
-
+        if (geopoint != null) {
+            if (geopoint.getLatitude() != 0 && geopoint.getLongitude() != 0) {
+                ParseGeoPoint newLocation = new ParseGeoPoint(location.getLatitude(), location.getLongitude());
+                installation.put("currentLocation", newLocation);
+                installation.saveInBackground();
+            }
         }
     }
 

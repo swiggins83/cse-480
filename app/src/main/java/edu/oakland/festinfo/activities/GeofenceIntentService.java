@@ -4,8 +4,11 @@ import java.util.List;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingEvent;
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
+import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 
@@ -45,6 +48,7 @@ public class GeofenceIntentService extends IntentService{
         super.onDestroy();
         Log.v(TAG, "onDestroy");
     }
+    //Final Exam 8-11 am thursday december 10th
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -52,129 +56,235 @@ public class GeofenceIntentService extends IntentService{
         Log.v(TAG, "OnHandleEvent");
         if (!geofencingEvent.hasError()) {
             int transition = geofencingEvent.getGeofenceTransition();
-            String notificationTitle;
             String currentStage = "";
             ParseInstallation.getCurrentInstallation().saveInBackground();
             ParseInstallation installation = ParseInstallation.getCurrentInstallation();
             ParsePush push = new ParsePush();
-            Log.d(TAG, installation.getInstallationId());
-
+            ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
+            final long currentTime = System.currentTimeMillis()/1000;
             switch (transition) {
-                case Geofence.GEOFENCE_TRANSITION_ENTER:
-                    notificationTitle = "Geofence Entered";
-                    Log.v(TAG, "Geofence Entered");
+                case Geofence.GEOFENCE_TRANSITION_DWELL:
+                    Log.v(TAG, "Geofence Dwelling");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
                         if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
                             push.subscribeInBackground("RanchArea");
                             installation.saveInBackground();
-                            Log.d(TAG, "Ranch Area Geofence found");
-                            currentStage = "Ranch Area";
-                            //MapPageActivity.addLocationToPage("Ranch Area");
+                            query.whereEqualTo("location", "ranch area");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "Ranch Area");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "Ranch Area");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
                             push.subscribeInBackground("SherwoodCourt");
                             installation.saveInBackground();
-                            Log.d(TAG, "Sherwood Court Geofence found");
-                            currentStage = "Sherwood Court";
-                            //MapPageActivity.addLocationToPage("Sherwood Court");
+                            query.whereEqualTo("location", "sherwood court");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "Sherwood Court");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "Sherwood Court");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
                             push.subscribeInBackground("Tripolee");
                             installation.saveInBackground();
-                            Log.d(TAG, "Tripolee Geofence found");
-                            currentStage = "Tripolee";
-                            //MapPageActivity.addLocationToPage("Tripolee");
+                            query.whereEqualTo("location", "tripolee");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "Tripolee");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "Tripolee");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
                             push.subscribeInBackground("TheHangar");
                             installation.saveInBackground();
-                            Log.d(TAG, "The Hangar Geofence found");
-                            currentStage = "The Hangar";
-                            //MapPageActivity.addLocationToPage("The Hangar");
+                            query.whereEqualTo("location", "the hangar");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "The Hanagar");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "The Hangar");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
                             push.subscribeInBackground("Jubilee");
                             installation.saveInBackground();
-                            Log.d(TAG, "Jubilee Geofence found");
-                            currentStage = "Jubilee";
-                            //MapPageActivity.addLocationToPage("Jubilee");
+                            query.whereEqualTo("location", "jubilee");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "Jubilee");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "Jubilee");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
                             push.subscribeInBackground("ForestStage");
                             installation.saveInBackground();
-                            Log.d(TAG, "Forest Stage Geofence found");
-                            currentStage = "Forest Stage";
-                            //MapPageActivity.addLocationToPage("Forest Stage");
+                            query.whereEqualTo("location", "forest stage");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "Forest Stage");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "Forest Stage");
+                                    }
+                                }
+                            });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
                             push.subscribeInBackground("TheObservatory");
                             installation.saveInBackground();
-                            Log.d(TAG, "The Observatory Geofence found");
-                            currentStage = "The Observatory";
-                            //MapPageActivity.addLocationToPage("The Observatory");
-                        } else {
-                            Log.d(TAG, "No Geofence Found");
+                            query.whereEqualTo("location", "the observatory");
+                            query.findInBackground(new FindCallback<ParseObject>() {
+                                @Override
+                                public void done(List<ParseObject> objects, ParseException e) {
+                                    String message = "";
+                                    String currentBand = "";
+                                    for (int i = 0; i < objects.size(); i++) {
+                                        long startTime = objects.get(i).getLong("startTimeDec3");
+                                        long endTime = objects.get(i).getLong("endTimeDec3");
+                                        if (startTime <= currentTime && currentTime <= endTime) {
+                                            currentBand = objects.get(i).getString("name");
+                                            message = currentBand + " is currently playing.";
+                                            break;
+                                        }
+                                    }
+                                    if (message.equals("")) {
+                                        sendNotification(GeofenceIntentService.this, "No band is currently playing.", "The Observatory");
+                                    } else {
+                                        sendNotification(GeofenceIntentService.this, message, "The Observatory");
+                                    }
+                                }
+                            });
                         }
                     }
                     break;
-                case Geofence.GEOFENCE_TRANSITION_DWELL:
-                    notificationTitle = "Geofence Dwell";
-                    Log.v(TAG, "Geofence Dwell");
-                    break;
                 case Geofence.GEOFENCE_TRANSITION_EXIT:
-                    notificationTitle = "Geofence Exit";
                     Log.v(TAG, "Geofence Exited");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
                         if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
                             push.unsubscribeInBackground("RanchArea");
-                            Log.d(TAG, "Ranch Area Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "Ranch Area";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving Ranch Area", "Ranch Area");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
                             push.unsubscribeInBackground("SherwoodCourt");
-                            Log.d(TAG, "Sherwood Court Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "Sherwood Court";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving Sherwood Court", "Sherwood Court");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
                             push.unsubscribeInBackground("Tripolee");
-                            Log.d(TAG, "Tripolee Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "Tripolee";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving Tripolee", "Tripolee");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
                             push.unsubscribeInBackground("TheHangar");
-                            Log.d(TAG, "The Hangar Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "The Hangar";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving The Hangar", "The Hanagar");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
                             push.unsubscribeInBackground("Jubilee");
-                            Log.d(TAG, "Jubilee Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "Jubilee";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving Jubilee", "Jubilee");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
                             push.unsubscribeInBackground("ForestStage");
-                            Log.d(TAG, "Forest Stage Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "Forest Stage";
-                            //MapPageActivity.removeLocationFromPage(" ");
+                            sendNotification(this, "Leaving Forest Stage", "Forest Stage");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
                             push.unsubscribeInBackground("TheObservatory");
-                            Log.d(TAG, "The Observatory Geofence removed");
                             installation.saveInBackground();
-                            currentStage = "The Observatory";
-                            //MapPageActivity.removeLocationFromPage(" ");
-                        } else {
-                            Log.d(TAG, "No Geofence removed");
+                            sendNotification(this, "Leaving The Obseratory", "The Observatory");
                         }
                     }
                     break;
                 default:
-                    notificationTitle = "Geofence Unknown";
+                    sendNotification(this, "Not nearby any stage", "Amplify!");
             }
-
-            sendNotifiation(this, currentStage, notificationTitle);
         }
     }
 
-    private void sendNotifiation(Context context, String notificationText, String notificationTitle) {
+    private void sendNotification(Context context, String notificationText, String notificationTitle) {
         PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
         PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "");
         wakeLock.acquire();

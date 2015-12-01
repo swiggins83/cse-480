@@ -502,71 +502,64 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             //Ranch Area
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("RanchArea")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.671896, -83.215000, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //Sherwood Court
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("SherwoodCourt")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.670989, -83.217028, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //Tripolee
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("Tripolee")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.673979, -83.212962, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //The Hangar
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("TheHangar")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.674286, -83.216577, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //Jubilee
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("Jubilee")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.672307, -83.210057, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //Forest Stage
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("ForestStage")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.677103, -83.213855, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
             //The Observatory
             geofenceArray.add(new Geofence.Builder()
                     .setRequestId("TheObservatory")
-                    .setLoiteringDelay(30000)
+                    .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
                     .setCircularRegion(42.677953, -83.219222, 100)
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER
-                            | Geofence.GEOFENCE_TRANSITION_DWELL
+                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
 
@@ -989,10 +982,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             Toast.makeText(getApplicationContext(), "Cannot share location. Is your GPS on?", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(getApplicationContext(), "Sharing location", Toast.LENGTH_SHORT).show();
-            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+            ParseUser user = ParseUser.getCurrentUser();
             ParseGeoPoint geoPoint = new ParseGeoPoint(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
-            installation.put("currentLocation", geoPoint);
-            installation.saveInBackground();
+            user.put("currentLocation", geoPoint);
+            user.saveInBackground();
             tvLocInfo.setText("Stored Location to Parse");
             FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
             fabOn.setVisibility(View.INVISIBLE);
@@ -1005,9 +998,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     public void shareLocationOff() {
         Toast.makeText(getApplicationContext(), "No longer sharing location", Toast.LENGTH_SHORT).show();
         ParseGeoPoint point = new ParseGeoPoint(0,0);
-        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-        installation.put("currentLocation", point);
-        installation.saveInBackground();
+        ParseUser user = ParseUser.getCurrentUser();
+        user.put("currentLocation", point);
+        user.saveInBackground();
         tvLocInfo.setText("Removed Location from Parse");
         FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
         fabOff.setVisibility(View.INVISIBLE);
@@ -1017,20 +1010,48 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @Click(R.id.navigate_to_friend_button)
     public void launchNavigation() {
-        ParseInstallation currentInstallation = ParseInstallation.getCurrentInstallation();
-        ParseQuery<ParseInstallation> query = ParseInstallation.getQuery();
+        ParseUser user = ParseUser.getCurrentUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
         ParseGeoPoint friendLocation = null;
-        try {
-            friendLocation = query.get("EaR2Lnm019").getParseGeoPoint("currentLocation");
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        ParseGeoPoint yourLocation = currentInstallation.getParseGeoPoint("currentLocation");
-        String url = "http://maps.google.com/maps?saddr="+yourLocation.getLatitude()+","
-                +yourLocation.getLongitude()+"&daddr="+friendLocation.getLatitude()+","
-                +friendLocation.getLongitude();
-        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
-        startActivity(intent);
+        final ParseGeoPoint yourLocation = user.getParseGeoPoint("currentLocation");
+        final ArrayList<ParseGeoPoint> friendLocations = new ArrayList<ParseGeoPoint>();
+        final ArrayList<String> friendNames = new ArrayList<String>();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                for (int i = 0; i < objects.size(); i++) {
+                    if (objects.get(i).getParseGeoPoint("currentLocation") != null) {
+                        if (objects.get(i).getParseGeoPoint("currentLocation").getLatitude() != 0
+                                && objects.get(i).getParseGeoPoint("currentLocation").getLongitude() != 0) {
+                            friendLocations.add(objects.get(i).getParseGeoPoint("currentLocation"));
+                            friendNames.add(objects.get(i).getUsername());
+                            Log.d(TAG, friendNames.toString());
+                        }
+                    }
+                }
+                String[] list = new String[friendNames.size()];
+                for (int j = 0; j < friendNames.size(); j++) {
+                    list[j] = friendNames.get(j);
+                    Log.v(TAG, list.toString());
+                }
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MapPageActivity.this);
+                dialog.setTitle("Choose a friend to navigate to: ")
+                        .setItems(list, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int friendNames) {
+                                ParseGeoPoint point = friendLocations.get(friendNames);
+                                String url = "http://maps.google.com/maps?saddr=" + yourLocation.getLatitude() + ","
+                                        + yourLocation.getLongitude() + "&daddr=" + point.getLatitude() + ","
+                                        + point.getLongitude();
+                                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                                startActivity(intent);
+                            }
+                        });
+                dialog.create();
+                dialog.show();
+            }
+        });
+
     }
 
     private synchronized void buildGoogleApiClient() {
@@ -1051,6 +1072,16 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     protected void onStop() {
         super.onStop();
         mGoogleApiClient.disconnect();
+    }
+
+    //Should set coordinates to (0,0) when user powers off their device if they did not turn sharing off.
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ParseGeoPoint point = new ParseGeoPoint(0,0);
+        ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+        installation.put("currentLocation", point);
+        installation.saveInBackground();
     }
 
     @Override

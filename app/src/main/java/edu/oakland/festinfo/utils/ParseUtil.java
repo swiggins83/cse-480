@@ -1,5 +1,7 @@
 package edu.oakland.festinfo.utils;
 
+import android.util.Log;
+
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseObject;
@@ -9,6 +11,8 @@ import com.parse.SaveCallback;
 import com.parse.SignUpCallback;
 
 import org.androidannotations.annotations.EBean;
+
+import java.util.List;
 
 @EBean(scope = EBean.Scope.Singleton)
 public class ParseUtil {
@@ -44,10 +48,22 @@ public class ParseUtil {
     public void changePassword() {
     }
 
+    public void getAllArtists(FindCallback<ParseObject> callback) {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        String fav = currentUser.get("favorites").toString();
+        Log.d("HEU", "" + fav);
+    }
+
     public void getArtistSchedule(FindCallback<ParseObject> callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
-        query.whereExists("time");
-        query.orderByAscending("time");
+        query.whereExists("endTimeDec3");
+        query.orderByAscending("endTimeDec3");
+        query.findInBackground(callback);
+    }
+
+    public void retrieveUsersWithPhotos(FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("_User");
+        query.whereExists("portrait");
         query.findInBackground(callback);
     }
 

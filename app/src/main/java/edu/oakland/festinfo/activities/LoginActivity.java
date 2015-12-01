@@ -3,6 +3,7 @@ package edu.oakland.festinfo.activities;
 import android.content.Intent;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
@@ -32,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.utils.FacebookUtil;
 import edu.oakland.festinfo.utils.ParseUtil;
 import edu.oakland.festinfo.utils.StringUtils;
 

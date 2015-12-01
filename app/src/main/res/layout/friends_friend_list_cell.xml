@@ -8,8 +8,8 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:weightSum="100"
         android:padding="16dp"
+        android:weightSum="100"
         android:orientation="horizontal">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -29,13 +29,15 @@
             android:layout_gravity="center"
             android:text="ArtistName" />
 
-        <TextView
+        <ImageView
             android:id="@+id/friends_friend_shared"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:padding="8dp"
             android:layout_weight="20"
             android:layout_gravity="center"
-            android:text="Rating" />
+            android:tint="@color/colorPrimary"
+            android:src="@drawable/ic_location_on" />
 
     </LinearLayout>
 

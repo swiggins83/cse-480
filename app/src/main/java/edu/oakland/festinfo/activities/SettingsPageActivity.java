@@ -2,10 +2,14 @@ package edu.oakland.festinfo.activities;
 
 import android.view.View;
 
+import com.parse.ParseException;
+import com.parse.ParseUser;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.utils.StringUtils;
 
 /**
  * Created by Devin on 10/6/2015.
@@ -36,10 +40,13 @@ public class SettingsPageActivity extends BaseActivity {
     }
 
     @Click(R.id.settings_reset_password)
-    public void showPasswordReset() {
-        ResetPasswordActivity_
-                .intent(this)
-                .start();
+    public void resetPassword() {
+        try {
+            ParseUser.requestPasswordReset(ParseUser.getCurrentUser().getEmail());
+        } catch (ParseException e) {
+            showSnackBar(this, StringUtils.capitalizeFirstLetter(e.getLocalizedMessage()));
+            e.printStackTrace();
+        }
     }
 
 }

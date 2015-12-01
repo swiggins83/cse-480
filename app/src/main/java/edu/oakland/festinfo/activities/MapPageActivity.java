@@ -1010,7 +1010,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @Click(R.id.navigate_to_friend_button)
     public void launchNavigation() {
-        ParseUser user = ParseUser.getCurrentUser();
+        final ParseUser user = ParseUser.getCurrentUser();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         ParseGeoPoint friendLocation = null;
         final ParseGeoPoint yourLocation = user.getParseGeoPoint("currentLocation");
@@ -1021,12 +1021,14 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             public void done(List<ParseUser> objects, ParseException e) {
 
                 for (int i = 0; i < objects.size(); i++) {
-                    if (objects.get(i).getParseGeoPoint("currentLocation") != null) {
-                        if (objects.get(i).getParseGeoPoint("currentLocation").getLatitude() != 0
-                                && objects.get(i).getParseGeoPoint("currentLocation").getLongitude() != 0) {
-                            friendLocations.add(objects.get(i).getParseGeoPoint("currentLocation"));
-                            friendNames.add(objects.get(i).getUsername());
-                            Log.d(TAG, friendNames.toString());
+                    if (objects.get(i).getUsername() != user.getUsername()) {
+                        if (objects.get(i).getParseGeoPoint("currentLocation") != null) {
+                            if (objects.get(i).getParseGeoPoint("currentLocation").getLatitude() != 0
+                                    && objects.get(i).getParseGeoPoint("currentLocation").getLongitude() != 0) {
+                                friendLocations.add(objects.get(i).getParseGeoPoint("currentLocation"));
+                                friendNames.add(objects.get(i).getUsername());
+                                Log.d(TAG, friendNames.toString());
+                            }
                         }
                     }
                 }

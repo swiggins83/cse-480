@@ -99,7 +99,6 @@
 
         <activity android:name=".activities.ChangeImageActivity_"/>
 
-        <activity android:name=".activities.MapTestActivity"/>
         <service android:name=".activities.GeofenceIntentService"/>
 
         <service android:name="com.parse.PushService"/>

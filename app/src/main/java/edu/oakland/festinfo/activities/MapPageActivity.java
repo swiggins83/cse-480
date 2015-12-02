@@ -99,8 +99,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     String markerColor = "";
 
-    @ViewById(R.id.locinfo)
-    TextView tvLocInfo;
+    //@ViewById(R.id.locinfo)
+    //TextView tvLocInfo;
 
     //Arrays for map key spinner
     String[] strings = {"Map Key", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
@@ -116,6 +116,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     CombinedMarker combinedMarker;
     ArrayList<CombinedMarker> combinedArray = new ArrayList<CombinedMarker>();
+    ArrayList<Marker> stageList = new ArrayList<Marker>();
 
     ArrayList<Geofence> geofenceArray = new ArrayList<Geofence>();
 
@@ -154,7 +155,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         map.setOnInfoWindowClickListener(new OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(final Marker marker) {
-                tvLocInfo.setText("Info Window Selected");
+                //tvLocInfo.setText("Info Window Selected");
                 if (marker.getTitle().equals("Ranch Area") || marker.getTitle().equals("Sherwood Court")
                         || marker.getTitle().equals("Tripolee") || marker.getTitle().equals("The Observatory")
                         || marker.getTitle().equals("The Hangar") || marker.getTitle().equals("Jubilee")
@@ -166,7 +167,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                             switch (which) {
 
                                                 case 0:
-                                                    tvLocInfo.setText("Favorite Stage Selected");
+                                                    //tvLocInfo.setText("Favorite Stage Selected");
                                                     ParseInstallation installationFavorite = ParseInstallation.getCurrentInstallation();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationFavorite.put("RanchAreaFavorited", true);
@@ -193,7 +194,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     break;
 
                                                 case 1:
-                                                    tvLocInfo.setText("Unfavorite Stage Selected");
+                                                    //tvLocInfo.setText("Unfavorite Stage Selected");
                                                     ParseInstallation installationUnfavorite = ParseInstallation.getCurrentInstallation();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationUnfavorite.put("RanchAreaFavorited", false);
@@ -233,7 +234,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                         public void onClick(DialogInterface dialog, int which) {
                                             switch (which) {
                                                 case 0:
-                                                    tvLocInfo.setText("Delete Marker Selected");
+                                                    //tvLocInfo.setText("Delete Marker Selected");
                                                     AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(MapPageActivity.this);
                                                     deleteConfirmation.setTitle("Warning");
                                                     deleteConfirmation.setMessage("Are you sure you want to delete this marker?");
@@ -279,7 +280,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     break;
 
                                                 case 1:
-                                                    tvLocInfo.setText("Change title selected");
+                                                    //tvLocInfo.setText("Change title selected");
                                                     AlertDialog.Builder changeTitleInput = new AlertDialog.Builder(MapPageActivity.this);
                                                     changeTitleInput.setTitle("Enter new Title: ");
                                                     final EditText changeInput = new EditText(MapPageActivity.this);
@@ -418,40 +419,47 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
         //Pregenerated Markers for Geofences
-        map.addMarker(new MarkerOptions()
+        Marker m = map.addMarker(new MarkerOptions()
         .title("Ranch Area")
         .position(new LatLng(42.671896, -83.215000))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m);
 
-        map.addMarker(new MarkerOptions()
+        Marker m2 = map.addMarker(new MarkerOptions()
         .title("Sherwood Court")
         .position(new LatLng(42.670989, -83.217028))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m2);
 
-        map.addMarker(new MarkerOptions()
+        Marker m3 = map.addMarker(new MarkerOptions()
                 .title("Tripolee")
                 .position(new LatLng(42.673979, -83.212962))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m3);
 
-        map.addMarker(new MarkerOptions()
+        Marker m4 = map.addMarker(new MarkerOptions()
                 .title("The Hangar")
                 .position(new LatLng(42.674286, -83.216577))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m4);
 
-        map.addMarker(new MarkerOptions()
-            .title("Jubilee")
-            .position(new LatLng(42.672307, -83.210057))
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        Marker m5 = map.addMarker(new MarkerOptions()
+                .title("Jubilee")
+                .position(new LatLng(42.672307, -83.210057))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m5);
 
-        map.addMarker(new MarkerOptions()
+        Marker m6 = map.addMarker(new MarkerOptions()
             .title("Forest Stage")
             .position(new LatLng(42.677103, -83.213855))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m6);
 
-        map.addMarker(new MarkerOptions()
+        Marker m7 = map.addMarker(new MarkerOptions()
             .title("The Observatory")
             .position(new LatLng(42.677953, -83.219222))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+        stageList.add(m7);
 
         //Build predefined Circles
         //Ranch Area
@@ -637,7 +645,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         markerColor = String.valueOf(colorSpinner.getSelectedItem());
 
-        tvLocInfo.setText("New marker added@" + point.toString());
+        //tvLocInfo.setText("New marker added@" + point.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add Custom Text:");
@@ -739,7 +747,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     MapMarkers.put("GeofenceID", newMarker.getId());
                     MapMarkers.put("GeofenceRadius", 0);
                     MapMarkers.saveInBackground();
-                    tvLocInfo.setText("Green Stored");
+                    //tvLocInfo.setText("Green Stored");
 
                 } else if (markerColor.equals("Violet")) {
 
@@ -914,17 +922,17 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @Override
     public void onMapClick(LatLng point) {
-        tvLocInfo.setText(point.toString());
+        //tvLocInfo.setText(point.toString());
         map.animateCamera(CameraUpdateFactory.newLatLng(point));
 
     }
 
     public void onMarkerDrag(Marker marker) {
-        tvLocInfo.setText("Marker " + marker.getId() + "Drag");
+        //tvLocInfo.setText("Marker " + marker.getId() + "Drag");
     }
 
     public void onMarkerDragEnd(final Marker marker) {
-        tvLocInfo.setText("Marker " + marker.getId() + " DragEnd");
+        //tvLocInfo.setText("Marker " + marker.getId() + " DragEnd");
 
         geo1Lat = marker.getPosition().latitude;
         geo1Long = marker.getPosition().longitude;
@@ -953,7 +961,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     }
 
     public void onMarkerDragStart(Marker marker) {
-        tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
+        //tvLocInfo.setText("Marker " + marker.getId() + " DragStart");
         ParseGeoPoint geoPoint = new ParseGeoPoint(marker.getPosition().latitude, marker.getPosition().longitude);
         currentMarkerTitle = marker.getTitle();
 
@@ -986,7 +994,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             ParseGeoPoint geoPoint = new ParseGeoPoint(map.getMyLocation().getLatitude(), map.getMyLocation().getLongitude());
             user.put("currentLocation", geoPoint);
             user.saveInBackground();
-            tvLocInfo.setText("Stored Location to Parse");
+            //tvLocInfo.setText("Stored Location to Parse");
             FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
             fabOn.setVisibility(View.INVISIBLE);
             FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
@@ -1001,11 +1009,58 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         ParseUser user = ParseUser.getCurrentUser();
         user.put("currentLocation", point);
         user.saveInBackground();
-        tvLocInfo.setText("Removed Location from Parse");
+        //tvLocInfo.setText("Removed Location from Parse");
         FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
         fabOff.setVisibility(View.INVISIBLE);
         FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
         fabOn.setVisibility(View.VISIBLE);
+    }
+
+    @Click(R.id.search_for_marker)
+    public void searchForMarker() {
+        AlertDialog.Builder searchInput = new AlertDialog.Builder(MapPageActivity.this);
+        searchInput.setTitle("Enter new Title: ");
+        final EditText changeInput = new EditText(MapPageActivity.this);
+        changeInput.setInputType(InputType.TYPE_CLASS_TEXT);
+        searchInput.setView(changeInput);
+        searchInput.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                boolean foundMarker = false;
+                if (changeInput.getText().toString().matches("")) {
+                    Toast.makeText(getApplicationContext(), "No Input Entered!", Toast.LENGTH_SHORT).show();
+                } else {
+                    for (int i = 0; i < combinedArray.size(); i++) {
+                        if (combinedArray.get(i).getMarker().getTitle().toLowerCase().equals(changeInput.getText().toString().toLowerCase())) {
+                            LatLng point = combinedArray.get(i).getMarker().getPosition();
+                            map.animateCamera(CameraUpdateFactory.newLatLng(point));
+                            combinedArray.get(i).getMarker().showInfoWindow();
+                            foundMarker = true;
+                            break;
+                        }
+                    }
+                    for (int i = 0; i < stageList.size(); i++) {
+                        if (stageList.get(i).getTitle().toLowerCase().equals(changeInput.getText().toString().toLowerCase())) {
+                            LatLng point = stageList.get(i).getPosition();
+                            map.animateCamera(CameraUpdateFactory.newLatLng(point));
+                            stageList.get(i).showInfoWindow();
+                            foundMarker = true;
+                            break;
+                        }
+                    }
+                    if (foundMarker == false) {
+                        Toast.makeText(MapPageActivity.this, "Cannot find marker", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+        });
+        searchInput.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        searchInput.show();
     }
 
     @Click(R.id.navigate_to_friend_button)

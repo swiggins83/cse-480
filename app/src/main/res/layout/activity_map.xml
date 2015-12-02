@@ -1,4 +1,4 @@
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -104,6 +104,6 @@
         fab:fab_colorRipple="@color/PrimaryColor"
         />
 
-</RelativeLayout>
+</LinearLayout>
 
 

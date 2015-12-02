@@ -99,8 +99,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     String markerColor = "";
 
-    //@ViewById(R.id.locinfo)
-    //TextView tvLocInfo;
+    @ViewById(R.id.locinfo)
+    TextView tvLocInfo;
 
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
@@ -1026,7 +1026,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     @Click(R.id.search_for_marker)
     public void searchForMarker() {
         AlertDialog.Builder searchInput = new AlertDialog.Builder(MapPageActivity.this);
-        searchInput.setTitle("Enter new Title: ");
+        searchInput.setTitle("Enter Search Text: ");
         final EditText changeInput = new EditText(MapPageActivity.this);
         changeInput.setInputType(InputType.TYPE_CLASS_TEXT);
         searchInput.setView(changeInput);

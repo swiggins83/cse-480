@@ -10,33 +10,21 @@
         android:id="@+id/image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/place_marker_24dp"
-        />
+        android:layout_centerVertical="true"
+        android:paddingLeft="8dp"
+        android:src="@drawable/place_marker_24dp" />
 
     <TextView
         android:layout_toRightOf="@+id/image"
-        android:padding="3dip"
-        android:layout_marginTop="2dip"
+        android:padding="16dp"
         android:textColor="@android:color/black"
         android:textSize="18dp"
         android:textStyle="bold"
         android:id="@+id/company"
         android:text="Map Key"
-        android:layout_marginLeft="5dip"
+        android:layout_centerVertical="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="wrap_content" />
 
-    <TextView
-        android:layout_toRightOf="@+id/image"
-        android:padding="2dip"
-        android:textColor="@android:color/darker_gray"
-        android:layout_marginLeft="5dip"
-        android:id="@+id/sub"
-        android:layout_below="@+id/company"
-        android:text="click to view the key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
 
 </RelativeLayout>

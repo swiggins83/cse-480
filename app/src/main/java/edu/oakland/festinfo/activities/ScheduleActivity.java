@@ -64,7 +64,7 @@ public class ScheduleActivity extends BaseActivity {
                                 artistName,
                                 startTime,
                                 endTime,
-                                StringUtils.capitalizeFirstLetter(location),
+                                StringUtils.toTitleCase(location),
                                 artistImageData);
 
                         artistShowTimeList.add(artistShowTime);

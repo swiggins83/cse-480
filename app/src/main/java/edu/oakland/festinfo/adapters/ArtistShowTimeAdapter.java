@@ -5,12 +5,14 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.facebook.AccessToken;
 import com.parse.ParseException;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
@@ -25,6 +27,8 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
+import edu.oakland.festinfo.activities.BaseActivity;
+import edu.oakland.festinfo.activities.MapPageActivity_;
 import edu.oakland.festinfo.models.ArtistShowTime;
 
 public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
@@ -41,7 +45,7 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, final View convertView, ViewGroup parent) {
         View row = convertView;
         final ArtistShowTimeHolder holder;
 
@@ -79,6 +83,58 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int TRIPOLEE = 1;
+                int RANCH_AREA = 2;
+                int SHERWOOD_COURT = 3;
+                int JUBILEE = 4;
+                int THE_OBSERVATORY = 5;
+                int THE_HANGAR = 6;
+                int FOREST_STAGE = 7;
+
+                int stageCode = 0;
+                switch (artistShowTime.getLocation()) {
+                    case "Tripolee":
+                        stageCode = TRIPOLEE;
+                        break;
+                    case "Ranch Area":
+                        stageCode = RANCH_AREA;
+                        break;
+                    case "Sherwood Court":
+                        stageCode = SHERWOOD_COURT;
+                        break;
+                    case "Jubilee":
+                        stageCode = JUBILEE;
+                        break;
+                    case "The Observatory":
+                        stageCode = THE_OBSERVATORY;
+                        break;
+                    case "The Hangar":
+                        stageCode = THE_HANGAR;
+                        break;
+                    case "Forest Stage":
+                        stageCode = FOREST_STAGE;
+                        break;
+                    default:
+                        break;
+                }
+
+                MapPageActivity_
+                        .intent(context)
+                        .extra("pastIntent", ((Activity) context).getIntent())
+                        .startForResult(stageCode);
+            }
+        });
+
+        holder.artistImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((BaseActivity) context).showSnackBar(context, "" + artistShowTime.getArtistName());
+            }
+        });
 
         return row;
     }

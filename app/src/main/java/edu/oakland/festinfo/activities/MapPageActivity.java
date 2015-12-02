@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
+import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,64 +20,52 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import android.widget.Spinner;
-
+import com.github.clans.fab.FloatingActionButton;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
 import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.Geofence;
-import com.google.android.gms.location.GeofencingRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
-
-import com.github.clans.fab.FloatingActionButton;
-
 import com.parse.FindCallback;
 import com.parse.GetCallback;
-import com.parse.Parse;
 import com.parse.ParseACL;
-import com.parse.ParseCloud;
 import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
-import com.parse.ParseSession;
 import com.parse.ParseUser;
-import com.parse.http.ParseHttpRequest;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 
-import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +79,14 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     protected static final String TAG = "MapPageActivity";
 
+    final int TRIPOLEE = 1;
+    final int RANCH_AREA = 2;
+    final int SHERWOOD_COURT = 3;
+    final int JUBILEE = 4;
+    final int THE_OBSERVATORY = 5;
+    final int THE_HANGAR = 6;
+    final int FOREST_STAGE = 7;
+
     final int RQS_GooglePlayServices = 1;
     private GoogleMap map;
     MapFragment mapFragment;
@@ -97,15 +96,21 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     private GeofenceStore mGeofenceStore;
 
+
     String markerColor = "";
 
     //@ViewById(R.id.locinfo)
     //TextView tvLocInfo;
 
+    @ViewById(R.id.toolbar)
+    Toolbar toolbar;
+
+    @Extra
+    Intent pastIntent;
+
     //Arrays for map key spinner
-    String[] strings = {"Map Key", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
+    String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
             "Hot Air Balloon Rides", "Access Shuttle", "Restrooms", "Tents", "Stages"};
-    String[] subs = {"click to expand", "", "", "", "", "", "", "", "", "", ""};
     int arr_images[] = {R.drawable.place_marker_24dp, R.drawable.orange_marker_24dp, R.drawable.red_marker_24dp,
             R.drawable.blue_marker_24dp, R.drawable.violet_marker_24dp,
             R.drawable.azure_marker_24dp, R.drawable.rose_marker_24dp, R.drawable.green_marker_24dp,
@@ -139,6 +144,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @AfterViews
     void init() {
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         mapKeySpinner = (Spinner) findViewById(R.id.mapkey_spinner);
         mapKeySpinner.setAdapter(new MyAdapter(MapPageActivity.this, R.layout.row, strings));
         FragmentManager fragmentManager = getFragmentManager();
@@ -335,10 +343,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     infowindowBuilderNoGeofence.show();
                 }
             }
-    });
+        });
 
         focusCamera();
-        addListenerOnSpinnerItemSelection();
         buildGoogleApiClient();
 
     }
@@ -362,9 +369,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             LayoutInflater inflator = getLayoutInflater();
             View row = inflator.inflate(R.layout.row, parent, false);
             TextView mainLabel = (TextView)row.findViewById(R.id.company);
-            TextView label = (TextView)row.findViewById(R.id.sub);
             mainLabel.setText(strings[position]);
-            label.setText(subs[position]);
 
             ImageView icon = (ImageView)row.findViewById(R.id.image);
             icon.setImageResource(arr_images[position]);
@@ -399,13 +404,12 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 LicenseDialog.setMessage(LicenseInfo);
                 LicenseDialog.show();
                 return true;
+            case android.R.id.home:
+                NavUtils.navigateUpTo(this, pastIntent);
+                return true;
         }
-        return super.onOptionsItemSelected(item);
-    }
 
-    public void addListenerOnSpinnerItemSelection() {
-        colorSpinner = (Spinner) findViewById(R.id.color_spinner);
-        colorSpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -418,6 +422,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         } else {
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
+
         //Pregenerated Markers for Geofences
         Marker m = map.addMarker(new MarkerOptions()
         .title("Ranch Area")
@@ -657,6 +662,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 String text = input.getText().toString();
+
+                //tvLocInfo.setText(text + " marker added!");
 
                 if (markerColor.equals("Red")) {
                     Marker newMarker = map.addMarker(new MarkerOptions()
@@ -1117,6 +1124,20 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+    }
+
+//    final int TRIPOLEE = 1;
+//    final int RANCH_AREA = 2;
+//    final int SHERWOOD_COURT = 3;
+//    final int JUBILEE = 4;
+//    final int THE_OBSERVATORY = 5;
+//    final int THE_HANGAR = 6;
+//    final int FOREST_STAGE = 7;
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("FUCK", "HI");
     }
 
     @Override

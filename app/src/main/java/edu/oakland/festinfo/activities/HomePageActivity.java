@@ -279,6 +279,7 @@ public class HomePageActivity extends BaseActivity {
     public void launchMapActivity() {
         MapPageActivity_
                 .intent(this)
+                .extra("pastIntent", this.getIntent())
                 .start();
     }
 
@@ -300,9 +301,7 @@ public class HomePageActivity extends BaseActivity {
     public void launchSettingActivity(){
         SettingsPageActivity_
                 .intent(this)
+                .extra("pastIntent", this.getIntent())
                 .start();
     }
-
-
-
 }

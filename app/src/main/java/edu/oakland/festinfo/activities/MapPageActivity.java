@@ -57,6 +57,7 @@ import com.parse.ParseException;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
+import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -177,26 +178,34 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                 case 0:
                                                     //tvLocInfo.setText("Favorite Stage Selected");
                                                     ParseInstallation installationFavorite = ParseInstallation.getCurrentInstallation();
+                                                    ParsePush push = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationFavorite.put("RanchAreaFavorited", true);
+                                                        push.subscribeInBackground("Ranch Area");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationFavorite.put("SherwoodCourtFavorited", true);
+                                                        push.subscribeInBackground("Sherwood Court");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationFavorite.put("TripoleeFavorited", true);
+                                                        push.subscribeInBackground("Tripolee");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationFavorite.put("TheHangarFavorited", true);
+                                                        push.subscribeInBackground("The Hanagar");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationFavorite.put("JubileeFavorited", true);
+                                                        push.subscribeInBackground("Jubilee");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Forest Stage")) {
                                                         installationFavorite.put("ForestStageFavorited", true);
+                                                        push.subscribeInBackground("Forest Stage");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationFavorite.put("TheObservatoryFavorited", true);
+                                                        push.subscribeInBackground("The Observatory");
                                                         installationFavorite.saveInBackground();
                                                     }
                                                     break;
@@ -204,26 +213,34 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                 case 1:
                                                     //tvLocInfo.setText("Unfavorite Stage Selected");
                                                     ParseInstallation installationUnfavorite = ParseInstallation.getCurrentInstallation();
+                                                    ParsePush pushRemove = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationUnfavorite.put("RanchAreaFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("Ranch Area");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationUnfavorite.put("SherwoodCourtFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("Sherwood Court");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationUnfavorite.put("TripoleeFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("Tripolee");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationUnfavorite.put("TheHangar", false);
+                                                        pushRemove.unsubscribeInBackground("The Hanagar");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationUnfavorite.put("JubileeFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("Jubilee");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Forest Stagee")) {
                                                         installationUnfavorite.put("ForestStageFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("Forest Stage");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationUnfavorite.put("TheObservatoryFavorited", false);
+                                                        pushRemove.unsubscribeInBackground("The Observatory");
                                                         installationUnfavorite.saveInBackground();
                                                     }
                                                     break;
@@ -635,7 +652,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
                 }
             }
-
         });
     }
 
@@ -648,8 +664,33 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         final ParseObject MapMarkers = new ParseObject("MapMarkers");
         MapMarkers.setACL(acl);
 
-        markerColor = String.valueOf(colorSpinner.getSelectedItem());
-
+        AlertDialog.Builder chooseColor = new AlertDialog.Builder(this);
+        chooseColor.setTitle("Choose a Color: ")
+                .setItems(R.array.choose_color_array, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (which == 0) {
+                            markerColor = "Red";
+                        } else if (which == 1) {
+                            markerColor = "Azure";
+                        } else if (which == 2) {
+                            markerColor = "Orange";
+                        } else if (which == 3) {
+                            markerColor = "Green";
+                        } else if (which == 4) {
+                            markerColor = "Violet";
+                        } else if (which == 5) {
+                            markerColor = "Blue";
+                        } else if (which == 6) {
+                            markerColor = "Magenta";
+                        } else if (which == 7) {
+                            markerColor = "Rose";
+                        } else if (which == 8) {
+                            markerColor = "Yellow";
+                        } else if (which == 9) {
+                            markerColor = "Cyan";
+                        }
+                    }
+                });
         //tvLocInfo.setText("New marker added@" + point.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);

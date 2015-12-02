@@ -91,6 +91,19 @@
         <item>Unfavorite Stage</item>
     </string-array>
 
+    <string-array name="choose_color_array">
+        <item>Red</item>
+        <item>Azure</item>
+        <item>Orange</item>
+        <item>Green</item>
+        <item>Violet</item>
+        <item>Blue</item>
+        <item>Magenta</item>
+        <item>Rose</item>
+        <item>Yellow</item>
+        <item>Cyan</item>
+    </string-array>
+
     <string name="infowindow_nogeofence_click_options">Select An Option:</string>
 
     <string-array name="infowindow_nogeofence_choices_array">

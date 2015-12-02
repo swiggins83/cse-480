@@ -48,7 +48,6 @@ public class GeofenceIntentService extends IntentService{
         super.onDestroy();
         Log.v(TAG, "onDestroy");
     }
-    //Final Exam 8-11 am thursday december 10th
 
     @Override
     protected void onHandleIntent(Intent intent) {
@@ -58,8 +57,6 @@ public class GeofenceIntentService extends IntentService{
             int transition = geofencingEvent.getGeofenceTransition();
             String currentStage = "";
             ParseInstallation.getCurrentInstallation().saveInBackground();
-            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-            ParsePush push = new ParsePush();
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
             final long currentTime = System.currentTimeMillis()/1000;
             switch (transition) {
@@ -67,8 +64,6 @@ public class GeofenceIntentService extends IntentService{
                     Log.v(TAG, "Geofence Dwelling");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
                         if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
-                            push.subscribeInBackground("RanchArea");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "ranch area");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -92,8 +87,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
-                            push.subscribeInBackground("SherwoodCourt");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "sherwood court");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -117,8 +110,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
-                            push.subscribeInBackground("Tripolee");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "tripolee");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -142,8 +133,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
-                            push.subscribeInBackground("TheHangar");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "the hangar");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -167,8 +156,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
-                            push.subscribeInBackground("Jubilee");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "jubilee");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -192,8 +179,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
-                            push.subscribeInBackground("ForestStage");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "forest stage");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -217,8 +202,6 @@ public class GeofenceIntentService extends IntentService{
                                 }
                             });
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
-                            push.subscribeInBackground("TheObservatory");
-                            installation.saveInBackground();
                             query.whereEqualTo("location", "the observatory");
                             query.findInBackground(new FindCallback<ParseObject>() {
                                 @Override
@@ -248,32 +231,18 @@ public class GeofenceIntentService extends IntentService{
                     Log.v(TAG, "Geofence Exited");
                     for (int i = 0; i < geofencingEvent.getTriggeringGeofences().size(); i++) {
                         if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("RanchArea")) {
-                            push.unsubscribeInBackground("RanchArea");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving Ranch Area", "Ranch Area");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("SherwoodCourt")) {
-                            push.unsubscribeInBackground("SherwoodCourt");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving Sherwood Court", "Sherwood Court");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Tripolee")) {
-                            push.unsubscribeInBackground("Tripolee");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving Tripolee", "Tripolee");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheHangar")) {
-                            push.unsubscribeInBackground("TheHangar");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving The Hangar", "The Hanagar");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("Jubilee")) {
-                            push.unsubscribeInBackground("Jubilee");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving Jubilee", "Jubilee");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("ForestStage")) {
-                            push.unsubscribeInBackground("ForestStage");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving Forest Stage", "Forest Stage");
                         } else if (geofencingEvent.getTriggeringGeofences().get(i).getRequestId().equals("TheObservatory")) {
-                            push.unsubscribeInBackground("TheObservatory");
-                            installation.saveInBackground();
                             sendNotification(this, "Leaving The Obseratory", "The Observatory");
                         }
                     }

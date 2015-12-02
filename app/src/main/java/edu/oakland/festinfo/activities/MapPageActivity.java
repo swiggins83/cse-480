@@ -364,8 +364,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         focusCamera();
         buildGoogleApiClient();
-
     }
+
+
 
     public class MyAdapter extends ArrayAdapter<String> {
         public MyAdapter(Context context, int textViewResourceId, String[] objects){

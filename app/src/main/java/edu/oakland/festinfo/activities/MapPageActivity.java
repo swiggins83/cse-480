@@ -97,7 +97,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     private GeofenceStore mGeofenceStore;
 
-
     String markerColor = "";
 
     @ViewById(R.id.locinfo)
@@ -108,6 +107,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @Extra
     Intent pastIntent;
+    @Extra
+    String stageSelected = "";
 
     //Arrays for map key spinner
     String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
@@ -432,10 +433,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     @Override
     protected void onResume(){
         super.onResume();
-
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
-            Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
         } else {
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
@@ -482,6 +482,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             .position(new LatLng(42.677953, -83.219222))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
         stageList.add(m7);
+
+        if (!stageSelected.isEmpty()) {
+            centerMapOnMarker();
+        }
 
         //Build predefined Circles
         //Ranch Area
@@ -653,6 +657,17 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 }
             }
         });
+    }
+
+    private void centerMapOnMarker() {
+        for (int i = 0; i < stageList.size(); i++) {
+            if (stageList.get(i).getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
+                LatLng point = stageList.get(i).getPosition();
+                map.animateCamera(CameraUpdateFactory.newLatLng(point));
+                stageList.get(i).showInfoWindow();
+                break;
+            }
+        }
     }
 
     @Override
@@ -1165,20 +1180,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
-    }
-
-//    final int TRIPOLEE = 1;
-//    final int RANCH_AREA = 2;
-//    final int SHERWOOD_COURT = 3;
-//    final int JUBILEE = 4;
-//    final int THE_OBSERVATORY = 5;
-//    final int THE_HANGAR = 6;
-//    final int FOREST_STAGE = 7;
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("FUCK", "HI");
     }
 
     @Override

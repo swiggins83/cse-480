@@ -87,45 +87,11 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int TRIPOLEE = 1;
-                int RANCH_AREA = 2;
-                int SHERWOOD_COURT = 3;
-                int JUBILEE = 4;
-                int THE_OBSERVATORY = 5;
-                int THE_HANGAR = 6;
-                int FOREST_STAGE = 7;
-
-                int stageCode = 0;
-                switch (artistShowTime.getLocation()) {
-                    case "Tripolee":
-                        stageCode = TRIPOLEE;
-                        break;
-                    case "Ranch Area":
-                        stageCode = RANCH_AREA;
-                        break;
-                    case "Sherwood Court":
-                        stageCode = SHERWOOD_COURT;
-                        break;
-                    case "Jubilee":
-                        stageCode = JUBILEE;
-                        break;
-                    case "The Observatory":
-                        stageCode = THE_OBSERVATORY;
-                        break;
-                    case "The Hangar":
-                        stageCode = THE_HANGAR;
-                        break;
-                    case "Forest Stage":
-                        stageCode = FOREST_STAGE;
-                        break;
-                    default:
-                        break;
-                }
-
                 MapPageActivity_
                         .intent(context)
                         .extra("pastIntent", ((Activity) context).getIntent())
-                        .startForResult(stageCode);
+                        .extra("stageSelected", artistShowTime.getLocation())
+                        .start();
             }
         });
 

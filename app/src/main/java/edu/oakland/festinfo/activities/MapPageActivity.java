@@ -611,7 +611,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         geofenceID = objects.get(i).getString("GeofenceID");
                         geofenceRadius = objects.get(i).getDouble("GeofenceRadius");
 
-
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(new LatLng(geo1Lat, geo1Long))
                                 .title(titleGet)
@@ -691,6 +690,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         }
                     }
                 });
+
         //tvLocInfo.setText("New marker added@" + point.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -966,6 +966,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             }
         });
         builder.show();
+        chooseColor.show();
     }
 
     @Override

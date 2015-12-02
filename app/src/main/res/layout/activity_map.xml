@@ -40,10 +40,14 @@
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spinner_layout">
+
     <fragment
         android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:layout_below="@id/spinner_layout"
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.MapFragment" />
 
@@ -103,6 +107,8 @@
         fab:fab_colorPressed="@color/PrimaryDarkColor"
         fab:fab_colorRipple="@color/PrimaryColor"
         />
+
+    </RelativeLayout>
 
 </LinearLayout>
 

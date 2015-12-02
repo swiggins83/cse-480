@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -426,7 +427,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 NavUtils.navigateUpTo(this, pastIntent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -653,7 +653,30 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 }
             }
         });
+        /*mapKeySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                 switch (position){
+                     case 0:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             combinedArray.get(i).getMarker().setVisible(true);
+                         }
+                         for (int j = 0; j < stageList.size(); j++) {
+                             stageList.get(j).setVisible(true);
+                         }
+                         break;
+                     case 1:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+
+                         }
+                 }
+
+
+            }
+        });*/
     }
+    //String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
+            //"Hot Air Balloon Rides", "Access Shuttle", "Restrooms", "Tents", "Stages"};
 
     @Override
     public void onMapLongClick(final LatLng point) {

@@ -2,6 +2,9 @@ package edu.oakland.festinfo.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,7 +49,8 @@ public class FriendMutualInterestAdapter extends ArrayAdapter<Artist> {
 
         Artist artist = mutualInterests.get(position);
         holder.nameTextView.setText(artist.getName());
-        holder.image.setImageDrawable(artist.getImage());
+        Drawable artistImage = new BitmapDrawable(BitmapFactory.decodeByteArray(artist.getImageData(), 0, artist.getImageData().length));
+        holder.image.setImageDrawable(artistImage);
 
         return row;
     }

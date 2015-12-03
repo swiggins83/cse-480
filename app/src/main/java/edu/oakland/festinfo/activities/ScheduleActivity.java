@@ -50,8 +50,8 @@ public class ScheduleActivity extends BaseActivity {
                     for (ParseObject o : objects) {
 
                         String artistName = (String) o.get("name");
-                        Date startTime = new Date((int) o.get("startTimeDec3"));
-                        Date endTime = new Date((int) o.get("endTimeDec3"));
+                        Date startTime = new Date(o.getLong("startTimeDec3") * 1000);
+                        Date endTime = new Date(o.getLong("endTimeDec3") * 1000);
                         String location = (String) o.get("location");
                         byte[] artistImageData = new byte[0];
                         try {

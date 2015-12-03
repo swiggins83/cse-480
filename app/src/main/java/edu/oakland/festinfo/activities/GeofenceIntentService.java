@@ -30,7 +30,7 @@ import edu.oakland.festinfo.activities.MapPageActivity;
 /**
  * Created by Devin on 11/9/2015.
  */
-public class GeofenceIntentService extends IntentService{
+public class GeofenceIntentService extends IntentService {
 
     private final String TAG = this.getClass().getCanonicalName();
 

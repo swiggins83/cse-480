@@ -2,11 +2,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.MapPageActivity"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
     <LinearLayout
-        tools:context=".activities.MapPageActivity"
         android:orientation="vertical"
         android:layout_height="match_parent"
         android:layout_width="match_parent">

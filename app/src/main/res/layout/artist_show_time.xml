@@ -12,7 +12,7 @@
 
         <LinearLayout
             android:id="@+id/artist_info"
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_weight="80"
             android:padding="16dp"

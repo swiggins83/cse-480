@@ -75,14 +75,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:columnCount="2"
-                    android:rowCount="3"
+                    android:rowCount="2"
                     android:layout_gravity="bottom">
 
                     <RelativeLayout
-                        android:id="@+id/schedule_button"
+                        android:id="@+id/artists_button"
                         android:minHeight="100dp"
                         android:layout_gravity="fill"
-                        android:background="#90CAF9"
+                        android:background="#9FA8DA"
                         android:clickable="true"
                         android:elevation="2dp"
                         android:stateListAnimator="@anim/raise"
@@ -96,21 +96,21 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/find_me_icon"
+                                android:id="@+id/venue_icon"
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:padding="8dp"
                                 android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_location_on" />
+                                android:src="@drawable/ic_group_work" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_below="@id/find_me_icon"
-                                android:textSize="20sp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_below="@id/venue_icon"
                                 android:textStyle="bold"
-                                android:text="Find Me" />
+                                android:textSize="20sp"
+                                android:text="Artists" />
 
                         </LinearLayout>
 
@@ -156,45 +156,6 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/friends_button"
-                        android:minHeight="100dp"
-                        android:layout_gravity="fill"
-                        android:background="#2196F3"
-                        android:clickable="true"
-                        android:elevation="2dp"
-                        android:stateListAnimator="@anim/raise"
-                        android:layout_rowWeight="1"
-                        android:layout_columnWeight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/friends_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_group" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/friends_icon"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:text="Friends" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
                         android:id="@+id/favorites_button"
                         android:minHeight="100dp"
                         android:layout_gravity="fill"
@@ -234,10 +195,10 @@
                     </RelativeLayout>
 
                     <RelativeLayout
-                        android:id="@+id/information_button"
+                        android:id="@+id/friends_button"
                         android:minHeight="100dp"
                         android:layout_gravity="fill"
-                        android:background="#9FA8DA"
+                        android:background="#2196F3"
                         android:clickable="true"
                         android:elevation="2dp"
                         android:stateListAnimator="@anim/raise"
@@ -251,65 +212,28 @@
                             android:orientation="vertical">
 
                             <ImageView
-                                android:id="@+id/venue_icon"
+                                android:id="@+id/friends_icon"
                                 android:layout_width="48dp"
                                 android:layout_height="48dp"
                                 android:padding="8dp"
                                 android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_error_black_18dp" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/venue_icon"
-                                android:textStyle="bold"
-                                android:textSize="20sp"
-                                android:text="Info" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:id="@+id/settings_button"
-                        android:minHeight="100dp"
-                        android:layout_gravity="fill"
-                        android:background="#303F9F"
-                        android:clickable="true"
-                        android:elevation="2dp"
-                        android:stateListAnimator="@anim/raise"
-                        android:layout_rowWeight="1"
-                        android:layout_columnWeight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/settings_icon"
-                                android:layout_width="56dp"
-                                android:layout_height="56dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_settings" />
+                                android:src="@drawable/ic_group" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_centerHorizontal="true"
                                 android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/settings_icon"
+                                android:layout_below="@id/friends_icon"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
-                                android:text="Settings" />
+                                android:text="Friends" />
 
                         </LinearLayout>
 
                     </RelativeLayout>
+
+
 
                 </GridLayout>
 

@@ -76,19 +76,17 @@ public class ArtistProfileActivity extends BaseActivity {
                 currentUser.put("favorites", favoriteArtists);
                 currentUser.saveInBackground();
                 String newArtistName = artistName.replace(" ", "");
-                ParseInstallation.getCurrentInstallation().saveInBackground();
-                ParseInstallation installation = new ParseInstallation();
+                ParseInstallation installation = ParseInstallation.getCurrentInstallation();
                 ParsePush push = new ParsePush();
                 push.subscribeInBackground(newArtistName);
                 installation.saveInBackground();
-	    }
+            }
         } else {
             favoriteArtists.add(artistName);
             currentUser.put("favorites", favoriteArtists);
             currentUser.saveInBackground();
             String newArtistName = artistName.replace(" ", "");
-            ParseInstallation.getCurrentInstallation().saveInBackground();
-            ParseInstallation installation = new ParseInstallation();
+            ParseInstallation installation = ParseInstallation.getCurrentInstallation();
             ParsePush push = new ParsePush();
             push.subscribeInBackground(newArtistName);
             installation.saveInBackground();

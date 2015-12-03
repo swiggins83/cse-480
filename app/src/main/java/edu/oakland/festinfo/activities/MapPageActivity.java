@@ -81,14 +81,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     protected static final String TAG = "MapPageActivity";
 
-    final int TRIPOLEE = 1;
-    final int RANCH_AREA = 2;
-    final int SHERWOOD_COURT = 3;
-    final int JUBILEE = 4;
-    final int THE_OBSERVATORY = 5;
-    final int THE_HANGAR = 6;
-    final int FOREST_STAGE = 7;
-
     final int RQS_GooglePlayServices = 1;
     private GoogleMap map;
     MapFragment mapFragment;
@@ -485,10 +477,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
 
-        if (!stageSelected.isEmpty()) {
-            centerMapOnMarker();
-        }
-
         //Build predefined Circles
         //Ranch Area
         Circle c1 = map.addCircle(new CircleOptions()
@@ -817,6 +805,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 // Another interface callback
             }
         });
+
+        if (!stageSelected.isEmpty()) {
+            centerMapOnMarker();
+        }
     }
 
     private void centerMapOnMarker() {

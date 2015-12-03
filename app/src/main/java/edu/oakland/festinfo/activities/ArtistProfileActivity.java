@@ -69,9 +69,11 @@ public class ArtistProfileActivity extends BaseActivity {
         List<String> favoriteArtists = new ArrayList<>();
         if (favorites != null) {
             favoriteArtists = (List<String>) favorites;
-            favoriteArtists.add(artistName);
-            currentUser.put("favorites", favoriteArtists);
-            currentUser.saveInBackground();
+            if (!favoriteArtists.contains(artistName)) {
+                favoriteArtists.add(artistName);
+                currentUser.put("favorites", favoriteArtists);
+                currentUser.saveInBackground();
+            }
         } else {
             favoriteArtists.add(artistName);
             currentUser.put("favorites", favoriteArtists);

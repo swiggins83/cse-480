@@ -434,6 +434,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     @Override
     protected void onResume(){
         super.onResume();
+        combinedArray.clear();
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
             //Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
@@ -442,11 +443,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         }
 
         //Pregenerated Markers for Geofences
-        Marker m = map.addMarker(new MarkerOptions()
+        Marker m1 = map.addMarker(new MarkerOptions()
         .title("Ranch Area")
         .position(new LatLng(42.671896, -83.215000))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m);
+        stageList.add(m1);
 
         Marker m2 = map.addMarker(new MarkerOptions()
         .title("Sherwood Court")
@@ -490,47 +491,50 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         //Build predefined Circles
         //Ranch Area
-        map.addCircle(new CircleOptions()
+        Circle c1 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.671896, -83.215000))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Sherwood Court
-        map.addCircle(new CircleOptions()
+        Circle c2 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.670989, -83.217028))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Tripolee
-        map.addCircle(new CircleOptions()
+        Circle c3 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.673979, -83.212962))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //The Hangar
-        map.addCircle(new CircleOptions()
+        Circle c4 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.674286, -83.216577))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Jubilee
-        map.addCircle(new CircleOptions()
+        Circle c5 = map.addCircle(new CircleOptions()
             .center(new LatLng(42.672307, -83.210057))
             .radius(100)
             .strokeColor(Color.MAGENTA)
             .strokeWidth(3));
         //Forest Stage
-        map.addCircle(new CircleOptions()
+        Circle c6 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.677103, -83.213855))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //The Observatory
-        map.addCircle(new CircleOptions()
+        Circle c7 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.677953, -83.219222))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
+
+        combinedArray.add(new CombinedMarker(m1, c1, m1.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m2, c2, m2.getId(), "stage"));
 
         //Build static geofences here
         if (geofencesCreated == false) {
@@ -628,8 +632,37 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         mapCircle.setStrokeColor(baseColor);
                         mapCircle.setStrokeWidth(2);
 
-                        CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId());
-                        combinedArray.add(combined);
+                        if (markerHue == BitmapDescriptorFactory.HUE_RED) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "first aid");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_AZURE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "lost found");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_ORANGE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "food");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_GREEN) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "shuttle");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_VIOLET) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "atm");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_MAGENTA) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "stage");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_ROSE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "hot air");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_BLUE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "hammock");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_CYAN) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "tents");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_YELLOW) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "restrooms");
+                            combinedArray.add(combined);
+                        }
 
                         //Code to build the geofences
                         /*if (geofencesCreated = false) {
@@ -657,30 +690,134 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 }
             }
         });
-        /*mapKeySpinner.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mapKeySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                  switch (position){
                      case 0:
                          for (int i = 0; i < combinedArray.size(); i++) {
                              combinedArray.get(i).getMarker().setVisible(true);
-                         }
-                         for (int j = 0; j < stageList.size(); j++) {
-                             stageList.get(j).setVisible(true);
+                             combinedArray.get(i).getCircle().setVisible(true);
                          }
                          break;
                      case 1:
                          for (int i = 0; i < combinedArray.size(); i++) {
-
+                             if (combinedArray.get(i).getMarkerType().equals("food")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
                          }
+                         break;
+                     case 2:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("first aid")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 3:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("hammock")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 4:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("atm")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 5:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("lost found")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 6:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("hot air")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 7:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("shuttle")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 8:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("restrooms")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 9:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("tents")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 10:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("stage")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
                  }
-
-
             }
-        });*/
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
-    //String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
-            //"Hot Air Balloon Rides", "Access Shuttle", "Restrooms", "Tents", "Stages"};
 
     private void centerMapOnMarker() {
         for (int i = 0; i < stageList.size(); i++) {
@@ -754,7 +891,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "first aid");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -776,7 +913,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "lost found");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -799,7 +936,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "food");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -822,7 +959,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "shuttle");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -846,7 +983,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "atm");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -869,7 +1006,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "hammock");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -892,7 +1029,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "stage");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -915,7 +1052,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "hot air");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -938,7 +1075,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "restrooms");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -961,7 +1098,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "tents");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -983,7 +1120,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "first aid");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);

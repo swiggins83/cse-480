@@ -18,10 +18,10 @@
 
     <string name="user_profile_string">User Profile</string>
     <string name="search_string">Search</string>
-    <string name="directions_string">Directions</string>
+    <string name="home_string">Home</string>
     <string name="weather_string">Weather</string>
     <string name="tickets_string">Tickets</string>
-    <string name="notifications_string">Notifications</string>
+    <string name="settings_string">Settings</string>
     <string name="logout_string">Logout</string>
 
     <string name="openDrawer">Open</string>

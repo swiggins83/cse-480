@@ -262,7 +262,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                         public void onClick(DialogInterface dialog, int which) {
                                             switch (which) {
                                                 case 0:
-                                                    //tvLocInfo.setText("Delete Marker Selected");
                                                     AlertDialog.Builder deleteConfirmation = new AlertDialog.Builder(MapPageActivity.this);
                                                     deleteConfirmation.setTitle("Warning");
                                                     deleteConfirmation.setMessage("Are you sure you want to delete this marker?");

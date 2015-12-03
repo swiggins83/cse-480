@@ -1,16 +1,14 @@
 package edu.oakland.festinfo.models;
 
-import android.graphics.drawable.Drawable;
-
 public class Artist {
 
     private String name;
-    private Drawable image;
+    private byte[] imageData;
     private double rating;
 
-    public Artist(String name, Drawable image, double rating) {
+    public Artist(String name, byte[] imageData, double rating) {
         this.name = name;
-        this.image = image;
+        this.imageData = imageData;
         this.rating = rating;
     }
 
@@ -18,8 +16,8 @@ public class Artist {
         return name;
     }
 
-    public Drawable getImage() {
-        return image;
+    public byte[] getImageData() {
+        return imageData;
     }
 
     public double getRating() {

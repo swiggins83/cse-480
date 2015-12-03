@@ -6,7 +6,7 @@ public class FavoriteArtist extends Artist {
 
     private String nextPerformance;
 
-    public FavoriteArtist(String name, Drawable image, double rating, String nextPerformance) {
+    public FavoriteArtist(String name, byte[] image, double rating, String nextPerformance) {
         super(name, image, rating);
         this.nextPerformance = nextPerformance;
     }

@@ -23,17 +23,16 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.parse.Parse;
+import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFacebookUtils;
 import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
-import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
@@ -41,13 +40,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.Date;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.utils.FacebookUtil;
+import edu.oakland.festinfo.utils.ParseUtil;
 
 @EActivity(R.layout.activity_main)
 public class HomePageActivity extends BaseActivity {
@@ -64,6 +63,9 @@ public class HomePageActivity extends BaseActivity {
     TextView usernameTextView;
     @ViewById(R.id.profile_image)
     CircleImageView profileImage;
+
+    @Bean
+    ParseUtil parseUtil;
 
     @Override
     public void onResume() {
@@ -203,8 +205,11 @@ public class HomePageActivity extends BaseActivity {
                     case R.id.tickets:
                         switchFragment(new TicketsPageActivity(), "Tickets");
                         return true;
-                    case R.id.notifications:
-                        switchFragment(new NotificationsPageActivity(), "Notifications");
+                    case R.id.settings_button:
+                        SettingsPageActivity_
+                                .intent(HomePageActivity.this)
+                                .extra("pastIntent", HomePageActivity.this.getIntent())
+                                .start();
                         return true;
                     case R.id.logout:
                         ParseUser.logOut();
@@ -283,6 +288,14 @@ public class HomePageActivity extends BaseActivity {
                 .start();
     }
 
+    @Click(R.id.artists_button)
+    public void launchArtistsActivity() {
+        ArtistsPageActivity_
+                .intent(this)
+                .extra("pastIntent", this.getIntent())
+                .start();
+    }
+
     @Click(R.id.friends_button)
     public void launchFriendsActivity() {
         FriendsActivity_
@@ -297,11 +310,4 @@ public class HomePageActivity extends BaseActivity {
                 .start();
     }
 
-    @Click(R.id.settings_button)
-    public void launchSettingActivity(){
-        SettingsPageActivity_
-                .intent(this)
-                .extra("pastIntent", this.getIntent())
-                .start();
-    }
 }

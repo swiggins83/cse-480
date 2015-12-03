@@ -49,9 +49,9 @@ public class ParseUtil {
     }
 
     public void getAllArtists(FindCallback<ParseObject> callback) {
-        ParseUser currentUser = ParseUser.getCurrentUser();
-        String fav = currentUser.get("favorites").toString();
-        Log.d("HEU", "" + fav);
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
+        query.orderByAscending("name");
+        query.findInBackground(callback);
     }
 
     public void getArtistSchedule(FindCallback<ParseObject> callback) {

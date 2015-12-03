@@ -64,6 +64,8 @@
         </activity>
         <activity android:name=".activities.MapPageActivity_" />
         <activity android:name=".activities.AdminActivity_" />
+        <activity android:name=".activities.ArtistsPageActivity_" />
+        <activity android:name=".activities.ArtistProfileActivity_" />
         <activity android:name=".activities.ArtistDetailActivity_" />
         <activity
             android:name=".activities.ResetEmailActivity_"

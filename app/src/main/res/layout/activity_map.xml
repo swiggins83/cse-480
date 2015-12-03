@@ -53,6 +53,7 @@
 
     </LinearLayout>
 
+
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/share_button_on"
         android:layout_height="wrap_content"
@@ -110,5 +111,6 @@
         fab:fab_colorNormal="@color/PrimaryColor"
         fab:fab_colorPressed="@color/PrimaryDarkColor"
         fab:fab_colorRipple="@color/PrimaryColor" />
+
 
 </RelativeLayout>

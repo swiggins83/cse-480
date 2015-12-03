@@ -19,6 +19,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -123,7 +124,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     CombinedMarker combinedMarker;
     ArrayList<CombinedMarker> combinedArray = new ArrayList<CombinedMarker>();
-    ArrayList<Marker> stageList = new ArrayList<Marker>();
+
 
     ArrayList<Geofence> geofenceArray = new ArrayList<Geofence>();
 
@@ -151,6 +152,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         mapKeySpinner = (Spinner) findViewById(R.id.mapkey_spinner);
         mapKeySpinner.setAdapter(new MyAdapter(MapPageActivity.this, R.layout.row, strings));
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -182,11 +184,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     ParsePush push = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationFavorite.put("RanchAreaFavorited", true);
-                                                        push.subscribeInBackground("Ranch Area");
+                                                        push.subscribeInBackground("RanchArea");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationFavorite.put("SherwoodCourtFavorited", true);
-                                                        push.subscribeInBackground("Sherwood Court");
+                                                        push.subscribeInBackground("SherwoodCourt");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationFavorite.put("TripoleeFavorited", true);
@@ -194,7 +196,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationFavorite.put("TheHangarFavorited", true);
-                                                        push.subscribeInBackground("The Hanagar");
+                                                        push.subscribeInBackground("TheHanagar");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationFavorite.put("JubileeFavorited", true);
@@ -202,11 +204,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Forest Stage")) {
                                                         installationFavorite.put("ForestStageFavorited", true);
-                                                        push.subscribeInBackground("Forest Stage");
+                                                        push.subscribeInBackground("ForestStage");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationFavorite.put("TheObservatoryFavorited", true);
-                                                        push.subscribeInBackground("The Observatory");
+                                                        push.subscribeInBackground("TheObservatory");
                                                         installationFavorite.saveInBackground();
                                                     }
                                                     break;
@@ -217,11 +219,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     ParsePush pushRemove = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationUnfavorite.put("RanchAreaFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Ranch Area");
+                                                        pushRemove.unsubscribeInBackground("RanchArea");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationUnfavorite.put("SherwoodCourtFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Sherwood Court");
+                                                        pushRemove.unsubscribeInBackground("SherwoodCourt");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationUnfavorite.put("TripoleeFavorited", false);
@@ -229,19 +231,19 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationUnfavorite.put("TheHangar", false);
-                                                        pushRemove.unsubscribeInBackground("The Hanagar");
+                                                        pushRemove.unsubscribeInBackground("TheHanagar");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationUnfavorite.put("JubileeFavorited", false);
                                                         pushRemove.unsubscribeInBackground("Jubilee");
                                                         installationUnfavorite.saveInBackground();
-                                                    } else if (marker.getTitle().equals("Forest Stagee")) {
+                                                    } else if (marker.getTitle().equals("Forest Stage")) {
                                                         installationUnfavorite.put("ForestStageFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Forest Stage");
+                                                        pushRemove.unsubscribeInBackground("ForestStage");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationUnfavorite.put("TheObservatoryFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("The Observatory");
+                                                        pushRemove.unsubscribeInBackground("TheObservatory");
                                                         installationUnfavorite.saveInBackground();
                                                     }
                                                     break;
@@ -364,8 +366,9 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         focusCamera();
         buildGoogleApiClient();
-
     }
+
+
 
     public class MyAdapter extends ArrayAdapter<String> {
         public MyAdapter(Context context, int textViewResourceId, String[] objects){
@@ -425,13 +428,13 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 NavUtils.navigateUpTo(this, pastIntent);
                 return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onResume(){
         super.onResume();
+        combinedArray.clear();
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getApplicationContext());
         if (resultCode == ConnectionResult.SUCCESS) {
             //Toast.makeText(getApplicationContext(), "isGooglePlayServicesAvailable SUCCESS", Toast.LENGTH_LONG).show();
@@ -440,47 +443,47 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         }
 
         //Pregenerated Markers for Geofences
-        Marker m = map.addMarker(new MarkerOptions()
+        Marker m1 = map.addMarker(new MarkerOptions()
         .title("Ranch Area")
         .position(new LatLng(42.671896, -83.215000))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m);
+
 
         Marker m2 = map.addMarker(new MarkerOptions()
         .title("Sherwood Court")
         .position(new LatLng(42.670989, -83.217028))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m2);
+
 
         Marker m3 = map.addMarker(new MarkerOptions()
                 .title("Tripolee")
                 .position(new LatLng(42.673979, -83.212962))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m3);
+
 
         Marker m4 = map.addMarker(new MarkerOptions()
                 .title("The Hangar")
                 .position(new LatLng(42.674286, -83.216577))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m4);
+
 
         Marker m5 = map.addMarker(new MarkerOptions()
                 .title("Jubilee")
                 .position(new LatLng(42.672307, -83.210057))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m5);
+
 
         Marker m6 = map.addMarker(new MarkerOptions()
             .title("Forest Stage")
             .position(new LatLng(42.677103, -83.213855))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m6);
+
 
         Marker m7 = map.addMarker(new MarkerOptions()
             .title("The Observatory")
             .position(new LatLng(42.677953, -83.219222))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m7);
+
 
         if (!stageSelected.isEmpty()) {
             centerMapOnMarker();
@@ -488,47 +491,50 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         //Build predefined Circles
         //Ranch Area
-        map.addCircle(new CircleOptions()
+        Circle c1 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.671896, -83.215000))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Sherwood Court
-        map.addCircle(new CircleOptions()
+        Circle c2 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.670989, -83.217028))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Tripolee
-        map.addCircle(new CircleOptions()
+        Circle c3 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.673979, -83.212962))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //The Hangar
-        map.addCircle(new CircleOptions()
+        Circle c4 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.674286, -83.216577))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Jubilee
-        map.addCircle(new CircleOptions()
+        Circle c5 = map.addCircle(new CircleOptions()
             .center(new LatLng(42.672307, -83.210057))
             .radius(100)
             .strokeColor(Color.MAGENTA)
             .strokeWidth(3));
         //Forest Stage
-        map.addCircle(new CircleOptions()
+        Circle c6 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.677103, -83.213855))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //The Observatory
-        map.addCircle(new CircleOptions()
+        Circle c7 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.677953, -83.219222))
                 .radius(100)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
+
+        combinedArray.add(new CombinedMarker(m1, c1, m1.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m2, c2, m2.getId(), "stage"));
 
         //Build static geofences here
         if (geofencesCreated == false) {
@@ -614,7 +620,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         geofenceID = objects.get(i).getString("GeofenceID");
                         geofenceRadius = objects.get(i).getDouble("GeofenceRadius");
 
-
                         Marker marker = map.addMarker(new MarkerOptions()
                                 .position(new LatLng(geo1Lat, geo1Long))
                                 .title(titleGet)
@@ -627,8 +632,37 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         mapCircle.setStrokeColor(baseColor);
                         mapCircle.setStrokeWidth(2);
 
-                        CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId());
-                        combinedArray.add(combined);
+                        if (markerHue == BitmapDescriptorFactory.HUE_RED) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "first aid");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_AZURE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "lost found");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_ORANGE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "food");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_GREEN) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "shuttle");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_VIOLET) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "atm");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_MAGENTA) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "stage");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_ROSE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "hot air");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_BLUE) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "hammock");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_CYAN) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "tents");
+                            combinedArray.add(combined);
+                        } else if (markerHue == BitmapDescriptorFactory.HUE_YELLOW) {
+                            CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "restrooms");
+                            combinedArray.add(combined);
+                        }
 
                         //Code to build the geofences
                         /*if (geofencesCreated = false) {
@@ -656,14 +690,141 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 }
             }
         });
+        mapKeySpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                 switch (position){
+                     case 0:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             combinedArray.get(i).getMarker().setVisible(true);
+                             combinedArray.get(i).getCircle().setVisible(true);
+                         }
+                         break;
+                     case 1:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("food")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 2:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("first aid")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 3:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("hammock")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 4:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("atm")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 5:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("lost found")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 6:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("hot air")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 7:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("shuttle")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 8:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("restrooms")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 9:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("tents")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                     case 10:
+                         for (int i = 0; i < combinedArray.size(); i++) {
+                             if (combinedArray.get(i).getMarkerType().equals("stage")) {
+                                 combinedArray.get(i).getMarker().setVisible(true);
+                                 combinedArray.get(i).getCircle().setVisible(true);
+                             } else {
+                                 combinedArray.get(i).getMarker().setVisible(false);
+                                 combinedArray.get(i).getCircle().setVisible(false);
+                             }
+                         }
+                         break;
+                 }
+            }
+
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Another interface callback
+            }
+        });
     }
 
     private void centerMapOnMarker() {
-        for (int i = 0; i < stageList.size(); i++) {
-            if (stageList.get(i).getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
-                LatLng point = stageList.get(i).getPosition();
+        for (int i = 0; i < combinedArray.size(); i++) {
+            if (combinedArray.get(i).getMarker().getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
+                LatLng point = combinedArray.get(i).getMarker().getPosition();
                 map.animateCamera(CameraUpdateFactory.newLatLng(point));
-                stageList.get(i).showInfoWindow();
+                combinedArray.get(i).getMarker().showInfoWindow();
                 break;
             }
         }
@@ -705,6 +866,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         }
                     }
                 });
+
         //tvLocInfo.setText("New marker added@" + point.toString());
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -729,7 +891,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "first aid");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -751,7 +913,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "lost found");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -774,7 +936,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "food");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -797,7 +959,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "shuttle");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -821,7 +983,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "atm");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -844,7 +1006,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "hammock");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -867,7 +1029,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "stage");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -890,7 +1052,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "hot air");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -913,7 +1075,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "restrooms");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -936,7 +1098,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "tents");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -958,7 +1120,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     Circle newCircle = map.addCircle(new CircleOptions().center(point).radius(0));
                     newCircle.setStrokeWidth(2);
                     newCircle.setStrokeColor(Color.RED);
-                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId());
+                    CombinedMarker cm = new CombinedMarker(newMarker, newCircle, newMarker.getId(), "first aid");
                     combinedArray.add(cm);
 
                     ParseGeoPoint geoPoint = new ParseGeoPoint(point.latitude, point.longitude);
@@ -980,6 +1142,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             }
         });
         builder.show();
+        chooseColor.show();
     }
 
     @Override
@@ -1097,15 +1260,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             LatLng point = combinedArray.get(i).getMarker().getPosition();
                             map.animateCamera(CameraUpdateFactory.newLatLng(point));
                             combinedArray.get(i).getMarker().showInfoWindow();
-                            foundMarker = true;
-                            break;
-                        }
-                    }
-                    for (int i = 0; i < stageList.size(); i++) {
-                        if (stageList.get(i).getTitle().toLowerCase().equals(changeInput.getText().toString().toLowerCase())) {
-                            LatLng point = stageList.get(i).getPosition();
-                            map.animateCamera(CameraUpdateFactory.newLatLng(point));
-                            stageList.get(i).showInfoWindow();
                             foundMarker = true;
                             break;
                         }

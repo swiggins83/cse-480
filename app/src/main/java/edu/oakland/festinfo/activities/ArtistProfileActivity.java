@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
 
 import org.androidannotations.annotations.AfterViews;
@@ -73,11 +75,23 @@ public class ArtistProfileActivity extends BaseActivity {
                 favoriteArtists.add(artistName);
                 currentUser.put("favorites", favoriteArtists);
                 currentUser.saveInBackground();
-            }
+                String newArtistName = artistName.replace(" ", "");
+                ParseInstallation.getCurrentInstallation().saveInBackground();
+                ParseInstallation installation = new ParseInstallation();
+                ParsePush push = new ParsePush();
+                push.subscribeInBackground(newArtistName);
+                installation.saveInBackground();
+	    }
         } else {
             favoriteArtists.add(artistName);
             currentUser.put("favorites", favoriteArtists);
             currentUser.saveInBackground();
+            String newArtistName = artistName.replace(" ", "");
+            ParseInstallation.getCurrentInstallation().saveInBackground();
+            ParseInstallation installation = new ParseInstallation();
+            ParsePush push = new ParsePush();
+            push.subscribeInBackground(newArtistName);
+            installation.saveInBackground();
         }
         floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cardview_dark_background)));
     }

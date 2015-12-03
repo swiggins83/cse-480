@@ -124,7 +124,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     CombinedMarker combinedMarker;
     ArrayList<CombinedMarker> combinedArray = new ArrayList<CombinedMarker>();
-    ArrayList<Marker> stageList = new ArrayList<Marker>();
+
 
     ArrayList<Geofence> geofenceArray = new ArrayList<Geofence>();
 
@@ -152,6 +152,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         mapKeySpinner = (Spinner) findViewById(R.id.mapkey_spinner);
         mapKeySpinner.setAdapter(new MyAdapter(MapPageActivity.this, R.layout.row, strings));
+        ParseInstallation.getCurrentInstallation().saveInBackground();
         FragmentManager fragmentManager = getFragmentManager();
         mapFragment = (MapFragment) fragmentManager.findFragmentById(R.id.map);
         map = mapFragment.getMap();
@@ -183,11 +184,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     ParsePush push = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationFavorite.put("RanchAreaFavorited", true);
-                                                        push.subscribeInBackground("Ranch Area");
+                                                        push.subscribeInBackground("RanchArea");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationFavorite.put("SherwoodCourtFavorited", true);
-                                                        push.subscribeInBackground("Sherwood Court");
+                                                        push.subscribeInBackground("SherwoodCourt");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationFavorite.put("TripoleeFavorited", true);
@@ -195,7 +196,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationFavorite.put("TheHangarFavorited", true);
-                                                        push.subscribeInBackground("The Hanagar");
+                                                        push.subscribeInBackground("TheHanagar");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationFavorite.put("JubileeFavorited", true);
@@ -203,11 +204,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Forest Stage")) {
                                                         installationFavorite.put("ForestStageFavorited", true);
-                                                        push.subscribeInBackground("Forest Stage");
+                                                        push.subscribeInBackground("ForestStage");
                                                         installationFavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationFavorite.put("TheObservatoryFavorited", true);
-                                                        push.subscribeInBackground("The Observatory");
+                                                        push.subscribeInBackground("TheObservatory");
                                                         installationFavorite.saveInBackground();
                                                     }
                                                     break;
@@ -218,11 +219,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                     ParsePush pushRemove = new ParsePush();
                                                     if (marker.getTitle().equals("Ranch Area")) {
                                                         installationUnfavorite.put("RanchAreaFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Ranch Area");
+                                                        pushRemove.unsubscribeInBackground("RanchArea");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Sherwood Court")) {
                                                         installationUnfavorite.put("SherwoodCourtFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Sherwood Court");
+                                                        pushRemove.unsubscribeInBackground("SherwoodCourt");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Tripolee")) {
                                                         installationUnfavorite.put("TripoleeFavorited", false);
@@ -230,19 +231,19 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Hangar")) {
                                                         installationUnfavorite.put("TheHangar", false);
-                                                        pushRemove.unsubscribeInBackground("The Hanagar");
+                                                        pushRemove.unsubscribeInBackground("TheHanagar");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("Jubilee")) {
                                                         installationUnfavorite.put("JubileeFavorited", false);
                                                         pushRemove.unsubscribeInBackground("Jubilee");
                                                         installationUnfavorite.saveInBackground();
-                                                    } else if (marker.getTitle().equals("Forest Stagee")) {
+                                                    } else if (marker.getTitle().equals("Forest Stage")) {
                                                         installationUnfavorite.put("ForestStageFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("Forest Stage");
+                                                        pushRemove.unsubscribeInBackground("ForestStage");
                                                         installationUnfavorite.saveInBackground();
                                                     } else if (marker.getTitle().equals("The Observatory")) {
                                                         installationUnfavorite.put("TheObservatoryFavorited", false);
-                                                        pushRemove.unsubscribeInBackground("The Observatory");
+                                                        pushRemove.unsubscribeInBackground("TheObservatory");
                                                         installationUnfavorite.saveInBackground();
                                                     }
                                                     break;
@@ -447,43 +448,43 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         .title("Ranch Area")
         .position(new LatLng(42.671896, -83.215000))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m1);
+
 
         Marker m2 = map.addMarker(new MarkerOptions()
         .title("Sherwood Court")
         .position(new LatLng(42.670989, -83.217028))
         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m2);
+
 
         Marker m3 = map.addMarker(new MarkerOptions()
                 .title("Tripolee")
                 .position(new LatLng(42.673979, -83.212962))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m3);
+
 
         Marker m4 = map.addMarker(new MarkerOptions()
                 .title("The Hangar")
                 .position(new LatLng(42.674286, -83.216577))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m4);
+
 
         Marker m5 = map.addMarker(new MarkerOptions()
                 .title("Jubilee")
                 .position(new LatLng(42.672307, -83.210057))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m5);
+
 
         Marker m6 = map.addMarker(new MarkerOptions()
             .title("Forest Stage")
             .position(new LatLng(42.677103, -83.213855))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m6);
+
 
         Marker m7 = map.addMarker(new MarkerOptions()
             .title("The Observatory")
             .position(new LatLng(42.677953, -83.219222))
             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-        stageList.add(m7);
+
 
         if (!stageSelected.isEmpty()) {
             centerMapOnMarker();
@@ -820,11 +821,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     }
 
     private void centerMapOnMarker() {
-        for (int i = 0; i < stageList.size(); i++) {
-            if (stageList.get(i).getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
-                LatLng point = stageList.get(i).getPosition();
+        for (int i = 0; i < combinedArray.size(); i++) {
+            if (combinedArray.get(i).getMarker().getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
+                LatLng point = combinedArray.get(i).getMarker().getPosition();
                 map.animateCamera(CameraUpdateFactory.newLatLng(point));
-                stageList.get(i).showInfoWindow();
+                combinedArray.get(i).getMarker().showInfoWindow();
                 break;
             }
         }
@@ -1260,15 +1261,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                             LatLng point = combinedArray.get(i).getMarker().getPosition();
                             map.animateCamera(CameraUpdateFactory.newLatLng(point));
                             combinedArray.get(i).getMarker().showInfoWindow();
-                            foundMarker = true;
-                            break;
-                        }
-                    }
-                    for (int i = 0; i < stageList.size(); i++) {
-                        if (stageList.get(i).getTitle().toLowerCase().equals(changeInput.getText().toString().toLowerCase())) {
-                            LatLng point = stageList.get(i).getPosition();
-                            map.animateCamera(CameraUpdateFactory.newLatLng(point));
-                            stageList.get(i).showInfoWindow();
                             foundMarker = true;
                             break;
                         }

@@ -2,7 +2,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:minHeight="88dp"
+    android:minHeight="72dp"
     app:cardBackgroundColor="@color/colorPrimaryLighter"
     app:cardElevation="2dp"
     app:cardCornerRadius="0dp">
@@ -11,53 +11,35 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="100"
+        android:paddingTop="20dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="20dp"
         android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/artist_info"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="20dp"
             android:layout_weight="80"
             android:orientation="vertical" >
-
-            <TextView
-                android:id="@+id/show_name_text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="16sp"
-                android:text="Name" />
 
             <TextView
                 android:id="@+id/show_time_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="14sp"
+                android:textStyle="italic"
                 android:text="Time" />
 
             <TextView
                 android:id="@+id/show_location_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="14sp"
+                android:textStyle="italic"
                 android:text="Location" />
 
         </LinearLayout>
-
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/artist_location_image"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:layout_marginRight="16dp"
-            android:layout_weight="20"
-            android:layout_gravity="center"
-            android:src="@drawable/ef" />
 
     </LinearLayout>
 

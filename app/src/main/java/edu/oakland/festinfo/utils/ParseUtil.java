@@ -48,6 +48,14 @@ public class ParseUtil {
     public void changePassword() {
     }
 
+    public void getArtistInfo(String artistName, FindCallback<ParseObject> callback) {
+        ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
+        query.whereEqualTo("name", artistName);
+        query.whereExists("endTimeDec10");
+        query.orderByAscending("endTimeDec10");
+        query.findInBackground(callback);
+    }
+
     public void getAllArtists(FindCallback<ParseObject> callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
         query.orderByAscending("name");
@@ -56,9 +64,14 @@ public class ParseUtil {
 
     public void getArtistSchedule(FindCallback<ParseObject> callback) {
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Artist");
-        query.whereExists("endTimeDec3");
-        query.orderByAscending("endTimeDec3");
+        query.whereExists("endTimeDec10");
+        query.orderByAscending("endTimeDec10");
         query.findInBackground(callback);
+    }
+
+    public List<String> getFavoriteArtists() {
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        return (List<String>) currentUser.get("favorites");
     }
 
     public void retrieveUsersWithPhotos(FindCallback<ParseObject> callback) {

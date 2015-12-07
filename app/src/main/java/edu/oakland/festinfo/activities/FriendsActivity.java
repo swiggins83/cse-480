@@ -2,6 +2,8 @@ package edu.oakland.festinfo.activities;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
@@ -11,6 +13,7 @@ import com.facebook.GraphResponse;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -50,6 +53,9 @@ public class FriendsActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Friends");
+        colorUpArrow();
+
+        showSpinner("Loading friends...");
 
         FacebookUtil.getUserFriends(this, new GraphRequest.Callback() {
             @Override
@@ -65,6 +71,8 @@ public class FriendsActivity extends BaseActivity {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+
+                dismissSpinner();
             }
         });
     }
@@ -83,7 +91,13 @@ public class FriendsActivity extends BaseActivity {
                         } catch (ParseException e1) {
                             e1.printStackTrace();
                         }
-                        User user = new User(username, (bitmapData.length > 0) ? BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length) : null);
+                        ParseGeoPoint parseGeoPoint = o.getParseGeoPoint("currentLocation");
+                        boolean isSharingLocation = (parseGeoPoint.getLatitude() != 0 && parseGeoPoint.getLatitude() != 0);
+                        User user = new User(
+                                username,
+                                (bitmapData.length > 0) ? BitmapFactory.decodeByteArray(bitmapData, 0, bitmapData.length) : null,
+                                isSharingLocation);
+
                         friendList.add(user);
                     }
                 }

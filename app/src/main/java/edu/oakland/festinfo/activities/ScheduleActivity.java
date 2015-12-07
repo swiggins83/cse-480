@@ -1,5 +1,7 @@
 package edu.oakland.festinfo.activities;
 
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.ListView;
@@ -42,6 +44,9 @@ public class ScheduleActivity extends BaseActivity {
     void init() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        colorUpArrow();
+
+        showSpinner("Loading schedule...");
 
         final List<ArtistShowTime> artistShowTimeList = new ArrayList<>();
         parseUtil.getArtistSchedule(new FindCallback<ParseObject>() {
@@ -76,6 +81,8 @@ public class ScheduleActivity extends BaseActivity {
                 } else {
                     Log.d("HEY", "" + e.getLocalizedMessage());
                 }
+
+                dismissSpinner();
             }
         });
 

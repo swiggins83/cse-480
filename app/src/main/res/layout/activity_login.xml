@@ -34,7 +34,8 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/username_layout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:paddingBottom="16dp">
                 <EditText
                     android:id="@+id/username_edittext"
                     android:hint="Username"
@@ -46,7 +47,8 @@
                 android:id="@+id/password_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/username_layout">
+                android:layout_below="@id/username_layout"
+                android:paddingBottom="16dp">
                 <EditText
                     android:id="@+id/password_edittext"
                     android:hint="Password"
@@ -61,15 +63,15 @@
                 android:layout_height="wrap_content"
                 android:text="Submit"
                 android:background="@drawable/login_button"
-                android:layout_below="@id/password_layout" />
+                android:layout_below="@id/password_layout"
+                android:layout_marginBottom="16dp" />
 
             <com.facebook.login.widget.LoginButton
                 android:id="@+id/facebook_login_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="20dp"
-                android:layout_below="@id/submit_button"
-                android:layout_marginTop="16dp" />
+                android:layout_below="@id/submit_button" />
 
         </RelativeLayout>
 

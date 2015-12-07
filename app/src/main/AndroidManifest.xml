@@ -29,6 +29,7 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:theme="@style/AppTheme" >
         <meta-data
             android:name="com.parse.APPLICATION_ID"
@@ -41,14 +42,19 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDLxuRPIPs2FunVbE-9SSGCsuAjKblIcjU" />
+            android:value="AIzaSyA0QOsmYM7LCA_i4-zRMKSZgZp1uXVc3qw" />
+
+        <meta-data
+            android:name="android.app.searchable"
+            android:resource="@xml/searchable" />
 
         <activity
             android:name=".activities.HomePageActivity_"
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name=".activities.FestivalAppIntroActivity">
+            android:name=".activities.FestivalAppIntroActivity"
+            android:theme="@style/AppTheme.AppIntro">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -64,7 +70,10 @@
         </activity>
         <activity android:name=".activities.MapPageActivity_" />
         <activity android:name=".activities.AdminActivity_" />
-        <activity android:name=".activities.ArtistsPageActivity_" />
+        <activity
+            android:name=".activities.ArtistsPageActivity_"
+            android:parentActivityName=".activities.HomePageActivity_" >
+        </activity>
         <activity android:name=".activities.ArtistProfileActivity_" />
         <activity android:name=".activities.ArtistDetailActivity_" />
         <activity

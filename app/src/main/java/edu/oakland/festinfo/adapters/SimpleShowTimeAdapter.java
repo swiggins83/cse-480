@@ -19,18 +19,18 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
-import edu.oakland.festinfo.activities.ArtistProfileActivity_;
 import edu.oakland.festinfo.activities.BaseActivity;
 import edu.oakland.festinfo.activities.MapPageActivity_;
 import edu.oakland.festinfo.models.ArtistShowTime;
+import edu.oakland.festinfo.utils.StringUtils;
 
-public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
+public class SimpleShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
 
     private Context context;
     private int layoutResource;
     private List<ArtistShowTime> showTimes;
 
-    public ArtistShowTimeAdapter(Context context, int layoutResource, List<ArtistShowTime> showTimes) {
+    public SimpleShowTimeAdapter(Context context, int layoutResource, List<ArtistShowTime> showTimes) {
         super(context, layoutResource, showTimes);
         this.context = context;
         this.layoutResource = layoutResource;
@@ -40,42 +40,31 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
     @Override
     public View getView(int position, final View convertView, ViewGroup parent) {
         View row = convertView;
-        final ArtistShowTimeHolder holder;
+        final SimpleShowTimeHolder holder;
 
         if (row == null) {
             LayoutInflater inflater = ((Activity) context).getLayoutInflater();
             row = inflater.inflate(layoutResource, parent, false);
-            holder = new ArtistShowTimeHolder();
+            holder = new SimpleShowTimeHolder();
             row.setTag(holder);
         } else {
-            holder = (ArtistShowTimeHolder) row.getTag();
+            holder = (SimpleShowTimeHolder) row.getTag();
         }
 
-        holder.nameTextView = (TextView) row.findViewById(R.id.show_name_text);
         holder.timeTextView = (TextView) row.findViewById(R.id.show_time_text);
         holder.locationTextView = (TextView) row.findViewById(R.id.show_location_text);
-        holder.artistImage = (CircleImageView) row.findViewById(R.id.artist_location_image);
 
         final ArtistShowTime artistShowTime = showTimes.get(position);
-        holder.nameTextView.setText(artistShowTime.getArtistName());
         Date startDate = artistShowTime.getStartTime();
         Date endDate = artistShowTime.getStartTime();
 
         String startTime = new SimpleDateFormat("E h:mm a").format(startDate);
         String endTime = new SimpleDateFormat("E h:mm a").format(endDate);
 
-        String playingTimes = startTime + " - " + endTime;
+        String playingTimes = "When: " + startTime + " - " + endTime;
         holder.timeTextView.setText(playingTimes);
-        holder.locationTextView.setText(artistShowTime.getLocation());
-
-        try {
-            File artistImage = File.createTempFile("artistImage", "" + position);
-            FileOutputStream fileOutputStream = new FileOutputStream(artistImage);
-            fileOutputStream.write(artistShowTime.getArtistImageData());
-            Picasso.with(context).load(artistImage).into(holder.artistImage);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        String location = "Where: " + StringUtils.toTitleCase(artistShowTime.getLocation());
+        holder.locationTextView.setText(location);
 
         row.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -88,26 +77,12 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
             }
         });
 
-        holder.artistImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ArtistProfileActivity_
-                        .intent(context)
-                        .extra("artistName", artistShowTime.getArtistName())
-                        .extra("artistImageData", artistShowTime.getArtistImageData())
-                        .extra("pastIntent", ((Activity) context).getIntent())
-                        .start();
-            }
-        });
-
         return row;
     }
 
-    static class ArtistShowTimeHolder {
-        TextView nameTextView;
+    static class SimpleShowTimeHolder {
         TextView timeTextView;
         TextView locationTextView;
-        CircleImageView artistImage;
     }
 
 }

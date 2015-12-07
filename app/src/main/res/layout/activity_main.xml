@@ -16,62 +16,25 @@
         <include layout="@layout/toolbar" />
 
         <ScrollView
+            android:id="@+id/frame"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <ViewFlipper
-                    android:id="@+id/header_image"
+                <com.daimajia.slider.library.SliderLayout
+                    android:id="@+id/image_slider"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autoStart="true"
-                    android:flipInterval="2000">
-
-                    <ImageView
-                        android:id="@+id/header_image1"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:scaleType="fitCenter"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:src="@drawable/ef" />
-
-                    <ImageView
-                        android:id="@+id/header_image2"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:scaleType="fitCenter"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:src="@drawable/ef_image" />
-
-                    <ImageView
-                        android:id="@+id/header_image3"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:scaleType="fitCenter"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:src="@drawable/ef_map" />
-
-                    <ImageView
-                        android:id="@+id/header_image4"
-                        android:layout_width="match_parent"
-                        android:layout_height="150dp"
-                        android:scaleType="fitCenter"
-                        android:paddingTop="16dp"
-                        android:paddingBottom="16dp"
-                        android:src="@drawable/ef_logo" />
-
-                </ViewFlipper>
+                    android:layout_height="200dp"
+                    app:indicator_visibility="visible"
+                    app:auto_cycle="true" />
 
                 <GridLayout
-                    android:id="@+id/frame"
+                    android:id="@+id/grid"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:columnCount="2"
@@ -79,118 +42,24 @@
                     android:layout_gravity="bottom">
 
                     <RelativeLayout
-                        android:id="@+id/artists_button"
-                        android:minHeight="100dp"
-                        android:layout_gravity="fill"
-                        android:background="#9FA8DA"
-                        android:clickable="true"
-                        android:elevation="2dp"
-                        android:stateListAnimator="@anim/raise"
-                        android:layout_rowWeight="1"
-                        android:layout_columnWeight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/venue_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_group_work" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/venue_icon"
-                                android:textStyle="bold"
-                                android:textSize="20sp"
-                                android:text="Artists" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
                         android:id="@+id/map_button"
-                        android:minHeight="100dp"
                         android:layout_gravity="fill"
-                        android:background="#1976D2"
                         android:clickable="true"
-                        android:elevation="2dp"
+                        android:elevation="0dp"
                         android:stateListAnimator="@anim/raise"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="Navigate"
+                            android:textSize="36sp"
+                            android:textColor="#000"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textStyle="bold"
                             android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/map_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_map" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_below="@id/map_icon"
-                                android:text="Map"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:layout_gravity="center_horizontal" />
-
-                        </LinearLayout>
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/favorites_button"
-                        android:minHeight="100dp"
-                        android:layout_gravity="fill"
-                        android:background="#3F51B5"
-                        android:clickable="true"
-                        android:elevation="2dp"
-                        android:stateListAnimator="@anim/raise"
-                        android:layout_rowWeight="1"
-                        android:layout_columnWeight="1">
-
-                        <LinearLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/favorites_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_favorite" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/favorites_icon"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:text="Favs" />
-
-                        </LinearLayout>
+                            android:layout_gravity="center_horizontal" />
 
                     </RelativeLayout>
 
@@ -198,42 +67,69 @@
                         android:id="@+id/friends_button"
                         android:minHeight="100dp"
                         android:layout_gravity="fill"
-                        android:background="#2196F3"
                         android:clickable="true"
-                        android:elevation="2dp"
+                        android:elevation="0dp"
                         android:stateListAnimator="@anim/raise"
                         android:layout_rowWeight="1"
                         android:layout_columnWeight="1">
 
-                        <LinearLayout
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:textSize="36sp"
+                            android:textColor="#000"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textStyle="bold"
                             android:layout_centerInParent="true"
-                            android:orientation="vertical">
-
-                            <ImageView
-                                android:id="@+id/friends_icon"
-                                android:layout_width="48dp"
-                                android:layout_height="48dp"
-                                android:padding="8dp"
-                                android:layout_gravity="center_horizontal"
-                                android:src="@drawable/ic_group" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerHorizontal="true"
-                                android:layout_gravity="center_horizontal"
-                                android:layout_below="@id/friends_icon"
-                                android:textSize="20sp"
-                                android:textStyle="bold"
-                                android:text="Friends" />
-
-                        </LinearLayout>
+                            android:text="Friends" />
 
                     </RelativeLayout>
 
+                    <RelativeLayout
+                        android:id="@+id/artists_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:clickable="true"
+                        android:elevation="0dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
 
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textStyle="bold"
+                            android:textSize="36sp"
+                            android:textColor="#000"
+                            android:layout_centerInParent="true"
+                            android:text="Artists" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/schedule_button"
+                        android:minHeight="100dp"
+                        android:layout_gravity="fill"
+                        android:clickable="true"
+                        android:elevation="0dp"
+                        android:stateListAnimator="@anim/raise"
+                        android:layout_rowWeight="1"
+                        android:layout_columnWeight="1">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:textSize="36sp"
+                            android:textColor="#000"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textStyle="bold"
+                            android:text="Schedule" />
+
+                    </RelativeLayout>
 
                 </GridLayout>
 
@@ -248,6 +144,7 @@
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
         android:layout_gravity="start"
+        android:background="@color/colorPrimaryLighter"
         app:headerLayout="@layout/header"
         app:menu="@menu/drawer" />
 

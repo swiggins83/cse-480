@@ -1,47 +1,54 @@
 package edu.oakland.festinfo.activities;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.TextSliderView;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
-import com.parse.FindCallback;
-import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
 import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.Bean;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
@@ -64,8 +71,22 @@ public class HomePageActivity extends BaseActivity {
     @ViewById(R.id.profile_image)
     CircleImageView profileImage;
 
+    @ViewById(R.id.image_slider)
+    SliderLayout sliderLayout;
+
+    @ViewById(R.id.map_button)
+    RelativeLayout mapButton;
+    @ViewById(R.id.friends_button)
+    RelativeLayout friendsButton;
+    @ViewById(R.id.artists_button)
+    RelativeLayout artistsButton;
+    @ViewById(R.id.schedule_button)
+    RelativeLayout scheduleButton;
+
     @Bean
     ParseUtil parseUtil;
+
+    private boolean imagesLoaded = false;
 
     @Override
     public void onResume() {
@@ -177,11 +198,34 @@ public class HomePageActivity extends BaseActivity {
         AppEventsLogger.deactivateApp(this);
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (!imagesLoaded) {
+            loadImageInto(getDrawable(R.drawable.maps), mapButton);
+            loadImageInto(getDrawable(R.drawable.festfriends), friendsButton);
+            loadImageInto(getDrawable(R.drawable.dj), artistsButton);
+            loadImageInto(getDrawable(R.drawable.schedule), scheduleButton);
+            imagesLoaded = true;
+        }
+
+    }
+
+    public void loadImageInto(Drawable drawable, RelativeLayout button) {
+        int w = button.getWidth();
+        int h = button.getHeight();
+        Bitmap b = ((BitmapDrawable) drawable).getBitmap();
+        b = Bitmap.createScaledBitmap(b, w, h, false);
+        button.setBackground(new BitmapDrawable(getResources(), b));
+    }
+
     @AfterViews
     void init() {
 
         setSupportActionBar(toolbar);
 
+        navigationView.setCheckedItem(0);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
 
             @Override
@@ -192,12 +236,11 @@ public class HomePageActivity extends BaseActivity {
 
                 switch (menuItem.getItemId()) {
 
-                    //Replacing the main content with chosen Fragment;
-                    case R.id.search:
-                        switchFragment(new SearchPageActivity(), "Search");
-                        return true;
-                    case R.id.directions:
-                        switchFragment(new DirectionsPageActivity(), "Directions");
+                    // replacing the main content with chosen Fragment;
+                    case R.id.home:
+                        HomePageActivity_
+                                .intent(HomePageActivity.this)
+                                .start();
                         return true;
                     case R.id.weather:
                         switchFragment(new WeatherPageActivity(), "Weather");
@@ -242,6 +285,22 @@ public class HomePageActivity extends BaseActivity {
 
         actionBarDrawerToggle.syncState();
 
+        HashMap<String,Integer> file_maps = new HashMap<>();
+        file_maps.put("", R.drawable.sherwood_forest);
+        file_maps.put(" ", R.drawable.ef_image);
+        file_maps.put("  ", R.drawable.explosion);
+        file_maps.put("   ", R.drawable.stage);
+
+        for(String name : file_maps.keySet()){
+            TextSliderView textSliderView = new TextSliderView(this);
+            textSliderView
+                    .description(name)
+                    .image(file_maps.get(name))
+                    .setScaleType(BaseSliderView.ScaleType.CenterCrop);
+
+            sliderLayout.addSlider(textSliderView);
+        }
+
     }
 
     public void switchFragment(Fragment f, String label) {
@@ -255,7 +314,20 @@ public class HomePageActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+
+        MenuItem searchItem = menu.findItem(R.id.search_icon);
+
+        SearchManager searchManager = (SearchManager) HomePageActivity.this.getSystemService(Context.SEARCH_SERVICE);
+
+        SearchView searchView = null;
+        if (searchItem != null) {
+            searchView = (SearchView) searchItem.getActionView();
+        }
+        if (searchView != null) {
+            searchView.setSearchableInfo(searchManager.getSearchableInfo(HomePageActivity.this.getComponentName()));
+        }
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -303,7 +375,7 @@ public class HomePageActivity extends BaseActivity {
                 .start();
     }
 
-    @Click(R.id.favorites_button)
+    @Click(R.id.schedule_button)
     public void launchScheduleActivity() {
         ScheduleActivity_
                 .intent(this)

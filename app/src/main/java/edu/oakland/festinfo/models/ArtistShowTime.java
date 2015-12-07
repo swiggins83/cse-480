@@ -18,6 +18,12 @@ public class ArtistShowTime {
         this.artistImageData = artistImageData;
     }
 
+    public ArtistShowTime(Date startTime, Date endTime, String location) {
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.location = location;
+    }
+
     public String getArtistName() {
         return artistName;
     }

@@ -11,11 +11,18 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.models.Artist;
+import edu.oakland.festinfo.utils.StringUtils;
 
 public class ArtistsArtistAdapter extends ArrayAdapter<Artist> {
 
@@ -44,15 +51,22 @@ public class ArtistsArtistAdapter extends ArrayAdapter<Artist> {
             holder = (ArtistLayoutHolder) row.getTag();
         }
 
-        holder.imageView = (CircleImageView) row.findViewById(R.id.artist_image);
-        holder.nameTextView = (TextView) row.findViewById(R.id.artist_name);
-        holder.ratingTextView = (TextView) row.findViewById(R.id.artist_rating);
+        holder.nameTextView = (TextView) row.findViewById(R.id.favorites_artist_name);
+        holder.nextPerformanceTextView = (TextView) row.findViewById(R.id.favorites_artist_next_performance);
+        holder.imageView = (CircleImageView) row.findViewById(R.id.favorites_artist_image);
 
         Artist artist = artists.get(position);
-        Drawable artistImage = new BitmapDrawable(BitmapFactory.decodeByteArray(artist.getImageData(), 0, artist.getImageData().length));
-        holder.imageView.setImageDrawable(artistImage);
+        try {
+            File artistImage = File.createTempFile("artistImage", "" + position);
+            FileOutputStream fileOutputStream = new FileOutputStream(artistImage);
+            fileOutputStream.write(artist.getImageData());
+            Picasso.with(context).load(artistImage).into(holder.imageView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         holder.nameTextView.setText(artist.getName());
-        holder.ratingTextView.setText(String.valueOf(artist.getRating()));
+        String playTime = new SimpleDateFormat("E h:mm a").format(artist.getPlayTime());
+        holder.nextPerformanceTextView.setText(StringUtils.toTitleCase(artist.getLocation()) + " at " + playTime);
 
         return row;
     }
@@ -60,7 +74,7 @@ public class ArtistsArtistAdapter extends ArrayAdapter<Artist> {
     static class ArtistLayoutHolder {
         CircleImageView imageView;
         TextView nameTextView;
-        TextView ratingTextView;
+        TextView nextPerformanceTextView;
     }
 
 }

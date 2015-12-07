@@ -18,7 +18,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Press and hold on the map to add a marker!"
-            android:textSize="14sp"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif-light"
+            android:textColor="@color/textColorPrimary"
             android:padding="16dp"
             android:paddingBottom="0dp" />
 
@@ -35,7 +37,8 @@
                 android:layout_height="wrap_content"
                 android:paddingBottom="8dp"
                 android:textStyle="bold"
-                android:text="Legend:" />
+                android:textColor="@color/textColorSecondary"
+                android:text="Filter:" />
 
             <Spinner
                 android:id="@+id/mapkey_spinner"
@@ -53,7 +56,6 @@
 
     </LinearLayout>
 
-
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/share_button_on"
         android:layout_height="wrap_content"
@@ -65,9 +67,9 @@
         android:layout_marginRight="0dp"
         android:visibility="visible"
         android:src="@drawable/share_location_button_icon_on"
-        fab:fab_colorNormal="@color/PrimaryColor"
-        fab:fab_colorPressed="@color/PrimaryDarkColor"
-        fab:fab_colorRipple="@color/PrimaryColor" />
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
+        fab:fab_colorRipple="@color/colorAccentLight" />
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/share_button_off"
@@ -80,9 +82,9 @@
         android:layout_marginRight="0dp"
         android:visibility="invisible"
         android:src="@drawable/share_location_button_icon_off"
-        fab:fab_colorNormal="@color/PrimaryColor"
-        fab:fab_colorPressed="@color/PrimaryDarkColor"
-        fab:fab_colorRipple="@color/PrimaryColor" />
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
+        fab:fab_colorRipple="@color/colorAccentLight" />
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/navigate_to_friend_button"
@@ -94,9 +96,9 @@
         android:layout_marginRight="0dp"
         android:visibility="visible"
         android:src="@drawable/ic_group"
-        fab:fab_colorNormal="@color/PrimaryColor"
-        fab:fab_colorPressed="@color/PrimaryDarkColor"
-        fab:fab_colorRipple="@color/PrimaryColor" />
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
+        fab:fab_colorRipple="@color/colorAccentLight" />
 
     <com.github.clans.fab.FloatingActionButton
         android:id="@+id/search_for_marker"
@@ -108,9 +110,8 @@
         android:layout_marginRight="8dp"
         android:visibility="visible"
         android:src="@drawable/ic_search_black_24dp"
-        fab:fab_colorNormal="@color/PrimaryColor"
-        fab:fab_colorPressed="@color/PrimaryDarkColor"
-        fab:fab_colorRipple="@color/PrimaryColor" />
-
+        fab:fab_colorNormal="@color/colorAccent"
+        fab:fab_colorPressed="@color/colorAccentDark"
+        fab:fab_colorRipple="@color/colorAccentLight" />
 
 </RelativeLayout>

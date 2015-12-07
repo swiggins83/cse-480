@@ -7,6 +7,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -97,11 +99,17 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
+    @ViewById(R.id.share_button_on)
+    FloatingActionButton fabOn;
+    @ViewById(R.id.share_button_off)
+    FloatingActionButton fabOff;
 
     @Extra
     Intent pastIntent;
     @Extra
     String stageSelected = "";
+    @Extra
+    String friendToNavigateTo = "";
 
     //Arrays for map key spinner
     String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
@@ -141,6 +149,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     void init() {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Map");
+        colorUpArrow();
 
         mapKeySpinner = (Spinner) findViewById(R.id.mapkey_spinner);
         mapKeySpinner.setAdapter(new MyAdapter(MapPageActivity.this, R.layout.row, strings));
@@ -434,47 +444,52 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             GooglePlayServicesUtil.getErrorDialog(resultCode, this, RQS_GooglePlayServices);
         }
 
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        ParseGeoPoint currentLocation = currentUser.getParseGeoPoint("currentLocation");
+        if (currentLocation.getLatitude() != 0 ||
+                currentLocation.getLongitude() != 0) {
+            fabOn.setVisibility(View.INVISIBLE);
+            fabOff.setVisibility(View.VISIBLE);
+        } else {
+            fabOn.setVisibility(View.VISIBLE);
+            fabOff.setVisibility(View.INVISIBLE);
+        }
+
         //Pregenerated Markers for Geofences
         Marker m1 = map.addMarker(new MarkerOptions()
-        .title("Ranch Area")
-        .position(new LatLng(42.671896, -83.215000))
-        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
+                .title("Ranch Area")
+                .position(new LatLng(42.671896, -83.215000))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         Marker m2 = map.addMarker(new MarkerOptions()
-        .title("Sherwood Court")
-        .position(new LatLng(42.670989, -83.217028))
-        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
+                .title("Sherwood Court")
+                .position(new LatLng(42.670989, -83.217028))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         Marker m3 = map.addMarker(new MarkerOptions()
                 .title("Tripolee")
                 .position(new LatLng(42.673979, -83.212962))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
-
         Marker m4 = map.addMarker(new MarkerOptions()
                 .title("The Hangar")
                 .position(new LatLng(42.674286, -83.216577))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
 
         Marker m5 = map.addMarker(new MarkerOptions()
                 .title("Jubilee")
                 .position(new LatLng(42.672307, -83.210057))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
-
         Marker m6 = map.addMarker(new MarkerOptions()
-            .title("Forest Stage")
-            .position(new LatLng(42.677103, -83.213855))
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
-
+                .title("Forest Stage")
+                .position(new LatLng(42.677103, -83.213855))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         Marker m7 = map.addMarker(new MarkerOptions()
-            .title("The Observatory")
-            .position(new LatLng(42.677953, -83.219222))
-            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
+                .title("The Observatory")
+                .position(new LatLng(42.677953, -83.219222))
+                .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
 
         //Build predefined Circles
@@ -523,6 +538,11 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         combinedArray.add(new CombinedMarker(m1, c1, m1.getId(), "stage"));
         combinedArray.add(new CombinedMarker(m2, c2, m2.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m3, c3, m3.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m4, c4, m4.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m5, c5, m5.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m6, c6, m6.getId(), "stage"));
+        combinedArray.add(new CombinedMarker(m7, c7, m7.getId(), "stage"));
 
         //Build static geofences here
         if (geofencesCreated == false) {
@@ -650,6 +670,10 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         } else if (markerHue == BitmapDescriptorFactory.HUE_YELLOW) {
                             CombinedMarker combined = new CombinedMarker(marker, circle, marker.getId(), "restrooms");
                             combinedArray.add(combined);
+                        }
+
+                        if (!stageSelected.isEmpty()) {
+                            centerMapOnMarker();
                         }
 
                         //Code to build the geofences
@@ -806,14 +830,16 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             }
         });
 
-        if (!stageSelected.isEmpty()) {
-            centerMapOnMarker();
+        if (!friendToNavigateTo.isEmpty()) {
+            navigateToFriend(friendToNavigateTo);
         }
     }
 
     private void centerMapOnMarker() {
         for (int i = 0; i < combinedArray.size(); i++) {
+            Log.d("HI", "" + combinedArray.get(i).getMarker().getTitle().toLowerCase());
             if (combinedArray.get(i).getMarker().getTitle().toLowerCase().equals(stageSelected.toLowerCase())) {
+                Log.d("HI", "" + stageSelected.toLowerCase());
                 LatLng point = combinedArray.get(i).getMarker().getPosition();
                 map.animateCamera(CameraUpdateFactory.newLatLng(point));
                 combinedArray.get(i).getMarker().showInfoWindow();
@@ -1212,9 +1238,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
             user.put("currentLocation", geoPoint);
             user.saveInBackground();
             //tvLocInfo.setText("Stored Location to Parse");
-            FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
             fabOn.setVisibility(View.INVISIBLE);
-            FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
             fabOff.setVisibility(View.VISIBLE);
         }
     }
@@ -1227,9 +1251,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         user.put("currentLocation", point);
         user.saveInBackground();
         //tvLocInfo.setText("Removed Location from Parse");
-        FloatingActionButton fabOff = (FloatingActionButton)findViewById(R.id.share_button_off);
         fabOff.setVisibility(View.INVISIBLE);
-        FloatingActionButton fabOn = (FloatingActionButton)findViewById(R.id.share_button_on);
         fabOn.setVisibility(View.VISIBLE);
     }
 
@@ -1275,22 +1297,20 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     public void launchNavigation() {
         final ParseUser user = ParseUser.getCurrentUser();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        ParseGeoPoint friendLocation = null;
         final ParseGeoPoint yourLocation = user.getParseGeoPoint("currentLocation");
-        final ArrayList<ParseGeoPoint> friendLocations = new ArrayList<ParseGeoPoint>();
-        final ArrayList<String> friendNames = new ArrayList<String>();
+        final ArrayList<ParseGeoPoint> friendLocations = new ArrayList<>();
+        final ArrayList<String> friendNames = new ArrayList<>();
         query.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> objects, ParseException e) {
 
                 for (int i = 0; i < objects.size(); i++) {
-                    if (objects.get(i).getUsername() != user.getUsername()) {
+                    if (!objects.get(i).getUsername().equals(user.getUsername())) {
                         if (objects.get(i).getParseGeoPoint("currentLocation") != null) {
                             if (objects.get(i).getParseGeoPoint("currentLocation").getLatitude() != 0
                                     && objects.get(i).getParseGeoPoint("currentLocation").getLongitude() != 0) {
                                 friendLocations.add(objects.get(i).getParseGeoPoint("currentLocation"));
                                 friendNames.add(objects.get(i).getUsername());
-                                Log.d(TAG, friendNames.toString());
                             }
                         }
                     }
@@ -1298,7 +1318,6 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 String[] list = new String[friendNames.size()];
                 for (int j = 0; j < friendNames.size(); j++) {
                     list[j] = friendNames.get(j);
-                    Log.v(TAG, list.toString());
                 }
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MapPageActivity.this);
                 dialog.setTitle("Choose a friend to navigate to: ")
@@ -1314,6 +1333,48 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                         });
                 dialog.create();
                 dialog.show();
+            }
+        });
+
+    }
+
+    public void navigateToFriend(final String userName) {
+
+        final ParseUser user = ParseUser.getCurrentUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        final ParseGeoPoint yourLocation = user.getParseGeoPoint("currentLocation");
+        final ArrayList<ParseGeoPoint> friendLocations = new ArrayList<>();
+        final ArrayList<String> friendNames = new ArrayList<>();
+        query.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> objects, ParseException e) {
+
+                for (int i = 0; i < objects.size(); i++) {
+                    if (!objects.get(i).getUsername().equals(user.getUsername())) {
+                        if (objects.get(i).getParseGeoPoint("currentLocation") != null) {
+                            if (objects.get(i).getParseGeoPoint("currentLocation").getLatitude() != 0
+                                    && objects.get(i).getParseGeoPoint("currentLocation").getLongitude() != 0) {
+                                friendLocations.add(objects.get(i).getParseGeoPoint("currentLocation"));
+                                friendNames.add(objects.get(i).getUsername());
+                            }
+                        }
+                    }
+                }
+                String[] list = new String[friendNames.size()];
+                for (int j = 0; j < friendNames.size(); j++) {
+                    list[j] = friendNames.get(j);
+                }
+                for (int i=0; i < friendNames.size(); i++) {
+                    if (userName.equals(friendNames.get(i))) {
+                        ParseGeoPoint point = friendLocations.get(i);
+                        String url = "http://maps.google.com/maps?saddr=" + yourLocation.getLatitude() + ","
+                                + yourLocation.getLongitude() + "&daddr=" + point.getLatitude() + ","
+                                + point.getLongitude();
+                        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(url));
+                        friendToNavigateTo = "";
+                        startActivity(intent);
+                    }
+                }
             }
         });
 

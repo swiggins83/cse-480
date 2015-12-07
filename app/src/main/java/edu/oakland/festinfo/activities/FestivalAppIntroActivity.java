@@ -1,9 +1,8 @@
 package edu.oakland.festinfo.activities;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
+import android.widget.TextView;
 
 import com.facebook.appevents.AppEventsLogger;
 import com.github.paolorotolo.appintro.AppIntro;
@@ -27,13 +26,29 @@ public class FestivalAppIntroActivity extends AppIntro {
     @Override
     public void init(Bundle savedInstanceState) {
 
-        addSlide(AppIntroFragment.newInstance("Introduction", "Interactive map with custom markers that makes searching easy.", R.mipmap.effmap, Color.parseColor("red")));
-        addSlide(AppIntroFragment.newInstance("Introduction", "Markers can be favorited and viewed on a seperate page to make finding your favorite artists easier.", R.mipmap.markers, Color.parseColor("blue")));
-        addSlide(AppIntroFragment.newInstance("Introduction", "Ability to search for bands playing at the festival by artist an location.", R.mipmap.search, Color.parseColor("magenta")));
-        addSlide(AppIntroFragment.newInstance("Introduction", "Notifications display as events happen to remind users about events going on.", R.mipmap.push, Color.parseColor("black")));
+        addSlide(AppIntroFragment.newInstance("Introduction",
+                "Interactive maps to guide you to the fun",
+                R.mipmap.effmap,
+                getResources().getColor(R.color.material_blue_500)));
+        addSlide(AppIntroFragment.newInstance("Introduction",
+                "Get notified about your favorite artists",
+                R.mipmap.push,
+                getResources().getColor(R.color.wallet_holo_blue_light)));
+        addSlide(AppIntroFragment.newInstance("Introduction",
+                "Place markers to find your way around",
+                R.mipmap.markers,
+                getResources().getColor(R.color.wallet_link_text_light)));
+        addSlide(AppIntroFragment.newInstance("Introduction",
+                "Easily find your friends and your campsite",
+                R.mipmap.search,
+                getResources().getColor(R.color.colorPrimary)));
 
-        setBarColor(Color.parseColor("grey"));
-        setSeparatorColor(Color.parseColor("aqua"));
+        setSkipText("Login");
+        setDoneText("Register");
+
+        setBarColor(getResources().getColor(R.color.colorPrimaryLight));
+        setSeparatorColor(getResources().getColor(R.color.colorAccent));
+
         showSkipButton(true);
         showDoneButton(true);
 

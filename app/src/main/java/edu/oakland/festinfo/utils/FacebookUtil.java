@@ -24,8 +24,6 @@ public class FacebookUtil {
 
     public static void getAnyUserInfo(String userId, GraphRequest.GraphJSONObjectCallback callback) {
 
-        Log.d("HEYID", "" + userId);
-
         GraphRequest.newGraphPathRequest(
                 AccessToken.getCurrentAccessToken(),
                 "/{" + userId + "}",

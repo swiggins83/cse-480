@@ -2,22 +2,27 @@ package edu.oakland.festinfo.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import edu.oakland.festinfo.R;
 import edu.oakland.festinfo.activities.ArtistProfileActivity_;
+import edu.oakland.festinfo.activities.MapPageActivity_;
 import edu.oakland.festinfo.models.Artist;
-import edu.oakland.festinfo.models.FavoriteArtist;
+import edu.oakland.festinfo.utils.StringUtils;
 
 public class FavoritesArtistAdapter extends ArrayAdapter<Artist> {
 
@@ -48,20 +53,40 @@ public class FavoritesArtistAdapter extends ArrayAdapter<Artist> {
 
         holder.nameTextView = (TextView) row.findViewById(R.id.favorites_artist_name);
         holder.nextPerformanceTextView = (TextView) row.findViewById(R.id.favorites_artist_next_performance);
-        holder.image = (CircleImageView) row.findViewById(R.id.favorites_artist_image);
+        holder.imageView = (CircleImageView) row.findViewById(R.id.favorites_artist_image);
 
         final Artist favoriteArtist = favoriteArtists.get(position);
         holder.nameTextView.setText(favoriteArtist.getName());
-        Drawable artistImage = new BitmapDrawable(BitmapFactory.decodeByteArray(favoriteArtist.getImageData(), 0, favoriteArtist.getImageData().length));
-        holder.image.setImageDrawable(artistImage);
+        String playTime = new SimpleDateFormat("E h:mm a").format(favoriteArtist.getPlayTime());
+        String nextPerformance = StringUtils.toTitleCase(favoriteArtist.getLocation()) + " at " + playTime;
+        holder.nextPerformanceTextView.setText(nextPerformance);
+        try {
+            File artistImage = File.createTempFile("artistImage", "" + position);
+            FileOutputStream fileOutputStream = new FileOutputStream(artistImage);
+            fileOutputStream.write(favoriteArtist.getImageData());
+            Picasso.with(context).load(artistImage).into(holder.imageView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         row.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MapPageActivity_
+                        .intent(context)
+                        .extra("pastIntent", ((Activity) context).getIntent())
+                        .extra("stageSelected", favoriteArtist.getLocation())
+                        .start();
+            }
+        });
+
+        holder.imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ArtistProfileActivity_
                         .intent(context)
                         .extra("artistName", favoriteArtist.getName())
-                        .extra("artistImageData", favoriteArtist.getImageData())
+                        .extra("artistImageURL", favoriteArtist.getImageLink())
                         .extra("pastIntent", ((Activity) context).getIntent())
                         .start();
             }
@@ -73,7 +98,7 @@ public class FavoritesArtistAdapter extends ArrayAdapter<Artist> {
     static class FavoriteArtistHolder {
         TextView nameTextView;
         TextView nextPerformanceTextView;
-        CircleImageView image;
+        CircleImageView imageView;
     }
 
 }

@@ -478,7 +478,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
 
         Marker m5 = map.addMarker(new MarkerOptions()
                 .title("Jubilee")
-                .position(new LatLng(42.672307, -83.210057))
+                .position(new LatLng(42.672042, -83.213621))
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_MAGENTA)));
 
         Marker m6 = map.addMarker(new MarkerOptions()
@@ -496,7 +496,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         //Ranch Area
         Circle c1 = map.addCircle(new CircleOptions()
                 .center(new LatLng(42.671896, -83.215000))
-                .radius(100)
+                .radius(60)
                 .strokeColor(Color.MAGENTA)
                 .strokeWidth(3));
         //Sherwood Court
@@ -519,7 +519,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                 .strokeWidth(3));
         //Jubilee
         Circle c5 = map.addCircle(new CircleOptions()
-            .center(new LatLng(42.672307, -83.210057))
+            .center(new LatLng(42.672042, -83.213621))
             .radius(100)
             .strokeColor(Color.MAGENTA)
             .strokeWidth(3));
@@ -551,7 +551,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     .setRequestId("RanchArea")
                     .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setCircularRegion(42.671896, -83.215000, 100)
+                    .setCircularRegion(42.671896, -83.215000, 60)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());
@@ -587,7 +587,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
                     .setRequestId("Jubilee")
                     .setLoiteringDelay(20000)
                     .setExpirationDuration(Geofence.NEVER_EXPIRE)
-                    .setCircularRegion(42.672307, -83.210057, 100)
+                    .setCircularRegion(42.672042, -83.213621, 100)
                     .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_DWELL
                             | Geofence.GEOFENCE_TRANSITION_EXIT)
                     .build());

@@ -522,7 +522,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         //Jubilee
         Circle c5 = map.addCircle(new CircleOptions()
             .center(new LatLng(42.672042, -83.213621))
-            .radius(100)
+            .radius(50)
             .strokeColor(Color.MAGENTA)
             .strokeWidth(3));
         //Forest Stage

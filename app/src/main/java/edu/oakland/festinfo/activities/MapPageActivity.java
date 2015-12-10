@@ -110,6 +110,8 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     String stageSelected = "";
     @Extra
     String friendToNavigateTo = "";
+    @Extra
+    boolean turnOnLocation = false;
 
     //Arrays for map key spinner
     String[] strings = {"All", "Food/Drink", "First Aid", "Hammock Zones", "ATM", "Lost & Found",
@@ -833,6 +835,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
         if (!friendToNavigateTo.isEmpty()) {
             navigateToFriend(friendToNavigateTo);
         }
+
     }
 
     private void centerMapOnMarker() {
@@ -1230,7 +1233,7 @@ public class MapPageActivity extends BaseActivity implements OnMapClickListener,
     @Click(R.id.share_button_on)
     public void shareLocation() {
         if (map.getMyLocation() == null) {
-            Toast.makeText(getApplicationContext(), "Cannot share location. Is your GPS on?", Toast.LENGTH_SHORT).show();
+            showSnackBar(this, "Cannot share location. Is your GPS on?");
         } else {
             Toast.makeText(getApplicationContext(), "Sharing location", Toast.LENGTH_SHORT).show();
             ParseUser user = ParseUser.getCurrentUser();

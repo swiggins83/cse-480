@@ -19,16 +19,15 @@
             android:scaleType="centerCrop"
             android:src="@drawable/ef" />
 
-        <TextView
-            android:id="@+id/artist_profile_header"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Artist"
-            android:layout_gravity="bottom"
-            android:padding="16dp"
-            android:textSize="28sp" />
-
     </FrameLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:fontFamily="sans-serif-medium"
+        android:text="Playing at:" />
 
     <ListView
         android:id="@+id/artist_show_times"

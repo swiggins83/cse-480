@@ -1,11 +1,7 @@
 package edu.oakland.festinfo.activities;
 
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.widget.ListView;
 
 import com.facebook.GraphRequest;
@@ -15,7 +11,6 @@ import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseGeoPoint;
 import com.parse.ParseObject;
-import com.parse.ParseUser;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Bean;

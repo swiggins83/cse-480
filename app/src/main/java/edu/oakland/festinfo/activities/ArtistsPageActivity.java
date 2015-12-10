@@ -1,15 +1,11 @@
 package edu.oakland.festinfo.activities;
 
-import android.app.ProgressDialog;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -42,6 +38,8 @@ public class ArtistsPageActivity extends BaseActivity {
     ListView favoritesList;
     @ViewById(R.id.artists_artists_list)
     ListView artistsList;
+    @ViewById(R.id.favorites_label)
+    TextView favoritesLabel;
 
     @Bean
     ParseUtil parseUtil;
@@ -133,9 +131,14 @@ public class ArtistsPageActivity extends BaseActivity {
     }
 
     private void setUpFavoriteArtistList(List<Artist> favoriteArtists) {
-        favoritesArtistAdapter = new FavoritesArtistAdapter(this, R.layout.favorites_artist_list_cell, favoriteArtists);
-        favoritesList.setAdapter(favoritesArtistAdapter);
-        setListViewHeightBasedOnChildren(favoritesList);
+        if (favoriteArtists.size() != 0) {
+            favoritesArtistAdapter = new FavoritesArtistAdapter(this, R.layout.favorites_artist_list_cell, favoriteArtists);
+            favoritesList.setAdapter(favoritesArtistAdapter);
+            setListViewHeightBasedOnChildren(favoritesList);
+        } else {
+            favoritesLabel.setVisibility(View.GONE);
+            favoritesList.setVisibility(View.GONE);
+        }
     }
 
     private void setUpFullArtistList(List<Artist> artistList) {

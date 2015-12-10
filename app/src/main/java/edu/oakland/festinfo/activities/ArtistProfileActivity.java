@@ -47,8 +47,6 @@ public class ArtistProfileActivity extends BaseActivity {
 
     @ViewById(R.id.toolbar)
     Toolbar toolbar;
-    @ViewById(R.id.artist_profile_header)
-    TextView profileHeader;
     @ViewById(R.id.header_image)
     ImageView headerImage;
     @ViewById(R.id.artist_show_times)
@@ -72,11 +70,9 @@ public class ArtistProfileActivity extends BaseActivity {
     void init() {
 
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Artist");
+        getSupportActionBar().setTitle(artistName);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         colorUpArrow();
-
-        profileHeader.setText(artistName);
 
         if (artistImageURL != null) {
             Picasso.with(this)
@@ -102,6 +98,16 @@ public class ArtistProfileActivity extends BaseActivity {
                 setUpShowTimeList(showTimes);
             }
         });
+
+        ParseUser currentUser = ParseUser.getCurrentUser();
+        boolean favorited = false;
+        for (Object favorite : currentUser.getList("favorites")) {
+            if (artistName.equals(favorite)) {
+                floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
+                favorited = true;
+                break;
+            }
+        }
     }
 
     private void setUpShowTimeList(List<ArtistShowTime> showTimes) {
@@ -124,6 +130,7 @@ public class ArtistProfileActivity extends BaseActivity {
                 ParsePush push = new ParsePush();
                 push.subscribeInBackground(newArtistName);
                 installation.saveInBackground();
+                showSnackBar(this, "Favorited " + artistName + "!");
             } else {
                 final List<String> finalFavoriteArtists = favoriteArtists;
                 showSnackBarWithAction(this, artistName + " is already one of your favorites!", "Unfavorite?", new View.OnClickListener() {
@@ -141,6 +148,7 @@ public class ArtistProfileActivity extends BaseActivity {
                         ParsePush push = new ParsePush();
                         push.unsubscribeInBackground(newArtistName);
                         installation.saveInBackground();
+                        floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                     }
                 });
             }
@@ -154,7 +162,7 @@ public class ArtistProfileActivity extends BaseActivity {
             push.subscribeInBackground(newArtistName);
             installation.saveInBackground();
         }
-        floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.cardview_dark_background)));
+        floatingActionButton.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccentDark)));
     }
 
     @Override

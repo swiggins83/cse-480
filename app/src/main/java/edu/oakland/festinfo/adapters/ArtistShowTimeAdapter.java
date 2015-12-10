@@ -2,6 +2,7 @@ package edu.oakland.festinfo.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,12 +92,16 @@ public class ArtistShowTimeAdapter extends ArrayAdapter<ArtistShowTime> {
         holder.artistImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArtistProfileActivity_
-                        .intent(context)
-                        .extra("artistName", artistShowTime.getArtistName())
-                        .extra("artistImageData", artistShowTime.getArtistImageData())
-                        .extra("pastIntent", ((Activity) context).getIntent())
-                        .start();
+                try {
+                    ArtistProfileActivity_
+                            .intent(context)
+                            .extra("artistName", artistShowTime.getArtistName())
+                            .extra("artistImageData", artistShowTime.getArtistImageData())
+                            .extra("pastIntent", ((Activity) context).getIntent())
+                            .start();
+                } catch (Exception e) {
+                    ((BaseActivity) context).showSnackBar(context, "Something went wrong!");
+                }
             }
         });
 

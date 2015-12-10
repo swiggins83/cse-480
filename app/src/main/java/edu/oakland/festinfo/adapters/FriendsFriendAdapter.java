@@ -11,6 +11,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.parse.ParseUser;
+
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -64,16 +66,21 @@ public class FriendsFriendAdapter extends ArrayAdapter<User> {
         row.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (user.getIsSharingLocation()) {
-                    MapPageActivity_
-                            .intent(context)
-                            .extra("friendToNavigateTo", user.getName())
-                            .extra("pastIntent", ((Activity) context).getIntent())
-                            .flags(Intent.FLAG_ACTIVITY_NO_HISTORY)
-                            .start();
-
+                ParseUser currentUser = ParseUser.getCurrentUser();
+                if (currentUser.getParseGeoPoint("currentLocation").getLatitude() != 0.0 &&
+                        currentUser.getParseGeoPoint("currentLocation").getLongitude() != 0.0) {
+                    if (user.getIsSharingLocation()) {
+                        MapPageActivity_
+                                .intent(context)
+                                .extra("friendToNavigateTo", user.getName())
+                                .extra("pastIntent", ((Activity) context).getIntent())
+                                .flags(Intent.FLAG_ACTIVITY_NO_HISTORY)
+                                .start();
+                    } else {
+                        ((BaseActivity) context).showSnackBar(context, user.getName() + " isn't sharing their location!");
+                    }
                 } else {
-                    ((BaseActivity) context).showSnackBar(context, user.getName() + " isn't sharing their location!");
+                    ((BaseActivity) context).showSnackBar(context, "You're not sharing your location.");
                 }
             }
         });
